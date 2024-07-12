@@ -26,7 +26,7 @@ class StudentController extends Controller
     }
 
     public function show(Student $student){
-        return response()->json(new StudentResource($student));
+        return response()->json(new StudentResource($student),200);
     }
 
     public function update(UpdateStudentRequest $request, Student $student){
