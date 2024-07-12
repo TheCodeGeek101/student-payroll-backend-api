@@ -4,6 +4,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Containers\UsersSection\Administrator\Controllers\AdminController;
 use App\Containers\UsersSection\Students\Controllers\StudentController;
+use App\Http\Controllers\UserController;
 
 /*
 |--------------------------------------------------------------------------
@@ -20,15 +21,25 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-// All admin routes
+ // All user routes
+Route::controller(UserController::class)->name('user.')->prefix('users')->group(function () {
+        Route::get('/', 'index');
+        Route::get('/show/{user}', 'show');
+        Route::post('/add', 'store');
+        Route::put('/update/{user}', 'update');
+});
+
+ // All admin routes
 Route::controller(AdminController::class)->name('admin.')->prefix('admin')->group(function() {
 //    Route::get('/students/all', 'index');
 });
 
-// All student routes
+ // All student routes
 Route::controller(StudentController::class)->name('student.')->prefix('students')->group(function() {
     Route::get('/', 'index');
     Route::post('/add', 'store');
-    Route::put('/{student}', 'update');
-    Route::get('/{student}', 'show');
+    Route::put('/update/{student}', 'update');
+    Route::get('/show/{student}', 'show');
 });
+
+
