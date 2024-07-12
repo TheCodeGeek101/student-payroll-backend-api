@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 use App\Containers\UsersSection\Administrator\Controllers\AdminController;
 use App\Containers\UsersSection\Students\Controllers\StudentController;
 use App\Http\Controllers\UserController;
+use App\Containers\FinancialSection\Payments\Controllers\PaymentController;
 
 /*
 |--------------------------------------------------------------------------
@@ -42,4 +43,9 @@ Route::controller(StudentController::class)->name('student.')->prefix('students'
     Route::get('/show/{student}', 'show');
 });
 
+// All payment routes
+Route::controller(PaymentController::class)->name('payment.')->prefix('payments')->group(function() {
+    Route::get('/','index');
+    Route::post('/create/{student}', 'payments');
+});
 

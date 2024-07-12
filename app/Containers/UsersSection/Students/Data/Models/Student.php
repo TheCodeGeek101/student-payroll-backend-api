@@ -5,7 +5,7 @@ use App\Containers\UsersSection\Guardians\Data\Models\Guardian;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
-
+use App\Containers\FinancialSection\Payments\Data\Models\Payments;
 class Student extends Model
 {
     use HasFactory;
@@ -25,4 +25,8 @@ class Student extends Model
         return $this->first_name.' '.$this->last_name;
     }
 
+    public function payments()
+    {
+        return $this->hasMany(Payments::class);
+    }
 }
