@@ -10,6 +10,8 @@ class Student extends Model
 {
     use HasFactory;
 
+    public mixed $email;
+
     public function guardian(): BelongsTo
     {
         return $this->belongsTo(Guardian::class);
