@@ -8,7 +8,7 @@ use Illuminate\Http\Request;
 
 class LoginUserAction extends Action
 {
-    protected $redirectTo = '/home';
+//    protected $redirectTo = '/home';
     public function __construct()
     {
         $this->middleware('guest')->except('logout');
