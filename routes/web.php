@@ -1,7 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-
+use App\Containers\UsersSection\Tutors\Controllers\TutorController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -15,4 +15,12 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
     return view('welcome');
+});
+//All tutor routes
+Route::prefix('tutors')->controller(TutorController::class)->name('tutor.')->group(function() {
+    Route::get('/', 'index');
+    Route::post('/create', 'store')->name("create");
+    Route::get('/show/{tutor}', 'show')->name("show");
+    Route::put('/update/{tutor}', 'update')->name("update");
+    Route::delete('/delete/{tutor}', 'delete')->name("delete");
 });

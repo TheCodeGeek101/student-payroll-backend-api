@@ -6,6 +6,9 @@ use App\Containers\UsersSection\Administrator\Controllers\AdminController;
 use App\Containers\UsersSection\Students\Controllers\StudentController;
 use App\Http\Controllers\UserController;
 use App\Containers\FinancialSection\Payments\Controllers\PaymentController;
+use App\Containers\SchoolsSection\Subjects\Controllers\SubjectsController;
+use App\Containers\UsersSection\Tutors\Controllers\TutorController;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -38,7 +41,7 @@ Route::controller(AdminController::class)->name('admin.')->prefix('admin')->grou
  // All student routes
 Route::controller(StudentController::class)->name('student.')->prefix('students')->group(function() {
     Route::get('/', 'index');
-    Route::post('/add', 'store');
+    Route::post('/create', 'store');
     Route::put('/update/{student}', 'update');
     Route::get('/show/{student}', 'show');
 });
@@ -47,5 +50,23 @@ Route::controller(StudentController::class)->name('student.')->prefix('students'
 Route::controller(PaymentController::class)->name('payment.')->prefix('payments')->group(function() {
     Route::get('/','index');
     Route::post('/create/{student}', 'payments');
+});
+
+//All Subject routes
+Route::controller(SubjectsController::class)->name('subjects.')->prefix('subjects')->group(function() {
+    Route::get('/', 'index');
+    Route::post('/create', 'create')->name("create");
+    Route::get('/show/{subject}', 'show')->name("show");
+    Route::put('/update/{subject}', 'update')->name("update");
+    Route::delete('/delete/{subject}', 'delete')->name("delete");
+});
+
+//All tutor routes
+Route::prefix('tutors')->controller(TutorController::class)->name('tutor.')->group(function() {
+    Route::get('/', 'index');
+    Route::post('/create', 'store')->name("create");
+    Route::get('/show/{tutor}', 'show')->name("show");
+    Route::put('/update/{tutor}', 'update')->name("update");
+    Route::delete('/delete/{tutor}', 'delete')->name("delete");
 });
 

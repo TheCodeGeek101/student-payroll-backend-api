@@ -26,7 +26,6 @@ class CreateStudentAction extends Action{
                 ['user_id' => $user->id, 'registered_by' => 1]
             ));
         });
-
         return $student;
     }
 }
