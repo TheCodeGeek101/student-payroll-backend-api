@@ -9,6 +9,9 @@ use App\Containers\SchoolsSection\Subjects\Requests\StoreSubjectRequest;
 use App\Containers\SchoolsSection\Subjects\Actions\CreateSubjectAction;
 use Illuminate\Http\JsonResponse;
 use App\Containers\SchoolsSection\Subjects\Resources\SubjectResource;
+use App\Containers\SchoolsSection\Subjects\Actions\GetSubjectByClassAction;
+use Illuminate\Http\Request;
+
 class SubjectsController extends Controller
 {
     /**
@@ -17,12 +20,14 @@ class SubjectsController extends Controller
      * @param \App\Containers\SchoolsSection\Subjects\Requests\StoreSubjectRequest $request
      * @return \Illuminate\Http\JsonResponse
      */
-    public function index(): JsonResponse{
+    public function index(): JsonResponse
+    {
         $subjects = Subject::all();
         return response()->json(['Subjects'=>$subjects],200);
     }
 
-    public function show(Subject $subject): JsonResponse{
+    public function show(Subject $subject): JsonResponse
+    {
         $singleSubject = new SubjectResource($subject);
         return response()->json(['Subject'=>$singleSubject],200);
     }
@@ -49,6 +54,12 @@ class SubjectsController extends Controller
     {
         $subject->delete();
         return response()->json(['message' => 'Subject deleted successfully'],200);
+    }
+
+    public function getSubjectByClass(Request $request): JsonResponse
+    {
+        $subjects = app(GetSubjectByClassAction::class)->run($request);
+        return response()->json(['Subjects'=>$subjects],200);
     }
 }
 

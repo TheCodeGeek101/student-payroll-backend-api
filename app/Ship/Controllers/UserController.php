@@ -1,14 +1,15 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Ship\Controllers;
 
-use Illuminate\Http\Request;
-use App\Models\User;
+use App\Http\Controllers\Controller;
+use App\Http\Requests\UpdateUserRequest;
+use App\Http\Requests\UserRequest;
 use App\Http\Resources\UserResource;
+use App\Models\User;
 use App\Ship\Actions\CreateUserAction;
 use App\Ship\Actions\UpdateUserAction;
-use App\Http\Requests\UserRequest;
-use App\Http\Requests\UpdateUserRequest;
+
 class UserController extends Controller
 {
     /**

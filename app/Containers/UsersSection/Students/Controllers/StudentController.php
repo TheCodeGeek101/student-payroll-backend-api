@@ -14,7 +14,7 @@ class StudentController extends Controller
 {
     public function index() {
         $students = Student::all();
-        return response()->json($students);
+        return response()->json(['students'=>$students]);
     }
 
     public function store(StoreStudentRequest $request){
@@ -32,5 +32,9 @@ class StudentController extends Controller
     public function update(UpdateStudentRequest $request, Student $student){
         $updatedStudent = app(UpdateStudentAction::class)->run($request,$student);
         return response()->json(['message' => 'Student Updated Successfully','student' => $updatedStudent],200);
+    }
+    public function destroy(Student $student){
+        $student->delete();
+        return response()->json(['message'=>'Student deleted successfully'],200);
     }
 }

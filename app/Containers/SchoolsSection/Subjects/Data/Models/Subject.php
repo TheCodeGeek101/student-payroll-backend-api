@@ -2,6 +2,7 @@
 
 namespace App\Containers\SchoolsSection\Subjects\Data\Models;
 
+use App\Containers\SchoolsSection\Grades\Data\Models\Grades;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
@@ -22,5 +23,9 @@ class Subject extends Model
     public function tutors(): BelongsToMany
     {
         return $this->belongsToMany(Tutor::class);
+    }
+
+    public function grades(){
+        return $this->hasMany(Grades::class);
     }
 }

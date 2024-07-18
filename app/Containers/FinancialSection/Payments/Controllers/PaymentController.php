@@ -7,6 +7,7 @@ use App\Containers\FinancialSection\Payments\Requests\PaymentRequest;
 use App\Containers\FinancialSection\Payments\Actions\MakePaymentAction;
 use App\Containers\UsersSection\Students\Data\Models\Student;
 use App\Containers\FinancialSection\Payments\Data\Models\Payments;
+
 class PaymentController extends Controller
 {
     public function index(){

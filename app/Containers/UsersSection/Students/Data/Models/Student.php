@@ -2,6 +2,7 @@
 
 namespace App\Containers\UsersSection\Students\Data\Models;
 
+use App\Containers\SchoolsSection\Grades\Data\Models\Grades;
 use App\Containers\UsersSection\Guardians\Data\Models\Guardian;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -35,6 +36,11 @@ class Student extends Model
     public function payments()
     {
         return $this->hasMany(Payments::class);
+    }
+
+    public function grades()
+    {
+        return $this->hasMany(Grades::class);
     }
 
     public function subjects(): BelongsToMany

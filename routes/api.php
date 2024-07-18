@@ -1,14 +1,15 @@
 <?php
 
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Route;
+use App\Containers\FinancialSection\Payments\Controllers\PaymentController;
+use App\Containers\SchoolsSection\Grades\Controllers\GradesController;
+use App\Containers\SchoolsSection\Subjects\Controllers\SubjectsController;
 use App\Containers\UsersSection\Administrator\Controllers\AdminController;
 use App\Containers\UsersSection\Students\Controllers\StudentController;
-use App\Http\Controllers\UserController;
-use App\Containers\FinancialSection\Payments\Controllers\PaymentController;
-use App\Containers\SchoolsSection\Subjects\Controllers\SubjectsController;
 use App\Containers\UsersSection\Tutors\Controllers\TutorController;
-
+use App\Ship\Controllers\AuthenticationController;
+use App\Ship\Controllers\UserController;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Route;
 
 /*
 |--------------------------------------------------------------------------
@@ -20,6 +21,10 @@ use App\Containers\UsersSection\Tutors\Controllers\TutorController;
 | be assigned to the "api" middleware group. Make something great!
 |
 */
+    //Authentication routes
+Route::prefix('auth')->controller(AuthenticationController::class)->group(function () {
+    Route::post('/login', 'login');
+});
 
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
@@ -40,10 +45,12 @@ Route::controller(AdminController::class)->name('admin.')->prefix('admin')->grou
 
  // All student routes
 Route::controller(StudentController::class)->name('student.')->prefix('students')->group(function() {
+        //CRUD ENDPOINTS
     Route::get('/', 'index');
     Route::post('/create', 'store');
     Route::put('/update/{student}', 'update');
     Route::get('/show/{student}', 'show');
+    Route::delete('/delete/{student}', 'destroy');
 });
 
 // All payment routes
@@ -54,19 +61,37 @@ Route::controller(PaymentController::class)->name('payment.')->prefix('payments'
 
 //All Subject routes
 Route::controller(SubjectsController::class)->name('subjects.')->prefix('subjects')->group(function() {
+        // CRUD ENDPOINTS
     Route::get('/', 'index');
     Route::post('/create', 'create')->name("create");
     Route::get('/show/{subject}', 'show')->name("show");
     Route::put('/update/{subject}', 'update')->name("update");
     Route::delete('/delete/{subject}', 'delete')->name("delete");
+
+    // ADDITIONAL ENDPOINTS
+    Route::post('/class', 'getSubjectByClass')->name("class");
 });
 
 //All tutor routes
 Route::prefix('tutors')->controller(TutorController::class)->name('tutor.')->group(function() {
+        //CRUD ENDPOINTS
     Route::get('/', 'index');
     Route::post('/create', 'store')->name("create");
     Route::get('/show/{tutor}', 'show')->name("show");
     Route::put('/update/{tutor}', 'update')->name("update");
     Route::delete('/delete/{tutor}', 'delete')->name("delete");
+});
+
+//All Grade routes
+Route::prefix('grades')->controller(GradesController::class)->name('grades.')->group(function() {
+      // CRUD ENDPOINTS
+    Route::get('/', 'index');
+    Route::post('/create', 'store')->name("create");
+    Route::get('/show/{grade}', 'show')->name("show");
+    Route::put('/update/{grade}', 'update')->name("update");
+    Route::delete('/delete/{grade}', 'delete')->name("delete");
+
+      // ADDITIONAL ENDPOINTS
+    Route::get('/subjects/', 'getSubjectGrades')->name("subjects");
 });
 
