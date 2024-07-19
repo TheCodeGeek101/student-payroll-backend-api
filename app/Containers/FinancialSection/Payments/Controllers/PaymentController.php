@@ -6,12 +6,12 @@ use App\Http\Controllers\Controller;
 use App\Containers\FinancialSection\Payments\Requests\PaymentRequest;
 use App\Containers\FinancialSection\Payments\Actions\MakePaymentAction;
 use App\Containers\UsersSection\Students\Data\Models\Student;
-use App\Containers\FinancialSection\Payments\Data\Models\Payments;
+use App\Containers\FinancialSection\Payments\Data\Models\Payment;
 
 class PaymentController extends Controller
 {
     public function index(){
-        $payments = Payments::all();
+        $payments = Payment::all();
         return response()->json(['message'=>'Payments retrieved successfully', 'payments' => $payments]);
     }
     public function payments(PaymentRequest $request, Student $student)

@@ -11,7 +11,9 @@ use App\Containers\UsersSection\Tutors\Requests\UpdateTutorRequest;
 use App\Containers\UsersSection\Tutors\Data\Models\Tutor;
 use App\Containers\UsersSection\Tutors\Resources\TutorResource;
 use Illuminate\Http\JsonResponse;
-
+use App\Containers\UsersSection\Tutors\Actions\GetTutorSubjectsAction;
+use Illuminate\Http\Request;
+use App\Containers\UsersSection\Tutors\Actions\GetEnrolledStudentsAction;
 class TutorController extends Controller
 {
     public function index(): JsonResponse
@@ -41,5 +43,17 @@ class TutorController extends Controller
     {
         $tutor->delete();
         return response()->json(['message' => 'Tutor deleted successfully'], 200);
+    }
+
+    public function getTutorSubjects(Tutor $tutor): JsonResponse
+    {
+        $subjects = app(GetTutorSubjectsAction::class)->run($tutor);
+        return response()->json(['TutorSubjects' => $subjects], 200);
+    }
+
+    public function getEnrolledStudents(Tutor $tutor): JsonResponse
+    {
+        $enrolledStudents = app(GetEnrolledStudentsAction::class)->run($tutor);
+        return response()->json(['StudentSubjects' => $enrolledStudents], 200);
     }
 }

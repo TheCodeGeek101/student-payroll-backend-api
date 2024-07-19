@@ -11,6 +11,7 @@ use Illuminate\Http\JsonResponse;
 use App\Containers\SchoolsSection\Subjects\Resources\SubjectResource;
 use App\Containers\SchoolsSection\Subjects\Actions\GetSubjectByClassAction;
 use Illuminate\Http\Request;
+use App\Containers\SchoolsSection\Subjects\Actions\CreateSubjectTutorAction;
 
 class SubjectsController extends Controller
 {
@@ -54,6 +55,12 @@ class SubjectsController extends Controller
     {
         $subject->delete();
         return response()->json(['message' => 'Subject deleted successfully'],200);
+    }
+
+    public function createSubjectTutor(Request $request): JsonResponse
+    {
+        $subject = app(CreateSubjectTutorAction::class)->run($request);
+        return response()->json(['message' => 'Subject assigned successfully','Subject'=>$subject],200);
     }
 
     public function getSubjectByClass(Request $request): JsonResponse

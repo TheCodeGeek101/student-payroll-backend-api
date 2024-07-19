@@ -9,7 +9,7 @@ use App\Containers\SchoolsSection\Subjects\Data\Models\Subject;
 use App\Containers\UsersSection\Students\Data\Models\Student;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
-class Grades extends Model
+class Grade extends Model
 {
     use HasFactory;
     protected $fillable = [

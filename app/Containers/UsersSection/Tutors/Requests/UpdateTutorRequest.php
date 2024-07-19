@@ -47,8 +47,6 @@ class UpdateTutorRequest extends FormRequest
             'phone' => 'nullable|string|max:20',
             'hire_date' => 'sometimes|required|date',
             'department' => 'nullable|string|max:255',
-            'subject_ids' => 'sometimes|required|array',
-            'subject_ids.*' => 'exists:subjects,id',
             'bio' => 'nullable|string',
         ];
     }

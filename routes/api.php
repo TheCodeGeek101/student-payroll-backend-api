@@ -45,12 +45,17 @@ Route::controller(AdminController::class)->name('admin.')->prefix('admin')->grou
 
  // All student routes
 Route::controller(StudentController::class)->name('student.')->prefix('students')->group(function() {
-        //CRUD ENDPOINTS
+
+    //CRUD ENDPOINTS
     Route::get('/', 'index');
     Route::post('/create', 'store');
     Route::put('/update/{student}', 'update');
     Route::get('/show/{student}', 'show');
     Route::delete('/delete/{student}', 'destroy');
+
+    // ADDITIONAL ENDPOINTS
+    Route::post('/subject/enroll','enrollSubject')->name('subject.enroll');
+
 });
 
 // All payment routes
@@ -59,8 +64,10 @@ Route::controller(PaymentController::class)->name('payment.')->prefix('payments'
     Route::post('/create/{student}', 'payments');
 });
 
+
 //All Subject routes
 Route::controller(SubjectsController::class)->name('subjects.')->prefix('subjects')->group(function() {
+
         // CRUD ENDPOINTS
     Route::get('/', 'index');
     Route::post('/create', 'create')->name("create");
@@ -68,23 +75,32 @@ Route::controller(SubjectsController::class)->name('subjects.')->prefix('subject
     Route::put('/update/{subject}', 'update')->name("update");
     Route::delete('/delete/{subject}', 'delete')->name("delete");
 
-    // ADDITIONAL ENDPOINTS
+        // ADDITIONAL ENDPOINTS
+    Route::post('/tutor/create','createSubjectTutor')->name("tutor");
     Route::post('/class', 'getSubjectByClass')->name("class");
+
 });
 
 //All tutor routes
 Route::prefix('tutors')->controller(TutorController::class)->name('tutor.')->group(function() {
-        //CRUD ENDPOINTS
+
+    //CRUD ENDPOINTS
     Route::get('/', 'index');
     Route::post('/create', 'store')->name("create");
     Route::get('/show/{tutor}', 'show')->name("show");
     Route::put('/update/{tutor}', 'update')->name("update");
     Route::delete('/delete/{tutor}', 'delete')->name("delete");
+
+
+    //ADDITIONAL ENDPOINTS
+    Route::get('/{tutor}/subjects','getTutorSubjects')->name("subjects");
+    Route::get('/{tutor}/students','getEnrolledStudents')->name("students");
+
 });
 
 //All Grade routes
 Route::prefix('grades')->controller(GradesController::class)->name('grades.')->group(function() {
-      // CRUD ENDPOINTS
+       // CRUD ENDPOINTS
     Route::get('/', 'index');
     Route::post('/create', 'store')->name("create");
     Route::get('/show/{grade}', 'show')->name("show");

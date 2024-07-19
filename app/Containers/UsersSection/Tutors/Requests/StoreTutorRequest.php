@@ -31,7 +31,6 @@ class StoreTutorRequest extends FormRequest
             'phone' => 'nullable|string|max:20',
             'hire_date' => 'required|date',
             'department' => 'nullable|string|max:255',
-            'subjects.*' => 'exists:subjects,id',
             'bio' => 'nullable|string',
         ];
     }

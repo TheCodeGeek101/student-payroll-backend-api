@@ -40,6 +40,6 @@ class AuthenticationController extends Controller
         $request->session()->invalidate();
         $request->session()->regenerateToken();
 
-        return response()->json(['status' => true, 'message' => 'User Logged Out Successfully']);
+        return response()->json(['status' => true, 'message' => 'User Logged Out Successfully'],200);
     }
 }

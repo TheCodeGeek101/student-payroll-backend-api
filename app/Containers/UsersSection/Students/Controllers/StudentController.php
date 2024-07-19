@@ -9,6 +9,8 @@ use App\Http\Controllers\Controller;
 use App\Containers\UsersSection\Students\Actions\CreateStudentAction;
 use App\Containers\UsersSection\Students\Requests\StoreStudentRequest;
 use App\Containers\UsersSection\Students\Resources\StudentResource;
+use App\Containers\UsersSection\Students\Actions\EnrollSubjectAction;
+use Illuminate\Http\Request;
 
 class StudentController extends Controller
 {
@@ -32,6 +34,11 @@ class StudentController extends Controller
     public function update(UpdateStudentRequest $request, Student $student){
         $updatedStudent = app(UpdateStudentAction::class)->run($request,$student);
         return response()->json(['message' => 'Student Updated Successfully','student' => $updatedStudent],200);
+    }
+
+    public function enrollSubject(Request $request){
+        app(EnrollSubjectAction::class)->run($request);
+        return response()->json(['message' => 'Student enrolled Successfully'],200);
     }
     public function destroy(Student $student){
         $student->delete();

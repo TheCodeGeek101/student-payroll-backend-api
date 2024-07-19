@@ -195,6 +195,14 @@ return [
         App\Providers\EventServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
 
+
+        /*
+         * Porto service provider
+         */
+        App\Containers\FinancialSection\FinancialSectionServiceProvider::class,
+        App\Containers\SchoolsSection\SchoolsSectionServiceProvider::class,
+        App\Containers\UsersSection\UsersSectionServiceProvider::class,
+
     ],
 
     /*

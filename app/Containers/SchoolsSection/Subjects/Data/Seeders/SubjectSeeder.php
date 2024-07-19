@@ -34,7 +34,8 @@ class SubjectSeeder extends Seeder
                 "description" => "An introductory course to Mathematics",
                 "credits" => 4,
                 "created_at" => now(),
-                "updated_at" => now()
+                "updated_at" => now(),
+
             ],
             [
                 "name" => "English Literature",

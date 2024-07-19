@@ -7,7 +7,7 @@ use App\Containers\FinancialSection\Payments\Requests\PaymentRequest;
 use App\Containers\UsersSection\Students\Data\Models\Student;
 use GuzzleHttp\Client as GuzzleClient;
 use Illuminate\Support\Facades\Log;
-use App\Containers\FinancialSection\Payments\Data\Models\Payments;
+use App\Containers\FinancialSection\Payments\Data\Models\Payment;
 use Exception;
 
 class MakePaymentAction extends Action
@@ -65,7 +65,7 @@ class MakePaymentAction extends Action
             // Check if the payment was successful
             if (isset($responseData['status']) && $responseData['status'] === 'success') {
                 // Store payment record in the database
-                $payment = new Payments([
+                $payment = new Payment([
                     'student_id' => $student->id,
                     'amount' => $request->amount,
                     'description' => 'Payment for tuition fees',  // Adjust as necessary
