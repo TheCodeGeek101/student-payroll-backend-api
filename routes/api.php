@@ -34,7 +34,7 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 Route::controller(UserController::class)->name('user.')->prefix('users')->group(function () {
         Route::get('/', 'index');
         Route::get('/show/{user}', 'show');
-        Route::post('/add', 'store');
+        Route::post('/create', 'store');
         Route::put('/update/{user}', 'update');
 });
 
@@ -55,6 +55,7 @@ Route::controller(StudentController::class)->name('student.')->prefix('students'
 
     // ADDITIONAL ENDPOINTS
     Route::post('/subject/enroll','enrollSubject')->name('subject.enroll');
+    Route::get('/{student}/subjects', 'getEnrolledSubjects')->name('subjects');
 
 });
 

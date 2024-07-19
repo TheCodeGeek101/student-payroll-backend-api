@@ -11,7 +11,8 @@ use App\Containers\UsersSection\Students\Requests\StoreStudentRequest;
 use App\Containers\UsersSection\Students\Resources\StudentResource;
 use App\Containers\UsersSection\Students\Actions\EnrollSubjectAction;
 use Illuminate\Http\Request;
-
+use Illuminate\Http\JsonResponse;
+use App\Containers\UsersSection\Students\Actions\GetEnrolledSubjectAction;
 class StudentController extends Controller
 {
     public function index() {
@@ -36,9 +37,26 @@ class StudentController extends Controller
         return response()->json(['message' => 'Student Updated Successfully','student' => $updatedStudent],200);
     }
 
-    public function enrollSubject(Request $request){
-        app(EnrollSubjectAction::class)->run($request);
-        return response()->json(['message' => 'Student enrolled Successfully'],200);
+    public function enrollSubject(Request $request): JsonResponse
+    {
+        try {
+            $result = app(EnrollSubjectAction::class)->run($request);
+
+            if ($result === false) {
+                return response()->json(['message' => 'Student already enrolled in this subject'], 409);
+            }
+
+            return response()->json(['message' => 'Student enrolled in subject successfully'], 200);
+        } catch (ValidationException $e) {
+            return response()->json(['errors' => $e->errors()], 422);
+        } catch (\Exception $e) {
+            return response()->json(['message' => 'An error occurred during enrollment'], 500);
+        }
+    }
+    public function getEnrolledSubjects(Student $student): JsonResponse
+    {
+        $enrolledSubjects = app(GetEnrolledSubjectAction::class)->run($student);
+        return response()->json(['enrolledSubjects'=>$enrolledSubjects],200);
     }
     public function destroy(Student $student){
         $student->delete();
