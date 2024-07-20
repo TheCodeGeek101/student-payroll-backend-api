@@ -4,13 +4,14 @@ namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
 use App\Containers\UsersSection\Tutors\Data\Models\Tutor;
 use App\Containers\UsersSection\Students\Data\Models\Student;
 use App\Containers\UsersSection\Adminstrator\Data\Models\Admin;
-use Illuminate\Database\Eloquent\Relations\HasMany;
+
 class User extends Authenticatable
 {
     use HasApiTokens, HasFactory, Notifiable;
@@ -47,16 +48,16 @@ class User extends Authenticatable
         return User::find($id);
     }
 
-    public function tutors(): HasMany
+    public function tutor(): HasOne
     {
-        return $this->hasMany(Tutor::class);
+        return $this->hasOne(Tutor::class);
     }
-    public function students(): HasMany
+    public function student(): HasOne
     {
-        return $this->hasMany(Student::class);
+        return $this->hasOne(Student::class);
     }
-    public function admins(): HasMany
+    public function admin(): HasOne
     {
-        return $this->hasMany(Admin::class);
+        return $this->hasOne(Admin::class);
     }
 }

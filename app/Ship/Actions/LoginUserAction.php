@@ -1,11 +1,13 @@
 <?php
 
+
 namespace App\Ship\Actions;
 
+use App\Containers\UsersSection\Adminstrator\Data\Models\Admin;
+use App\Containers\UsersSection\Students\Data\Models\Student;
+use App\Containers\UsersSection\Tutors\Data\Models\Tutor;
 use App\Ship\Actions\Action;
-use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use Illuminate\Http\Request;
-use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 
@@ -35,12 +37,37 @@ class LoginUserAction extends Action
             }
 
             $user = Auth::user();
+            $userData = null;
+
+            if ($user->role == 'admin') {
+                $userData = Admin::join('users', 'users.id', '=', 'admins.user_id')
+                    ->where('users.id', $user->id)
+                    ->select('users.*', 'admins.*')
+                    ->first();
+
+                $userData = ['admin' => $userData];
+            } elseif ($user->role == 'student') {
+                $userData = Student::join('users', 'users.id', '=', 'students.user_id')
+                    ->where('users.id', $user->id)
+                    ->select('users.*', 'students.*')
+                    ->first();
+
+                $userData = ['student' => $userData];
+            } elseif ($user->role == 'tutor') {
+                $userData = Tutor::join('users', 'users.id', '=', 'tutors.user_id')
+                    ->where('users.id', $user->id)
+                    ->select('users.*', 'tutors.*')
+                    ->first();
+
+                $userData = ['tutor' => $userData];
+            }
 
             return response()->json([
                 'status' => true,
                 'message' => 'User Logged In Successfully',
-                'user' => $user,
+                'user' => $userData,
             ], 200);
+
         } catch (\Throwable $exception) {
             return response()->json([
                 'status' => false,

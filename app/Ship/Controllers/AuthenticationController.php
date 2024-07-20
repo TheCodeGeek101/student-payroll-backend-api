@@ -1,5 +1,6 @@
 <?php
 
+
 namespace App\Ship\Controllers;
 
 use App\Http\Controllers\Controller;
@@ -29,7 +30,7 @@ class AuthenticationController extends Controller
         return response()->json([
             'status' => true,
             'message' => 'User Logged In Successfully',
-            'user' => $user,
+            'user' => $response->original['user'],
             'token' => $token,
         ], 200);
     }
@@ -40,6 +41,6 @@ class AuthenticationController extends Controller
         $request->session()->invalidate();
         $request->session()->regenerateToken();
 
-        return response()->json(['status' => true, 'message' => 'User Logged Out Successfully'],200);
+        return response()->json(['status' => true, 'message' => 'User Logged Out Successfully'], 200);
     }
 }

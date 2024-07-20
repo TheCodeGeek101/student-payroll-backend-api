@@ -4,6 +4,7 @@ namespace App\Containers\SchoolsSection\Subjects\Controllers;
 use App\Containers\SchoolsSection\Subjects\Actions\UpdateSubjectAction;
 use App\Containers\SchoolsSection\Subjects\Data\Models\Subject;
 use App\Containers\SchoolsSection\Subjects\Requests\UpdateSubjectRequest;
+use App\Containers\UsersSection\Adminstrator\Data\Models\Admin;
 use App\Http\Controllers\Controller;
 use App\Containers\SchoolsSection\Subjects\Requests\StoreSubjectRequest;
 use App\Containers\SchoolsSection\Subjects\Actions\CreateSubjectAction;
@@ -57,9 +58,9 @@ class SubjectsController extends Controller
         return response()->json(['message' => 'Subject deleted successfully'],200);
     }
 
-    public function assignSubjectToTutor(Request $request): JsonResponse
+    public function assignSubjectToTutor(Request $request,Admin $admin): JsonResponse
     {
-        $subject = app(AssignSubjectToTutor::class)->run($request);
+        $subject = app(AssignSubjectToTutor::class)->run($request,$admin);
         return response()->json(['message' => 'Subject assigned successfully','Subject'=>$subject],200);
     }
 
