@@ -37,10 +37,10 @@ class StudentController extends Controller
         return response()->json(['message' => 'Student Updated Successfully','student' => $updatedStudent],200);
     }
 
-    public function enrollSubject(Request $request): JsonResponse
+    public function enrollSubject(Request $request, Student $student): JsonResponse
     {
         try {
-            $result = app(EnrollSubjectAction::class)->run($request);
+            $result = app(EnrollSubjectAction::class)->run($request, $student);
 
             if ($result === false) {
                 return response()->json(['message' => 'Student already enrolled in this subject'], 409);

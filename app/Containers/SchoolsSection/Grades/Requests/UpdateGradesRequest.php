@@ -39,7 +39,6 @@ class UpdateGradesRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'tutor_id' => 'sometimes|exists:tutors,id',
             'student_id' => 'sometimes|exists:students,id',
             'subject_id' => 'sometimes|exists:subjects,id',
             'grade' => 'sometimes|string|max:5',

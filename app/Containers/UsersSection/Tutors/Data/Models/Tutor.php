@@ -1,7 +1,9 @@
 <?php
 
+
 namespace App\Containers\UsersSection\Tutors\Data\Models;
 
+use App\Containers\UsersSection\Students\Data\Models\Student;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
@@ -22,31 +24,21 @@ class Tutor extends Model
         'user_id'
     ];
 
-    /**
-     * Get the full name of the tutor.
-     *
-     * @return string
-     */
     public function getFullNameAttribute(): string
     {
         return $this->first_name . ' ' . $this->last_name;
     }
 
-    /**
-     * The subjects that belong to the tutor.
-     *
-     * @return BelongsToMany
-     */
     public function subjects(): BelongsToMany
     {
         return $this->belongsToMany(Subject::class, 'subject_tutor');
     }
 
-    /**
-     * The user that the tutor belongs to.
-     *
-     * @return BelongsTo
-     */
+    public function students(): BelongsToMany
+    {
+        return $this->belongsToMany(Student::class);
+    }
+
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class, 'user_id');

@@ -11,10 +11,9 @@ use Illuminate\Validation\ValidationException;
 
 class EnrollSubjectAction extends Action
 {
-    public function run(Request $request)
+    public function run(Request $request, Student $student)
     {
         $validator = Validator::make($request->all(), [
-            'student_id' => 'required|integer|exists:students,id',
             'subject_id' => 'required|integer|exists:subjects,id',
         ]);
 
@@ -24,7 +23,7 @@ class EnrollSubjectAction extends Action
 
         $data = $validator->validated();
 
-        $student = Student::find($data['student_id']);
+        $student = Student::find($student->id);
         $subject = Subject::find($data['subject_id']);
 
         if ($student->subjects()->where('subject_id', $data['subject_id'])->exists()) {

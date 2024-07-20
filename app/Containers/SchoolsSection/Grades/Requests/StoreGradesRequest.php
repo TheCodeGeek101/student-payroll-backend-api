@@ -39,7 +39,7 @@ class StoreGradesRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'tutor_id' => 'required|exists:tutors,id',
+
             'student_id' => 'required|exists:students,id',
             'subject_id' => 'required|exists:subjects,id',
             'grade' => 'required|string|max:5',

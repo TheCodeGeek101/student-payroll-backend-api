@@ -14,6 +14,8 @@ use Illuminate\Http\JsonResponse;
 use App\Containers\UsersSection\Tutors\Actions\GetTutorSubjectsAction;
 use Illuminate\Http\Request;
 use App\Containers\UsersSection\Tutors\Actions\GetEnrolledStudentsAction;
+use App\Containers\UsersSection\Tutors\Actions\GetStudentGradesAction;
+
 class TutorController extends Controller
 {
     public function index(): JsonResponse
@@ -54,6 +56,13 @@ class TutorController extends Controller
     public function getEnrolledStudents(Tutor $tutor): JsonResponse
     {
         $enrolledStudents = app(GetEnrolledStudentsAction::class)->run($tutor);
-        return response()->json(['StudentSubjects' => $enrolledStudents], 200);
+        return response()->json(['data' => $enrolledStudents], 200);
     }
+
+    public function getStudentGrades(Tutor $tutor): JsonResponse
+    {
+        $grades = app(GetStudentGradesAction::class)->run($tutor);
+        return response()->json(['grades' => $grades], 200);
+    }
+
 }

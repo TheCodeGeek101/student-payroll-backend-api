@@ -7,7 +7,10 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
-
+use App\Containers\UsersSection\Tutors\Data\Models\Tutor;
+use App\Containers\UsersSection\Students\Data\Models\Student;
+use App\Containers\UsersSection\Adminstrator\Data\Models\Admin;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 class User extends Authenticatable
 {
     use HasApiTokens, HasFactory, Notifiable;
@@ -42,5 +45,18 @@ class User extends Authenticatable
     public static function getUser($id)
     {
         return User::find($id);
+    }
+
+    public function tutors(): HasMany
+    {
+        return $this->hasMany(Tutor::class);
+    }
+    public function students(): HasMany
+    {
+        return $this->hasMany(Student::class);
+    }
+    public function admins(): HasMany
+    {
+        return $this->hasMany(Admin::class);
     }
 }

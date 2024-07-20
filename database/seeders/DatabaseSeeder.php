@@ -7,7 +7,7 @@ use Illuminate\Database\Seeder;
 use Database\Seeders\UserSeeder;
 use App\Containers\UsersSection\Students\Data\Seeders\StudentSeeder;
 use App\Containers\SchoolsSection\Subjects\Data\Seeders\SubjectSeeder;
-
+use App\Containers\UsersSection\Adminstrator\Data\Seeders\AdministratorSeeder;
 class DatabaseSeeder extends Seeder
 {
     /**
@@ -17,6 +17,7 @@ class DatabaseSeeder extends Seeder
     {
         $this->call([
             UserSeeder::class,
+//            AdministratorSeeder::class,
 //            StudentSeeder::class,
             SubjectSeeder::class,
         ]);

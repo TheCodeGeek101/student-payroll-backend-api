@@ -1,17 +1,16 @@
 <?php
 
+
 namespace App\Containers\SchoolsSection\Grades\Data\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use App\Containers\UsersSection\Tutors\Data\Models\Tutor;
-use App\Containers\SchoolsSection\Subjects\Data\Models\Subject;
-use App\Containers\UsersSection\Students\Data\Models\Student;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Grade extends Model
 {
     use HasFactory;
+
     protected $fillable = [
         'tutor_id',
         'student_id',
@@ -23,16 +22,16 @@ class Grade extends Model
 
     public function initiator(): BelongsTo
     {
-        return $this->belongsTo(Tutor::class);
+        return $this->belongsTo(Tutor::class, 'tutor_id');
     }
 
     public function student(): BelongsTo
     {
-        return $this->belongsTo(Student::class);
+        return $this->belongsTo(Student::class, 'student_id');
     }
 
     public function subject(): BelongsTo
     {
-        return $this->belongsTo(Subject::class);
+        return $this->belongsTo(Subject::class, 'subject_id');
     }
 }

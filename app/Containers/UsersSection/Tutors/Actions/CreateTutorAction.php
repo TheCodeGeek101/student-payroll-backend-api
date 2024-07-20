@@ -19,11 +19,11 @@ class CreateTutorAction extends Action
         DB::transaction(function () use ($request, &$tutor) {
             Log::info('Starting transaction for creating a tutor.');
 
-            $tutorName = $request->input('first_name') . ' ' . ucfirst($request->input('last_name'));
+            $tutorName = $request->validated()['first_name'] . ' ' . ucfirst($request->validated()['last_name']);
 
             $user = User::create([
                 'name' => $tutorName,
-                'email' => $request->input('email'),
+                'email' => $request->validated()['email'],
                 'password' => Hash::make('SecuredKey@2024'),
                 'role' => 'tutor',
             ]);
