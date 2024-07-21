@@ -58,10 +58,13 @@ class SubjectsController extends Controller
         return response()->json(['message' => 'Subject deleted successfully'],200);
     }
 
-    public function assignSubjectToTutor(Request $request,Admin $admin): JsonResponse
+    public function assignSubjectToTutor(Request $request, Subject $subject, Admin $admin): JsonResponse
     {
-        $subject = app(AssignSubjectToTutor::class)->run($request,$admin);
-        return response()->json(['message' => 'Subject assigned successfully','Subject'=>$subject],200);
+        \Log::info('Admin Type: ' . get_class($admin));
+        \Log::info('Subject Type: ' . get_class($subject));
+
+        $assignedSubject = app(AssignSubjectToTutor::class)->run($request, $admin, $subject);
+        return response()->json(['message' => 'Subject assigned successfully', 'Subject' => $assignedSubject], 200);
     }
 
     public function getSubjectByClass(Request $request): JsonResponse

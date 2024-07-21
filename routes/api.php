@@ -3,13 +3,14 @@
 use App\Containers\FinancialSection\Payments\Controllers\PaymentController;
 use App\Containers\SchoolsSection\Grades\Controllers\GradesController;
 use App\Containers\SchoolsSection\Subjects\Controllers\SubjectsController;
-use App\Containers\UsersSection\Adminstrator\Controllers\AdminController;
 use App\Containers\UsersSection\Students\Controllers\StudentController;
 use App\Containers\UsersSection\Tutors\Controllers\TutorController;
 use App\Ship\Controllers\AuthenticationController;
 use App\Ship\Controllers\UserController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use App\Containers\UsersSection\Adminstrator\Controllers\AdminstratorController;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -21,6 +22,8 @@ use Illuminate\Support\Facades\Route;
 | be assigned to the "api" middleware group. Make something great!
 |
 */
+
+
     //Authentication routes
 Route::prefix('auth')->controller(AuthenticationController::class)->group(function () {
     Route::post('/login', 'login');
@@ -39,7 +42,7 @@ Route::controller(UserController::class)->name('user.')->prefix('users')->group(
 });
 
  // All admin routes
-Route::controller(AdminController::class)->name('admin.')->prefix('admin')->group(function() {
+Route::controller(AdminstratorController::class)->name('admin.')->prefix('admin')->group(function() {
             //CRUD ENDPOINTS
             Route::get('/','index')->name('index');
             Route::get('/show/{admin}', 'show');
@@ -82,7 +85,7 @@ Route::controller(SubjectsController::class)->name('subjects.')->prefix('subject
     Route::delete('/delete/{subject}', 'delete')->name("delete");
 
         // ADDITIONAL ENDPOINTS
-    Route::post('/{admin}/assign','assignSubjectToTutor')->name("tutor");
+    Route::post('/{subject}/admin/{admin}/assign', [SubjectsController::class, 'assignSubjectToTutor'])->name("tutor");
     Route::post('/class', 'getSubjectByClass')->name("class");
 
 });

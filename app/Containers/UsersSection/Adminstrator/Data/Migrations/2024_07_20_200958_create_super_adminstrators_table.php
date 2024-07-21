@@ -18,6 +18,7 @@ return new class extends Migration
             $table->string('phone')->nullable();
             $table->enum('gender', ['male', 'female']);
             $table->date('birthdate');
+            $table->foreignId('user_id')->constrained('users');
             $table->timestamps();
         });
     }
