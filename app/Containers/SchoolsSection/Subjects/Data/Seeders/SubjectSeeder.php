@@ -17,6 +17,7 @@ class SubjectSeeder extends Seeder
                 "code" => "BIO101",
                 "description" => "An introductory course to Biology",
                 "credits" => 3,
+                "year_of_study"=> 3,
                 "created_at" => now(),
                 "updated_at" => now()
             ],
@@ -25,6 +26,7 @@ class SubjectSeeder extends Seeder
                 "code" => "PHYS101",
                 "description" => "An introductory course to Physics",
                 "credits" => 4,
+                "year_of_study"=> 3,
                 "created_at" => now(),
                 "updated_at" => now()
             ],
@@ -33,6 +35,8 @@ class SubjectSeeder extends Seeder
                 "code" => "MATH101",
                 "description" => "An introductory course to Mathematics",
                 "credits" => 4,
+                "year_of_study"=> 3,
+
                 "created_at" => now(),
                 "updated_at" => now(),
 
@@ -42,6 +46,7 @@ class SubjectSeeder extends Seeder
                 "code" => "ENG101",
                 "description" => "An introductory course to English Literature",
                 "credits" => 3,
+                "year_of_study"=> 3,
                 "created_at" => now(),
                 "updated_at" => now()
             ]

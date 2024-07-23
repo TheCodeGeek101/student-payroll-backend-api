@@ -40,9 +40,9 @@ class LoginUserAction extends Action
             $userData = null;
 
             if ($user->role == 'admin') {
-                $userData = Admin::join('users', 'users.id', '=', 'admins.user_id')
+                $userData = Admin::join('users', 'users.id', '=', 'administrators.user_id')
                     ->where('users.id', $user->id)
-                    ->select('users.*', 'admins.*')
+                    ->select('users.*', 'administrators.*')
                     ->first();
 
                 $userData = ['admin' => $userData];

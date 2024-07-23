@@ -29,8 +29,5 @@ class CreateAdminstratorAction extends Action
             ));
         });
         return $admin;
-
-
     }
-
 }

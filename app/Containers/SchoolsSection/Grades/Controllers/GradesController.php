@@ -11,6 +11,7 @@ use App\Containers\SchoolsSection\Grades\Actions\UpdateGradesAction;
 use App\Containers\SchoolsSection\Grades\Resources\GradesResource;
 use App\Containers\SchoolsSection\Grades\Actions\GetSubjectGrade;
 use App\Containers\UsersSection\Tutors\Data\Models\Tutor;
+use App\Containers\SchoolsSection\Subjects\Data\Models\Subject;
 class GradesController extends Controller
 {
     public function index()
@@ -18,8 +19,8 @@ class GradesController extends Controller
         $grades = Grade::all();
         return response()->json(['grades'=>$grades],200);
     }
-    public function store(StoreGradesRequest $request, Tutor $tutor){
-        $newGrade = app(CreateGradesAction::class)->run($request,$tutor);
+    public function store(StoreGradesRequest $request, Tutor $tutor, Subject $subject){
+        $newGrade = app(CreateGradesAction::class)->run($request,$tutor, $subject);
         return response()->json(['message'=>'Grade uploaded successfully','grade'=>$newGrade],201);
     }
     public function show(Grade $grades){

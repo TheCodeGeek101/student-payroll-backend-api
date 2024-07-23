@@ -11,11 +11,14 @@ class Grade extends Model
 {
     use HasFactory;
 
+    protected $table = 'grades';
+
     protected $fillable = [
         'tutor_id',
         'student_id',
         'subject_id',
         'grade',
+        'grade_value',
         'comments',
         'graded_at',
     ];

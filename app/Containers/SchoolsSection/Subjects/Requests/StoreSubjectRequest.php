@@ -34,6 +34,7 @@ class StoreSubjectRequest extends FormRequest
             'code' => 'required|string|max:50|unique:subjects,code',
             'description' => 'nullable|string',
             'credits' => 'required|integer|min:0',
+            'year_of_study' => 'required|integer|min:1',
         ];
     }
 }

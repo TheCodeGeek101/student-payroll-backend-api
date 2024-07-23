@@ -11,5 +11,4 @@ class UpdateGradesAction extends Action
         $grades->update($request->validated());
         return $grades;
     }
-
 }

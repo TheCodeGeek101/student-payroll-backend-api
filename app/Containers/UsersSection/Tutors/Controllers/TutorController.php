@@ -1,20 +1,24 @@
 <?php
-// app/Containers/UsersSection/Tutors/Controllers/TutorController.php
+
 
 namespace App\Containers\UsersSection\Tutors\Controllers;
 
 use App\Http\Controllers\Controller;
-use App\Containers\UsersSection\Tutors\Actions\CreateTutorAction;
-use App\Containers\UsersSection\Tutors\Actions\UpdateTutorAction;
-use App\Containers\UsersSection\Tutors\Requests\StoreTutorRequest;
-use App\Containers\UsersSection\Tutors\Requests\UpdateTutorRequest;
+use App\Containers\UsersSection\Tutors\Actions\{
+    CreateTutorAction,
+    UpdateTutorAction,
+    GetTutorSubjectsAction,
+    GetEnrolledStudentsAction,
+    GetStudentGradesAction,
+    AddStudentToClassAction
+};
+use App\Containers\UsersSection\Tutors\Requests\{
+    StoreTutorRequest,
+    UpdateTutorRequest
+};
 use App\Containers\UsersSection\Tutors\Data\Models\Tutor;
 use App\Containers\UsersSection\Tutors\Resources\TutorResource;
-use Illuminate\Http\JsonResponse;
-use App\Containers\UsersSection\Tutors\Actions\GetTutorSubjectsAction;
-use Illuminate\Http\Request;
-use App\Containers\UsersSection\Tutors\Actions\GetEnrolledStudentsAction;
-use App\Containers\UsersSection\Tutors\Actions\GetStudentGradesAction;
+use Illuminate\Http\{JsonResponse, Request};
 
 class TutorController extends Controller
 {
@@ -47,6 +51,12 @@ class TutorController extends Controller
         return response()->json(['message' => 'Tutor deleted successfully'], 200);
     }
 
+    public function addStudentsToClass(Request $request, Tutor $tutor): JsonResponse
+    {
+        app(AddStudentToClassAction::class)->run($request, $tutor);
+        return response()->json(['message' => 'Student added to class successfully'], 200);
+    }
+
     public function getTutorSubjects(Tutor $tutor): JsonResponse
     {
         $subjects = app(GetTutorSubjectsAction::class)->run($tutor);
@@ -64,5 +74,4 @@ class TutorController extends Controller
         $grades = app(GetStudentGradesAction::class)->run($tutor);
         return response()->json(['grades' => $grades], 200);
     }
-
 }

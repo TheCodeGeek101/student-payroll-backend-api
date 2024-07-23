@@ -1,11 +1,11 @@
 <?php
 
-namespace App\Containers\UsersSection\Adminstrator\Resources;
+namespace App\Containers\SchoolsSection\Class\Resources;
 
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\ResourceCollection;
 
-class AdminResourceCollection extends ResourceCollection
+class ClassroomResourceCollection extends ResourceCollection
 {
     /**
      * Transform the resource collection into an array.
@@ -15,10 +15,10 @@ class AdminResourceCollection extends ResourceCollection
     public function toArray(Request $request): array
     {
         return [
-            'object' => 'AdminResourceCollection',
+            'object'=> 'ClassroomResourceCollection',
             'data' => $this->collection,
             'links' => [
-                'self' => 'link-value'
+                'self' => 'link-value',
             ]
         ];
     }
