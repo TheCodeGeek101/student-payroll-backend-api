@@ -24,14 +24,19 @@ class SubjectsController extends Controller
      */
     public function index(): JsonResponse
     {
-        $subjects = Subject::all();
-        return response()->json(['Subjects'=>$subjects],200);
+        $subjects = Subject::join('departments', 'departments.id', '=', 'subjects.department_id')
+            ->select('subjects.*', 'departments.name as department_name')
+            ->get();
+        return response()->json(['subjects'=>$subjects],200);
     }
 
     public function show(Subject $subject): JsonResponse
     {
-        $singleSubject = new SubjectResource($subject);
-        return response()->json(['Subject'=>$singleSubject],200);
+        $singleSubject = Subject::join('departments', 'departments.id', '=', 'subjects.department_id')
+            ->where('subjects.id','=',$subject->id)
+            ->select('subjects.*', 'departments.name as department_name')
+            ->first();
+        return response()->json($singleSubject,200);
     }
 
     public function create(StoreSubjectRequest $request): JsonResponse

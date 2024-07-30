@@ -11,6 +11,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Containers\UsersSection\Adminstrator\Controllers\AdminstratorController;
 use App\Containers\SchoolsSection\Class\Controllers\ClassroomController;
+use App\Containers\SchoolsSection\Department\Controllers\DepartmentController;
 
 /*
 |--------------------------------------------------------------------------
@@ -107,6 +108,7 @@ Route::prefix('tutors')->controller(TutorController::class)->name('tutor.')->gro
     Route::get('/{tutor}/subjects','getTutorSubjects')->name("subjects");
     Route::get('/{tutor}/students','getEnrolledStudents')->name("students");
     Route::get('/{tutor}/students/grades', 'getStudentGrades')->name('grades');
+    Route::get('/subject/{subject}/department','getTutorsUnderDepartment')->name('department');
 
 });
 
@@ -132,4 +134,12 @@ Route::prefix('classroom')->controller(ClassroomController::class)->name('classr
         Route::get('/show/{classroom}', 'show')->name("show");
         Route::put('/update/{classroom}', 'update')->name("update");
         Route::delete('/delete/{classroom}', 'delete')->name("delete");
+});
+
+Route::prefix('department')->controller(DepartmentController::class)->name('department.')->group(function() {
+    Route::get('/', 'index');
+    Route::post('/create', 'store')->name("create");
+    Route::get('/show/{department}', 'show')->name("show");
+    Route::put('/update/{department}', 'update')->name("update");
+    Route::delete('/delete/{department}', 'delete')->name("delete");
 });

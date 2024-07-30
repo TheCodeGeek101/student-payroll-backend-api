@@ -17,6 +17,8 @@ return new class extends Migration
             $table->string('code')->unique();
             $table->text('description')->nullable();
             $table->integer('credits');
+            $table->string('year_of_study');
+            $table->foreignId('department_id')->constrained('departments')->onDelete('cascade');
             $table->timestamps();
         });
     }

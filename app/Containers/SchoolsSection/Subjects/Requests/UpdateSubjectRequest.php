@@ -35,11 +35,12 @@ class UpdateSubjectRequest extends FormRequest
             'code' => [
                 'required',
                 'string',
-                'max:50',
-                Rule::unique('subjects', 'code')->ignore($this->route('subject')),
+                'max:50'
             ],
             'description' => 'nullable|string',
             'credits' => 'required|integer|min:0',
+            'department_id' => 'nullable|integer|exists:departments,id',
+            'year_of_study' => 'required|string'
         ];
     }
 }

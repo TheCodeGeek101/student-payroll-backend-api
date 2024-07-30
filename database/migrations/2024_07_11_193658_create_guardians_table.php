@@ -11,8 +11,10 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::table('subjects', function (Blueprint $table) {
-            $table->integer('year_of_study')->after('credits')->nullable();
+        Schema::create('guardians', function (Blueprint $table) {
+            $table->id();
+            $table->foreignId('student_id')->constrained('students');
+            $table->timestamps();
         });
     }
 
@@ -21,8 +23,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::table('subjects', function (Blueprint $table) {
-            //
-        });
+        Schema::dropIfExists('guardians');
     }
 };

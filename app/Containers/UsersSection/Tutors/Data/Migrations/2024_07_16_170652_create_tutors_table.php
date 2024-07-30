@@ -20,6 +20,7 @@ return new class extends Migration
             $table->date('hire_date');
             $table->string('department')->nullable();
             $table->foreignId('user_id')->constrained('users');
+            $table->foreignId('department_id')->constrained('departments');
             $table->timestamps();
         });
     }

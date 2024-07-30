@@ -46,7 +46,7 @@ class UpdateTutorRequest extends FormRequest
             'email' => 'sometimes|required|string|email|max:255|unique:tutors,email,' . $tutorId,
             'phone' => 'nullable|string|max:20',
             'hire_date' => 'sometimes|required|date',
-            'department' => 'nullable|string|max:255',
+            'department_id' => 'nullable|integer|exists:departments,id',
             'bio' => 'nullable|string',
         ];
     }

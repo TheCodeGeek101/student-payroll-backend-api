@@ -2,10 +2,12 @@
 
 namespace App\Containers\SchoolsSection;
 
-use Illuminate\Support\ServiceProvider;
+use App\Containers\SchoolsSection\Class\Configurations\providers\ClassroomServiceProvider;
+use App\Containers\SchoolsSection\Department\Configurations\providers\DepartmentServiceProvider;
 use App\Containers\SchoolsSection\Grades\Configurations\providers\GradesServiceProvider;
 use App\Containers\SchoolsSection\Subjects\Configurations\providers\SubjectServiceProvider;
-use App\Containers\SchoolsSection\Class\Configurations\providers\ClassroomServiceProvider;
+use Illuminate\Support\ServiceProvider;
+
 class SchoolsSectionServiceProvider extends ServiceProvider
 {
     /**
@@ -16,6 +18,7 @@ class SchoolsSectionServiceProvider extends ServiceProvider
         $this->app->register(GradesServiceProvider::class);
         $this->app->register(SubjectServiceProvider::class);
         $this->app->register(ClassroomServiceProvider::class);
+        $this->app->register(DepartmentServiceProvider::class);
     }
 
     /**
