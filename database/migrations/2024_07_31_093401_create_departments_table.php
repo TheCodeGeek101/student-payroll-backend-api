@@ -12,12 +12,12 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('departments', function (Blueprint $table) {
-            $table->id();
-            $table->string('name')->unique(); // Name of the department
-            $table->string('code')->unique(); // Department code
-            $table->foreignId('head_of_department')->nullable()->constrained('tutors')->nullOnDelete(); // Head of department
+            $table->id(); // Primary key: id
+            $table->string('name'); // Name of the department
+            $table->string('code')->unique(); // Unique code for the department
+            $table->foreignId('head_of_department')->nullable()->constrained('tutors')->onDelete('set null');
             $table->text('description')->nullable(); // Description of the department
-            $table->timestamps();
+            $table->timestamps(); // Created at and updated at timestamps
         });
     }
 

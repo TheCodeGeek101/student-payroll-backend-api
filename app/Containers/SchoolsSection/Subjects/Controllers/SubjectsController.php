@@ -1,6 +1,7 @@
 <?php
 namespace App\Containers\SchoolsSection\Subjects\Controllers;
 
+use App\Containers\SchoolsSection\Subjects\Actions\GetSubjectTutorsAction;
 use App\Containers\SchoolsSection\Subjects\Actions\UpdateSubjectAction;
 use App\Containers\SchoolsSection\Subjects\Data\Models\Subject;
 use App\Containers\SchoolsSection\Subjects\Requests\UpdateSubjectRequest;
@@ -13,7 +14,7 @@ use App\Containers\SchoolsSection\Subjects\Resources\SubjectResource;
 use App\Containers\SchoolsSection\Subjects\Actions\GetSubjectByClassAction;
 use Illuminate\Http\Request;
 use App\Containers\SchoolsSection\Subjects\Actions\AssignSubjectToTutor;
-
+use App\Containers\UsersSection\Tutors\Actions\GetTutorSubjectsAction;
 class SubjectsController extends Controller
 {
     /**
@@ -68,14 +69,30 @@ class SubjectsController extends Controller
         \Log::info('Admin Type: ' . get_class($admin));
         \Log::info('Subject Type: ' . get_class($subject));
 
-        $assignedSubject = app(AssignSubjectToTutor::class)->run($request, $admin, $subject);
-        return response()->json(['message' => 'Subject assigned successfully', 'Subject' => $assignedSubject], 200);
+        try {
+            $result = app(AssignSubjectToTutor::class)->run($request, $admin, $subject);
+
+            if ($result['status'] === 'success') {
+                return response()->json(['message' => 'Subject assigned successfully', 'Subject' => $subject], 200);
+            } else {
+                return response()->json(['message' => $result['message']], 500);
+            }
+        } catch (\Exception $e) {
+            \Log::error('Failed to assign subject to tutor: ' . $e->getMessage());
+            return response()->json(['message' => 'Failed to assign subject to tutor'], 500);
+        }
     }
 
     public function getSubjectByClass(Request $request): JsonResponse
     {
         $subjects = app(GetSubjectByClassAction::class)->run($request);
         return response()->json(['Subjects'=>$subjects],200);
+    }
+
+    public function getSubjectTutors(): JsonResponse
+    {
+        $subjects = app(GetSubjectTutorsAction::class)->run();
+        return response()->json(['message' => 'Data retrieved successfully','subjects'=>$subjects],200);
     }
 }
 

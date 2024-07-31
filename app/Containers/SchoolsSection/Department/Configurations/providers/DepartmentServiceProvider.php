@@ -25,7 +25,7 @@ class DepartmentServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        $this->registerMigrations();
         $this->registerConfig();
+        $this->registerMigrations();
     }
 }
