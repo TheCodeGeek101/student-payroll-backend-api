@@ -38,7 +38,7 @@ class TutorController extends Controller
     {
         try {
             $tutor = $this->createTutorAction->run($request);
-            return response()->json(['data' => $tutor], 201);
+            return response()->json(['tutor' => $tutor], 201);
         } catch (\Exception $e) {
             return response()->json(['error' => $e->getMessage()], 500);
         }
@@ -74,7 +74,7 @@ class TutorController extends Controller
     public function getTutorSubjects(Tutor $tutor): JsonResponse
     {
         $subjects = app(GetTutorSubjectsAction::class)->run($tutor);
-        return response()->json(['TutorSubjects' => $subjects], 200);
+        return response()->json(['subjects' => $subjects], 200);
     }
 
     public function getEnrolledStudents(Tutor $tutor): JsonResponse

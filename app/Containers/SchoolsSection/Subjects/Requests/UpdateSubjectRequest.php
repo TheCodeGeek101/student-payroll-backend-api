@@ -40,7 +40,7 @@ class UpdateSubjectRequest extends FormRequest
             'description' => 'nullable|string',
             'credits' => 'required|integer|min:0',
             'department_id' => 'nullable|integer|exists:departments,id',
-            'year_of_study' => 'required|string'
+            'class_id' => 'nullable|integer|exists:classroom,id'
         ];
     }
 }

@@ -39,6 +39,7 @@ class StoreStudentRequest extends FormRequest
             'emergency_contact' => ['required', 'regex:/^[\+0-9\-\(\)\s]*$/'],
             'previous_school' => ['required', 'string', 'max:255'],
             'medical_info' => ['required', 'string', 'max:500'],
+            'class_id' => 'nullable|integer|exists:classroom,id',
         ];
     }
 
@@ -81,6 +82,7 @@ class StoreStudentRequest extends FormRequest
             'emergency_contact.regex' => 'Emergency contact format is invalid',
             'previous_school.required' => 'Previous school is required',
             'medical_info.required' => 'Medical information is required',
+            'class_id.required' => 'Class id is required',
         ];
     }
 }

@@ -45,6 +45,7 @@ class UpdateStudentRequest extends FormRequest
             'emergency_contact' => ['required', 'regex:/^[\+0-9\-\(\)\s]*$/'],
             'previous_school' => ['required', 'string', 'max:255'],
             'medical_info' => ['required', 'string', 'max:500'],
+            'class_id' => 'nullable|integer|exists:classroom,id',
         ];
     }
 

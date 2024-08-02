@@ -30,7 +30,7 @@ class StoreTutorRequest extends FormRequest
             'email' => 'required|string|email|max:255|unique:users,email',
             'phone' => 'nullable|string|max:20',
             'hire_date' => 'required|date',
-            'department_id' => 'nullable|integer|exists:departments,id',
+            'department_id' => 'integer|exists:departments,id',
             'bio' => 'nullable|string',
 
         ];

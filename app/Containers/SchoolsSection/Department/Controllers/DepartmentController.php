@@ -15,9 +15,7 @@ class DepartmentController extends Controller
 {
     public function index(): JsonResponse
     {
-        $departments = Department::join('tutors', 'tutors.id', '=', 'departments.head_of_department')
-            ->select('departments.*', 'tutors.first_name as tutor_first_name', 'tutors.last_name as tutor_last_name')
-            ->get();
+        $departments = Department::all();
         return response()->json(['departments' =>$departments],200);
     }
     public function store(StoreDepartmentRequest $request): JsonResponse

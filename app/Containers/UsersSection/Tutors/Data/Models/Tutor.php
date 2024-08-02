@@ -19,9 +19,9 @@ class Tutor extends Model
         'email',
         'phone',
         'hire_date',
-        'department',
+        'department_id',
+        'user_id',
         'bio',
-        'user_id'
     ];
 
     public function getFullNameAttribute(): string

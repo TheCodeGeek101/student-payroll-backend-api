@@ -15,13 +15,11 @@ return new class extends Migration
             $table->id();
             $table->foreignId('tutor_id')->constrained('tutors');
             $table->foreignId('student_id')->constrained('students')->onDelete('cascade');
-            $table->foreignId('subject_id')->constrained('subjects')->onDelete('cascade');
             $table->string('grade'); // The letter grade
             $table->double('grade_value', 8, 2); // The numeric grade value
             $table->text('comments')->nullable(); // Comments for the grade
             $table->date('graded_at')->default(DB::raw('CURRENT_DATE')); // The date the grade was assigned
             $table->timestamps();
-            $table->index(['student_id', 'subject_id']);
         });
     }
 

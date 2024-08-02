@@ -37,16 +37,24 @@ class LoginUserAction extends Action
             }
 
             $user = Auth::user();
+
+
             $userData = null;
 
-            if ($user->role == 'admin') {
+            if ($user->role == 'superadminstrator') {
+                $userData = $user->where('id',$user->id)->first();
+
+                $userData = ['superadmin' => $userData];
+            }
+            else if ($user->role == 'admin') {
                 $userData = Admin::join('users', 'users.id', '=', 'administrators.user_id')
                     ->where('users.id', $user->id)
                     ->select('users.*', 'administrators.*')
                     ->first();
 
                 $userData = ['admin' => $userData];
-            } elseif ($user->role == 'student') {
+            }
+            elseif ($user->role == 'student') {
                 $userData = Student::join('users', 'users.id', '=', 'students.user_id')
                     ->where('users.id', $user->id)
                     ->select('users.*', 'students.*')

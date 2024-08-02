@@ -1,4 +1,5 @@
 <?php
+
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -10,8 +11,8 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::table('tutors', function (Blueprint $table) {
-            $table->string('bio')->after('last_name')->nullable();
+        Schema::table('grades', function (Blueprint $table) {
+            $table->foreignId('subject_id')->constrained('subjects')->onDelete('cascade');
         });
     }
 
@@ -20,8 +21,8 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::table('tutors', function (Blueprint $table) {
-            $table->dropColumn('bio');
+        Schema::table('grades', function (Blueprint $table) {
+            //
         });
     }
 };
