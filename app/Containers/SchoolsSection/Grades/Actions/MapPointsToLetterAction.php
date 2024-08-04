@@ -3,7 +3,8 @@ namespace App\Containers\SchoolsSection\Grades\Actions;
 
 use App\Ship\Actions\SubAction;
 
-class MapPointsToLetterAction extends SubAction
+class
+MapPointsToLetterAction extends SubAction
 {
     /**
      * Map the grade value (percentage) to an IGCSE letter grade.

@@ -18,13 +18,6 @@ class ClassModel extends Model
 
     protected $fillable = [
         'name',
-        'description',
-        'term',
-        'capacity',
-        'subject_id',
-        'room',
-        'status',
-
     ];
 
     public function subjects(): HasMany
@@ -37,5 +30,9 @@ class ClassModel extends Model
         return $this->hasMany(Student::class);
     }
 
-
+    // Define a relationship to Tutor if needed
+    public function tutor(): BelongsTo
+    {
+        return $this->belongsTo(Tutor::class);
+    }
 }

@@ -77,10 +77,10 @@ class TutorController extends Controller
         return response()->json(['subjects' => $subjects], 200);
     }
 
-    public function getEnrolledStudents(Tutor $tutor): JsonResponse
+    public function getEnrolledStudents(Tutor $tutor, Subject $subject): JsonResponse
     {
-        $enrolledStudents = app(GetEnrolledStudentsAction::class)->run($tutor);
-        return response()->json(['data' => $enrolledStudents], 200);
+        $enrolledStudents = app(GetEnrolledStudentsAction::class)->run($tutor, $subject);
+        return response()->json(['students' => $enrolledStudents], 200);
     }
 
     public function getStudentGrades(Tutor $tutor): JsonResponse

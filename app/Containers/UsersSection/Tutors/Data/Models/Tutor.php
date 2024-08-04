@@ -1,6 +1,4 @@
 <?php
-
-
 namespace App\Containers\UsersSection\Tutors\Data\Models;
 
 use App\Containers\UsersSection\Students\Data\Models\Student;
@@ -24,21 +22,41 @@ class Tutor extends Model
         'bio',
     ];
 
+    /**
+     * Get the full name of the tutor.
+     *
+     * @return string
+     */
     public function getFullNameAttribute(): string
     {
         return $this->first_name . ' ' . $this->last_name;
     }
 
+    /**
+     * The subjects that the tutor teaches.
+     *
+     * @return BelongsToMany
+     */
     public function subjects(): BelongsToMany
     {
         return $this->belongsToMany(Subject::class, 'subject_tutor');
     }
 
+    /**
+     * The students that the tutor is associated with.
+     *
+     * @return BelongsToMany
+     */
     public function students(): BelongsToMany
     {
         return $this->belongsToMany(Student::class);
     }
 
+    /**
+     * The user account associated with the tutor.
+     *
+     * @return BelongsTo
+     */
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class, 'user_id');

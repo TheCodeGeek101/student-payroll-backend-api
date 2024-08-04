@@ -6,6 +6,7 @@ use App\Containers\SchoolsSection\Class\Configurations\providers\ClassroomServic
 use App\Containers\SchoolsSection\Department\Configurations\providers\DepartmentServiceProvider;
 use App\Containers\SchoolsSection\Grades\Configurations\providers\GradesServiceProvider;
 use App\Containers\SchoolsSection\Subjects\Configurations\providers\SubjectServiceProvider;
+use App\Containers\SchoolsSection\Assessments\Configurations\providers\AssessmentProvider;
 use Illuminate\Support\ServiceProvider;
 
 class SchoolsSectionServiceProvider extends ServiceProvider
@@ -19,6 +20,7 @@ class SchoolsSectionServiceProvider extends ServiceProvider
         $this->app->register(SubjectServiceProvider::class);
         $this->app->register(ClassroomServiceProvider::class);
         $this->app->register(DepartmentServiceProvider::class);
+        $this->app->register(AssessmentProvider::class);
     }
 
     /**

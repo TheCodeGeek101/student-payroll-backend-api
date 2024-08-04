@@ -105,7 +105,7 @@ Route::prefix('tutors')->controller(TutorController::class)->name('tutor.')->gro
     // ADDITIONAL ENDPOINTS
     Route::post('/{tutor}/student/add','addStudentsToClass')->name("student.add");
     Route::get('/{tutor}/subjects','getTutorSubjects')->name("subjects");
-    Route::get('/{tutor}/students','getEnrolledStudents')->name("students");
+    Route::get('/{tutor}/subject/{subject}/students','getEnrolledStudents')->name("students");
     Route::get('/{tutor}/students/grades', 'getStudentGrades')->name('grades');
     Route::get('/subject/{subject}/department','getTutorsUnderDepartment')->name('department');
 

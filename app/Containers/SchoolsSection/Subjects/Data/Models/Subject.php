@@ -1,6 +1,4 @@
 <?php
-
-
 namespace App\Containers\SchoolsSection\Subjects\Data\Models;
 
 use App\Containers\SchoolsSection\Class\Data\Models\ClassModel;
@@ -17,7 +15,7 @@ class Subject extends Model
 {
     use HasFactory;
 
-    protected $guarded = [];
+    protected $guarded = []; // All attributes are mass assignable
 
     public function students(): BelongsToMany
     {
@@ -33,9 +31,9 @@ class Subject extends Model
     {
         return $this->hasMany(Grade::class, 'subject_id');
     }
-    public function class():  HasOne
+
+    public function classroom(): HasOne
     {
         return $this->hasOne(ClassModel::class);
     }
 }
-
