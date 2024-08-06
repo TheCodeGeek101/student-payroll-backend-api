@@ -20,8 +20,11 @@ class Assessment extends Model
         'student_id',
         'subject_id',
         'score',
+        'total_marks',
+        'grade_value',
         'comments',
-        'tutor_id'
+        'tutor_id',
+        'date'
     ];
 
     public function student(): BelongsTo

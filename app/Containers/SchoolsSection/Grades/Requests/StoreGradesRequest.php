@@ -1,5 +1,6 @@
 <?php
 
+
 namespace App\Containers\SchoolsSection\Grades\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
@@ -40,12 +41,9 @@ class StoreGradesRequest extends FormRequest
     {
         return [
             'student_id' => 'required|exists:students,id',
-            'subject_id' => 'required|exists:subjects,id', // Added subject_id for consistency
-            'assessments' => 'required|array',
-            'assessments.*.grade' => 'required|numeric|min:0|max:100', // Validate each assessment grade
-            'assessments.*.weightage' => 'required|numeric|min:0|max:1', // Validate each assessment weightage
-            'graded_at' => 'required|date',
-            'comments' => 'nullable|string',
+            'score' => 'required|numeric|min:0|max:100',
+            'total_marks' => 'required|numeric|min:0|max:100',
+            'graded_at' => 'required|date'
         ];
     }
 
@@ -57,14 +55,18 @@ class StoreGradesRequest extends FormRequest
     public function messages(): array
     {
         return [
-            'assessments.*.grade.required' => 'Each assessment must have a grade.',
-            'assessments.*.grade.numeric' => 'Each assessment grade must be a number.',
-            'assessments.*.grade.min' => 'Each assessment grade must be at least 0.',
-            'assessments.*.grade.max' => 'Each assessment grade must be at most 100.',
-            'assessments.*.weightage.required' => 'Each assessment must have a weightage.',
-            'assessments.*.weightage.numeric' => 'Each assessment weightage must be a number.',
-            'assessments.*.weightage.min' => 'Each assessment weightage must be at least 0.',
-            'assessments.*.weightage.max' => 'Each assessment weightage must be at most 1.',
+            'student_id.required' => 'The student ID is required.',
+            'student_id.exists' => 'The selected student ID is invalid.',
+            'score.required' => 'The score is required.',
+            'score.numeric' => 'The score must be a number.',
+            'score.min' => 'The score must be at least 0.',
+            'score.max' => 'The score may not be greater than 100.',
+            'total_marks.required' => 'Total marks are required.',
+            'total_marks.numeric' => 'Total marks must be a number.',
+            'total_marks.min' => 'Total marks must be at least 0.',
+            'total_marks.max' => 'Total marks may not be greater than 200.',
+            'graded_at.required' => 'The graded at date is required.',
+            'graded_at.date' => 'The graded at date must be a valid date.',
         ];
     }
 }

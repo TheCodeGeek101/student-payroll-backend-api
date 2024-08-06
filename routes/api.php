@@ -12,7 +12,7 @@ use Illuminate\Support\Facades\Route;
 use App\Containers\UsersSection\Adminstrator\Controllers\AdminstratorController;
 use App\Containers\SchoolsSection\Class\Controllers\ClassroomController;
 use App\Containers\SchoolsSection\Department\Controllers\DepartmentController;
-
+use App\Containers\SchoolsSection\Assessments\Controllers\AssessmentController;
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -109,6 +109,16 @@ Route::prefix('tutors')->controller(TutorController::class)->name('tutor.')->gro
     Route::get('/{tutor}/students/grades', 'getStudentGrades')->name('grades');
     Route::get('/subject/{subject}/department','getTutorsUnderDepartment')->name('department');
 
+});
+
+//All Assessment routes
+Route::prefix('assessments')->controller(AssessmentController::class)->name('assessments')->group( function(){
+//   CRUD ROUTES
+    Route::get('/', 'index');
+    Route::get('/show/{assessment}', 'show');
+    Route::put('/update/{assessment}', 'update')->name("update");
+    Route::post('/tutor/{tutor}/subject/{subject}/create', 'store');
+    Route::delete('/delete/{assessment}', 'destroy')->name("delete");
 });
 
 //All Grade routes

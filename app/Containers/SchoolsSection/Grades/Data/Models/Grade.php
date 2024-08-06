@@ -1,8 +1,7 @@
 <?php
-
-
 namespace App\Containers\SchoolsSection\Grades\Data\Models;
 
+use App\Containers\SchoolsSection\Assessments\Data\Models\Assessment;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -17,6 +16,8 @@ class Grade extends Model
         'tutor_id',
         'student_id',
         'subject_id',
+        'score',
+        'total_marks',
         'grade',
         'grade_value',
         'comments',
