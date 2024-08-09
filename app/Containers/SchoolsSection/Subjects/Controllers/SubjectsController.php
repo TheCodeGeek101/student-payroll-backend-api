@@ -1,6 +1,7 @@
 <?php
 namespace App\Containers\SchoolsSection\Subjects\Controllers;
 
+use App\Containers\SchoolsSection\Class\Data\Models\ClassModel;
 use App\Containers\SchoolsSection\Subjects\Actions\GetSubjectTutorsAction;
 use App\Containers\SchoolsSection\Subjects\Actions\UpdateSubjectAction;
 use App\Containers\SchoolsSection\Subjects\Data\Models\Subject;
@@ -26,7 +27,8 @@ class SubjectsController extends Controller
     public function index(): JsonResponse
     {
         $subjects = Subject::join('departments', 'departments.id', '=', 'subjects.department_id')
-            ->select('subjects.*', 'departments.name as department_name')
+            ->join('classroom','classroom.id','=','subjects.class_id')
+            ->select('subjects.*', 'departments.name as department_name','classroom.name as class_name')
             ->get();
         return response()->json(['subjects'=>$subjects],200);
     }
@@ -34,8 +36,9 @@ class SubjectsController extends Controller
     public function show(Subject $subject): JsonResponse
     {
         $singleSubject = Subject::join('departments', 'departments.id', '=', 'subjects.department_id')
+            ->join('classroom','classroom.id','=','subjects.class_id')
             ->where('subjects.id','=',$subject->id)
-            ->select('subjects.*', 'departments.name as department_name')
+            ->select('subjects.*', 'departments.name as department_name','classroom.name as class_name')
             ->first();
         return response()->json($singleSubject,200);
     }
@@ -83,9 +86,9 @@ class SubjectsController extends Controller
         }
     }
 
-    public function getSubjectByClass(Request $request): JsonResponse
+    public function getSubjectByClass(Request $request, ClassModel $classroom): JsonResponse
     {
-        $subjects = app(GetSubjectByClassAction::class)->run($request);
+        $subjects = app(GetSubjectByClassAction::class)->run($request,$classroom);
         return response()->json(['Subjects'=>$subjects],200);
     }
 

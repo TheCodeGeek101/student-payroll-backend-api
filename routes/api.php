@@ -52,7 +52,7 @@ Route::controller(AdminstratorController::class)->name('admin.')->prefix('admin'
             Route::delete('/delete/{admin}', 'destroy');
 });
 
- // All student routes
+// All student routes
 Route::controller(StudentController::class)->name('student.')->prefix('students')->group(function() {
 
     // CRUD ENDPOINTS
@@ -63,11 +63,12 @@ Route::controller(StudentController::class)->name('student.')->prefix('students'
     Route::delete('/delete/{student}', 'destroy');
 
     // ADDITIONAL ENDPOINTS
+    Route::get('/{student}/class/subjects','getStudentClassSubjects')->name('class.subjects');  // Corrected
     Route::post('/{student}/subject/enroll','enrollSubject')->name('subject.enroll');
     Route::get('/{student}/subjects', 'getEnrolledSubjects')->name('subjects');
     Route::get('/{student}/subjects/grades', 'getStudentGrades')->name('subjects.grades');
-
 });
+
 
 // All payment routes
 Route::controller(PaymentController::class)->name('payment.')->prefix('payments')->group(function() {
@@ -114,7 +115,7 @@ Route::prefix('tutors')->controller(TutorController::class)->name('tutor.')->gro
 //All Assessment routes
 Route::prefix('assessments')->controller(AssessmentController::class)->name('assessments')->group( function(){
 //   CRUD ROUTES
-    Route::get('/', 'index');
+    Route::get('/subject/{subject}', 'index');
     Route::get('/show/{assessment}', 'show');
     Route::put('/update/{assessment}', 'update')->name("update");
     Route::post('/tutor/{tutor}/subject/{subject}/create', 'store');
@@ -125,7 +126,7 @@ Route::prefix('assessments')->controller(AssessmentController::class)->name('ass
 Route::prefix('grades')->controller(GradesController::class)->name('grades.')->group(function() {
 
     // CRUD ENDPOINTS
-    Route::get('/', 'index');
+    Route::get('/subject/{subject}', 'index');
     Route::post('/tutor/{tutor}/subject/{subject}/create', 'store')->name("create");
     Route::get('/show/{grade}', 'show')->name("show");
     Route::put('/update/{grade}', 'update')->name("update");

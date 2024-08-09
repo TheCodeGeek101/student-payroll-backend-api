@@ -14,9 +14,27 @@ use App\Containers\UsersSection\Tutors\Data\Models\Tutor;
 use App\Containers\SchoolsSection\Subjects\Data\Models\Subject;
 class GradesController extends Controller
 {
-    public function index()
+    public function index(Subject $subject)
     {
-        $grades = Grade::all();
+        $grades = Grade::join('subjects','subjects.id','=','grades.subject_id')
+            ->join('students','students.id','=','grades.student_id')
+            ->join('tutors','tutors.id','=','grades.tutor_id')
+            ->where('subjects.id',$subject->id)
+            ->select(
+                'grades.score as score',
+                'grades.total_marks as marks',
+                'grades.grade_value as grade_value',
+                'grades.comments as grade_comments',
+                'grades.graded_at as graded_at',
+                'grades.id as grade_id',
+                'students.first_name as student_first_name',
+                'students.last_name as student_last_name',
+                'subjects.name as subject_name',
+                'subjects.code as subject_code',
+                'tutors.first_name as tutor_first_name',
+                'tutors.last_name as tutor_last_name'
+            )
+            ->get();
         return response()->json(['grades'=>$grades],200);
     }
     public function store(StoreGradesRequest $request, Tutor $tutor, Subject $subject){

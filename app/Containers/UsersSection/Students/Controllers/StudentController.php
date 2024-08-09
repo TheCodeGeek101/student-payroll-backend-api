@@ -14,6 +14,7 @@ use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
 use App\Containers\UsersSection\Students\Actions\GetEnrolledSubjectAction;
 use App\Containers\UsersSection\Students\Actions\GetStudentGradesAction;
+use App\Containers\UsersSection\Students\Actions\GetStudentClassSubjectAction;
 class StudentController extends Controller
 {
     public function index() {
@@ -39,6 +40,14 @@ class StudentController extends Controller
             'message' => 'Student Updated Successfully',
             'student' => $updatedStudent
         ],200);
+    }
+    public function getStudentClassSubjects(Student $student): JsonResponse
+    {
+        $subjects = app(GetStudentClassSubjectAction::class)->run($student);
+
+        return response()->json([
+            'subjects' => $subjects
+        ], 200);
     }
 
     public function enrollSubject(Request $request, Student $student): JsonResponse
@@ -67,7 +76,7 @@ class StudentController extends Controller
     {
         $enrolledSubjects = app(GetEnrolledSubjectAction::class)->run($student);
         return response()->json([
-            'enrolledSubjects'=>$enrolledSubjects
+            'subjects'=>$enrolledSubjects
         ],200);
     }
 
