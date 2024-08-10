@@ -3,6 +3,7 @@
 
 namespace App\Containers\UsersSection\Students\Actions;
 
+use App\Containers\SchoolsSection\Grades\Data\Models\Grade;
 use App\Ship\Actions\Action;
 use App\Containers\UsersSection\Students\Data\Models\Student;
 use Illuminate\Support\Facades\DB;
@@ -17,14 +18,11 @@ class GetStudentGradesAction extends Action
         }
 
         // Fetch grades for the specific student
-        $grades = DB::table('grades')
-            ->join('subjects', 'grades.subject_id', '=', 'subjects.id')
-            ->join('tutors', 'grades.tutor_id', '=', 'tutors.id')
-            ->join('students', 'grades.student_id', '=', 'students.id')
-            ->where('grades.student_id', $student->id)
-            ->select('grades.*', 'subjects.name as subject', 'subjects.code as subject_code','subjects.description as subject_description', 'subjects.credits as subject_credit_hours', 'subjects.year_of_study as subject_class')
+        $grades = Grade::join('students','grades.student_id','students.id')
+            ->join('subjects','grades.subject_id','subjects.id')
+            ->where('students.id',$student->id)
+            ->select('subjects.name as subject_name', 'subjects.code as subject_code','grades.grade as letter_grade', 'grades.grade_value as number_grade', 'grades.comments as grade_comments')
             ->get();
-
         return response()->json($grades);
     }
 }

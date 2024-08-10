@@ -31,17 +31,19 @@ class CalculateOverallResultsAction extends Action
 
         // Determine pass or fail message
         if ($averageResults >= 50) {
-            $message = [
+            $results = [
                 'status' => 'Pass',
-                'message' => 'Congratulations! You have passed the exam with an average score of ' . number_format($averageResults, 2) . '. Keep up the good work!'
+                'message' => 'Congratulations! You have passed the exam with an average score of ' . number_format($averageResults, 2) . '. Keep up the good work!',
+                'results' => $averageResults
             ];
         } else {
-            $message = [
+            $results = [
                 'status' => 'Fail',
-                'message' => 'Unfortunately, you have not passed the exam. Your average score is ' . number_format($averageResults, 2) . '. Please review the material and seek help if needed.'
+                'message' => 'Unfortunately, you have not passed the exam. Your average score is ' . number_format($averageResults, 2) . '. Please review the material and seek help if needed.',
+                'results' => $averageResults
             ];
         }
 
-        return $message;
+        return $results;
     }
 }

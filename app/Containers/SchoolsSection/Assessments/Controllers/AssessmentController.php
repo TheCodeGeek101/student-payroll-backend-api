@@ -7,10 +7,11 @@ use App\Containers\SchoolsSection\Assessments\Requests\UpdateAssessmentRequest;
 use App\Containers\SchoolsSection\Assessments\Actions\CreateAssessmentAction;
 use App\Containers\SchoolsSection\Assessments\Actions\UpdateAssessmentAction;
 use App\Containers\SchoolsSection\Subjects\Data\Models\Subject;
+use App\Containers\UsersSection\Students\Data\Models\Student;
 use App\Containers\UsersSection\Tutors\Data\Models\Tutor;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\JsonResponse;
-
+use App\Containers\SchoolsSection\Assessments\Actions\GetStudentAssessmentAction;
 class AssessmentController extends Controller
 {
     public function index(Subject $subject): JsonResponse
@@ -44,7 +45,21 @@ class AssessmentController extends Controller
 
     public function show(Assessment $assessment): JsonResponse
     {
-        return response()->json(['assessment' => $assessment], 200);
+        $singleAssessment = Assessment::join('students','assessments.student_id','students.id')
+            ->join('subjects','assessments.subject_id','subjects.id')
+            ->join('tutors','assessments.tutor_id','tutors.id')
+            ->where('assessments.id',$assessment->id)
+            ->select(
+                'assessments.*',
+                'subjects.name as subject_name',
+                'subjects.code as subject_code',
+                'students.first_name as student_first_name',
+                'students.last_name as student_last_name',
+                'tutors.first_name as tutor_first_name',
+                'tutors.last_name as tutor_last_name'
+            )
+            ->get();
+        return response()->json(['assessment' => $singleAssessment], 200);
     }
 
     public function update(UpdateAssessmentRequest $request, Assessment $assessment): JsonResponse
@@ -53,6 +68,11 @@ class AssessmentController extends Controller
         return response()->json(['assessment' => $updateAssessment], 200);
     }
 
+    public function getStudentAssessment(Student $student): JsonResponse
+    {
+        $assessments = app(GetStudentAssessmentAction::class)->run($student);
+        return response()->json(['assessments',$assessments],200);
+    }
     public function delete(Assessment $assessment): JsonResponse
     {
         $assessment->delete();

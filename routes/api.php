@@ -120,6 +120,9 @@ Route::prefix('assessments')->controller(AssessmentController::class)->name('ass
     Route::put('/update/{assessment}', 'update')->name("update");
     Route::post('/tutor/{tutor}/subject/{subject}/create', 'store');
     Route::delete('/delete/{assessment}', 'destroy')->name("delete");
+
+//    ADDITIONAL ROUTES
+    Route::get('/student/{student}/subjects/results','getStudentAssessment');
 });
 
 //All Grade routes
@@ -134,6 +137,7 @@ Route::prefix('grades')->controller(GradesController::class)->name('grades.')->g
 
     // ADDITIONAL ENDPOINTS
     Route::get('/subjects/', 'getSubjectGrades')->name("subjects");
+    Route::get('/student/{student}/results','getOverallResults');
 });
 
 // All Classes routes

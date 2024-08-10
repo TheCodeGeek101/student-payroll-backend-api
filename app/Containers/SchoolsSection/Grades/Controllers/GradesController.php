@@ -12,6 +12,10 @@ use App\Containers\SchoolsSection\Grades\Resources\GradesResource;
 use App\Containers\SchoolsSection\Grades\Actions\GetSubjectGrade;
 use App\Containers\UsersSection\Tutors\Data\Models\Tutor;
 use App\Containers\SchoolsSection\Subjects\Data\Models\Subject;
+use App\Containers\SchoolsSection\Grades\Actions\CalculateOverallResultsAction;
+use Illuminate\Http\JsonResponse;
+use App\Containers\UsersSection\Students\Data\Models\Student;
+
 class GradesController extends Controller
 {
     public function index(Subject $subject)
@@ -56,5 +60,10 @@ class GradesController extends Controller
     public function getSubjectGrades(){
         $subjectGrade = app(GetSubjectGrade::class)->run();
         return response()->json(['grades'=>$subjectGrade],200);
+    }
+    public function getOverallResults(Student $student): JsonResponse
+    {
+        $results = app(CalculateOverallResultsAction::class)->run($student);
+        return response()->json(['results'=> $results],200);
     }
 }
