@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Containers\UsersSection\Adminstrator\Resources;
+namespace App\Containers\UsersSection\Admin\Resources;
 
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\ResourceCollection;
@@ -15,10 +15,9 @@ class AdminResourceCollection extends ResourceCollection
     public function toArray(Request $request): array
     {
         return [
-            'object' => 'AdminResourceCollection',
             'data' => $this->collection,
-            'links' => [
-                'self' => 'link-value'
+            'link' => [
+                'self' => 'link-value',
             ]
         ];
     }

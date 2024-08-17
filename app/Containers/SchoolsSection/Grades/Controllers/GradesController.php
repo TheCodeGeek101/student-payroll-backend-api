@@ -63,7 +63,19 @@ class GradesController extends Controller
     }
     public function getOverallResults(Student $student): JsonResponse
     {
-        $results = app(CalculateOverallResultsAction::class)->run($student);
-        return response()->json(['results'=> $results],200);
+        try {
+            // Calculate overall results
+            $results = app(CalculateOverallResultsAction::class)->run($student);
+
+            // Return response as JSON
+            return response()->json($results, 200);
+
+        } catch (\Exception $e) {
+            // Handle any exceptions that might occur
+            return response()->json([
+                'status' => 'Error',
+                'message' => 'An error occurred while retrieving the results: ' . $e->getMessage()
+            ], 500);
+        }
     }
 }

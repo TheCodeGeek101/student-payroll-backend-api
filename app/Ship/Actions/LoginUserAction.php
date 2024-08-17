@@ -3,7 +3,7 @@
 
 namespace App\Ship\Actions;
 
-use App\Containers\UsersSection\Adminstrator\Data\Models\Admin;
+use App\Containers\UsersSection\Admin\Data\Models\Adminstrator;
 use App\Containers\UsersSection\Students\Data\Models\Student;
 use App\Containers\UsersSection\Tutors\Data\Models\Tutor;
 use App\Ship\Actions\Action;
@@ -47,9 +47,9 @@ class LoginUserAction extends Action
                 $userData = ['superadmin' => $userData];
             }
             else if ($user->role == 'admin') {
-                $userData = Admin::join('users', 'users.id', '=', 'administrators.user_id')
+                $userData = Adminstrator::join('users', 'users.id', '=', 'adminstrators.user_id')
                     ->where('users.id', $user->id)
-                    ->select('users.*', 'administrators.*')
+                    ->select('users.*', 'adminstrators.*')
                     ->first();
 
                 $userData = ['admin' => $userData];

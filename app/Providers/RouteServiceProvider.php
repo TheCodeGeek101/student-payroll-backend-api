@@ -1,6 +1,7 @@
 <?php
 namespace App\Providers;
 
+use App\Containers\UsersSection\Admin\Data\Models\Adminstrator;
 use Illuminate\Cache\RateLimiting\Limit;
 use Illuminate\Foundation\Support\Providers\RouteServiceProvider as ServiceProvider;
 use Illuminate\Http\Request;
@@ -27,7 +28,7 @@ class RouteServiceProvider extends ServiceProvider
     {
         $this->configureRateLimiting();
 
-        Route::model('admin', Admin::class);
+        Route::model('admin', Adminstrator::class);
         Route::model('subject', Subject::class);
 
         $this->routes(function () {

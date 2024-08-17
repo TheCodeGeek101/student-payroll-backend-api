@@ -34,7 +34,10 @@ class AssessmentController extends Controller
                 'tutors.first_name as tutor_first_name',
                 'tutors.last_name as tutor_last_name',
             )->get();
-        return response()->json(['assessments' => $assessments], 200);
+        return response()->json([
+            'message' => 'assessments retrieved successfully',
+            'assessments'=>$assessments
+        ],200);
     }
 
     public function store(StoreAssessmentRequest $request, Tutor $tutor, Subject $subject): JsonResponse
@@ -59,7 +62,10 @@ class AssessmentController extends Controller
                 'tutors.last_name as tutor_last_name'
             )
             ->get();
-        return response()->json(['assessment' => $singleAssessment], 200);
+        return response()->json([
+            'message'=>'assessments retrieved successfully',
+            'assessment' => $singleAssessment
+        ], 200);
     }
 
     public function update(UpdateAssessmentRequest $request, Assessment $assessment): JsonResponse
@@ -71,7 +77,7 @@ class AssessmentController extends Controller
     public function getStudentAssessment(Student $student): JsonResponse
     {
         $assessments = app(GetStudentAssessmentAction::class)->run($student);
-        return response()->json(['assessments',$assessments],200);
+        return response()->json(['assessments'=> $assessments],200);
     }
     public function delete(Assessment $assessment): JsonResponse
     {

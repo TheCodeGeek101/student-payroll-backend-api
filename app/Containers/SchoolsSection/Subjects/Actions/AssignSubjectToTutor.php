@@ -1,6 +1,7 @@
 <?php
 namespace App\Containers\SchoolsSection\Subjects\Actions;
 
+use App\Containers\UsersSection\Admin\Data\Models\Adminstrator;
 use App\Containers\UsersSection\Adminstrator\Data\Models\Admin;
 use App\Containers\SchoolsSection\Subjects\Data\Models\Subject;
 use Illuminate\Http\Request;
@@ -9,7 +10,7 @@ use App\Ship\Actions\Action;
 
 class AssignSubjectToTutor extends Action
 {
-    public function run(Request $request, Admin $admin, Subject $subject)
+    public function run(Request $request, Adminstrator $admin, Subject $subject)
     {
         $data = $request->validate([
             'tutor_id' => 'required|exists:tutors,id',

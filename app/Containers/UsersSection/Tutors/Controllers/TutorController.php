@@ -12,11 +12,17 @@ use App\Containers\UsersSection\Tutors\Requests\UpdateTutorRequest;
 use App\Containers\UsersSection\Tutors\Data\Models\Tutor;
 use App\Containers\UsersSection\Tutors\Resources\TutorResource;
 use App\Containers\UsersSection\Tutors\Actions\GetTutorsUnderDepartmentAction;
+use App\Models\User;
 use Illuminate\Http\JsonResponse;
 use App\Containers\UsersSection\Tutors\Actions\GetStudentGradesAction;
 use App\Containers\UsersSection\Tutors\Actions\AddStudentToClassAction;
 use App\Containers\UsersSection\Tutors\Actions\GetEnrolledStudentsAction;
 use App\Containers\UsersSection\Tutors\Actions\GetTutorSubjectsAction;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Log;
+use App\Containers\UsersSection\Admin\Requests\StoreAdminRequest;
+use App\Containers\UsersSection\Admin\Data\Models\Adminstrator;
 class TutorController extends Controller
 {
     protected $createTutorAction;
@@ -33,6 +39,47 @@ class TutorController extends Controller
     {
         $this->createTutorAction = $createTutorAction;
     }
+
+    public function createAdmin(StoreAdminRequest $request): JsonResponse
+    {
+        // Handle validation exception if it occurs
+        try {
+            $adminstrator = null;
+
+            DB::transaction(function () use ($request, &$adminstrator) {
+                $user = User::create([
+                    'name' => $request->validated()['full_name'],
+                    'email' => $request->validated()['email'],
+                    'password' => Hash::make('SecuredKey@2024'),
+                    'role' => 'admin'
+                ]);
+
+                $adminstrator = Adminstrator::create(
+                    array_merge($request->validated(),
+                        ['user_id' => $user->id, 'registered_by' => 1]
+                    ));
+            });
+
+            return response()->json([
+                'message' => 'Admin created successfully',
+                'admin' => $adminstrator
+            ], 201);
+
+        } catch (ValidationException $e) {
+            // Return a 422 status code with validation errors if validation fails
+            return response()->json([
+                'message' => 'Validation failed',
+                'errors' => $e->errors()
+            ], 422);
+        } catch (\Exception $e) {
+            // Handle other exceptions if needed
+            return response()->json([
+                'message' => 'An error occurred',
+                'error' => $e->getMessage()
+            ], 500);
+        }
+    }
+
 
     public function store(StoreTutorRequest $request): JsonResponse
     {

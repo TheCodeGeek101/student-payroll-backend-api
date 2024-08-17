@@ -18,11 +18,11 @@ class GetStudentGradesAction extends Action
         }
 
         // Fetch grades for the specific student
-        $grades = Grade::join('students','grades.student_id','students.id')
-            ->join('subjects','grades.subject_id','subjects.id')
+        $grades = Grade::join('students','grades.student_id', '=','students.id')
+            ->join('subjects','grades.subject_id', '=', 'subjects.id')
             ->where('students.id',$student->id)
             ->select('subjects.name as subject_name', 'subjects.code as subject_code','grades.grade as letter_grade', 'grades.grade_value as number_grade', 'grades.comments as grade_comments')
             ->get();
-        return response()->json($grades);
+        return $grades;
     }
 }

@@ -9,10 +9,11 @@ use App\Ship\Controllers\AuthenticationController;
 use App\Ship\Controllers\UserController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
-use App\Containers\UsersSection\Adminstrator\Controllers\AdminstratorController;
 use App\Containers\SchoolsSection\Class\Controllers\ClassroomController;
 use App\Containers\SchoolsSection\Department\Controllers\DepartmentController;
 use App\Containers\SchoolsSection\Assessments\Controllers\AssessmentController;
+use App\Containers\UsersSection\Admin\Controllers\AdminController;
+
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -43,14 +44,14 @@ Route::controller(UserController::class)->name('user.')->prefix('users')->group(
 });
 
  // All admin routes
-Route::controller(AdminstratorController::class)->name('admin.')->prefix('admin')->group(function() {
-            //CRUD ENDPOINTS
-            Route::get('/','index')->name('index');
-            Route::get('/show/{admin}', 'show');
-            Route::post('/create', 'store');
-            Route::put('/update/{admin}', 'update');
-            Route::delete('/delete/{admin}', 'destroy');
+Route::controller(AdminController::class)->name('admin.')->prefix('admin')->group(function () {
+    Route::get('/', 'index');
+    Route::get('/show/{admin}', 'show');
+    Route::post('/create', 'store');
+    Route::put('/update/{admin}', 'update');
+
 });
+
 
 // All student routes
 Route::controller(StudentController::class)->name('student.')->prefix('students')->group(function() {
@@ -97,6 +98,7 @@ Route::prefix('tutors')->controller(TutorController::class)->name('tutor.')->gro
 
     // CRUD ENDPOINTS
     Route::get('/', 'index');
+    Route::post('/admin/create','createAdmin');
     Route::post('/create', 'store')->name("create");
     Route::get('/show/{tutor}', 'show')->name("show");
     Route::put('/update/{tutor}', 'update')->name("update");

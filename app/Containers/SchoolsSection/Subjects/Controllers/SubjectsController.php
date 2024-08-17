@@ -6,6 +6,7 @@ use App\Containers\SchoolsSection\Subjects\Actions\GetSubjectTutorsAction;
 use App\Containers\SchoolsSection\Subjects\Actions\UpdateSubjectAction;
 use App\Containers\SchoolsSection\Subjects\Data\Models\Subject;
 use App\Containers\SchoolsSection\Subjects\Requests\UpdateSubjectRequest;
+use App\Containers\UsersSection\Admin\Data\Models\Adminstrator;
 use App\Containers\UsersSection\Adminstrator\Data\Models\Admin;
 use App\Http\Controllers\Controller;
 use App\Containers\SchoolsSection\Subjects\Requests\StoreSubjectRequest;
@@ -67,7 +68,7 @@ class SubjectsController extends Controller
         return response()->json(['message' => 'Subject deleted successfully'],200);
     }
 
-    public function assignSubjectToTutor(Request $request, Subject $subject, Admin $admin): JsonResponse
+    public function assignSubjectToTutor(Request $request, Subject $subject, Adminstrator $admin): JsonResponse
     {
         \Log::info('Admin Type: ' . get_class($admin));
         \Log::info('Subject Type: ' . get_class($subject));

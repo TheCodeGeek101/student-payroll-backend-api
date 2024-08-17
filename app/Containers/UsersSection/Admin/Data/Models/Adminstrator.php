@@ -1,25 +1,17 @@
 <?php
+namespace App\Containers\UsersSection\Admin\Data\Models;
 
-
-namespace App\Containers\UsersSection\Adminstrator\Data\Models;
-
-use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use App\Models\User;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
-class Admin extends Model
+class Adminstrator extends Model
 {
     use HasFactory;
-    protected $guarded = [];
 
-    protected $table = 'administrators';
+    protected $table = 'adminstrators';
 
-    /**
-     * The attributes that are mass assignable.
-     *
-     * @var array<string>
-     */
     protected $fillable = [
         'full_name',
         'email',
@@ -38,14 +30,12 @@ class Admin extends Model
         'date_of_hire',
         'employment_type',
         'emergency_contact_name',
+        'emergency_contact_relationship',
         'emergency_contact_phone',
         'emergency_contact_email',
-        'user_id'
+        'user_id',
     ];
 
-    /**
-     * Get the user that owns the admin.
-     */
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);

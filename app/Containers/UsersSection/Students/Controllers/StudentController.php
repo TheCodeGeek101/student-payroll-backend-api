@@ -86,7 +86,7 @@ class StudentController extends Controller
             $studentGrades = app(GetStudentGradesAction::class)->run($student);
             return response()->json([
                 'message' => 'Grades retrieved successfully',
-                'Grades' => $studentGrades
+                'grades' => $studentGrades
             ], 200);
         } catch (\Exception $e) {
             return response()->json([
@@ -96,7 +96,8 @@ class StudentController extends Controller
         }
     }
 
-    public function destroy(Student $student){
+    public function destroy(Student $student): JsonResponse
+    {
         $student->delete();
         return response()->json([
             'message'=>'Student deleted successfully'

@@ -3,6 +3,7 @@
 namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
+use App\Containers\UsersSection\Admin\Data\Models\Adminstrator;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -10,7 +11,6 @@ use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
 use App\Containers\UsersSection\Tutors\Data\Models\Tutor;
 use App\Containers\UsersSection\Students\Data\Models\Student;
-use App\Containers\UsersSection\Adminstrator\Data\Models\Admin;
 
 class User extends Authenticatable
 {
@@ -58,6 +58,6 @@ class User extends Authenticatable
     }
     public function admin(): HasOne
     {
-        return $this->hasOne(Admin::class);
+        return $this->hasOne(Adminstrator::class);
     }
 }
