@@ -25,7 +25,6 @@ return new class extends Migration
             $table->string('country');
             $table->string('profile_picture')->nullable();
             $table->string('employee_id')->unique();
-            $table->string('position')->nullable();
             $table->string('department')->nullable();
             $table->date('date_of_hire');
             $table->enum('employment_type', ['Full-Time', 'Part-Time', 'Contract'])->nullable();

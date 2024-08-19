@@ -1,6 +1,4 @@
 <?php
-
-
 namespace App\Ship\Actions;
 
 use App\Containers\UsersSection\Admin\Data\Models\Adminstrator;
@@ -37,37 +35,21 @@ class LoginUserAction extends Action
             }
 
             $user = Auth::user();
-
-
             $userData = null;
 
-            if ($user->role == 'superadminstrator') {
-                $userData = $user->where('id',$user->id)->first();
-
-                $userData = ['superadmin' => $userData];
-            }
-            else if ($user->role == 'admin') {
-                $userData = Adminstrator::join('users', 'users.id', '=', 'adminstrators.user_id')
-                    ->where('users.id', $user->id)
-                    ->select('users.*', 'adminstrators.*')
-                    ->first();
-
-                $userData = ['admin' => $userData];
-            }
-            elseif ($user->role == 'student') {
-                $userData = Student::join('users', 'users.id', '=', 'students.user_id')
-                    ->where('users.id', $user->id)
-                    ->select('users.*', 'students.*')
-                    ->first();
-
-                $userData = ['student' => $userData];
-            } elseif ($user->role == 'tutor') {
-                $userData = Tutor::join('users', 'users.id', '=', 'tutors.user_id')
-                    ->where('users.id', $user->id)
-                    ->select('users.*', 'tutors.*')
-                    ->first();
-
-                $userData = ['tutor' => $userData];
+            switch ($user->role) {
+                case 'superadminstrator':
+                    $userData = ['superadmin' => $user];
+                    break;
+                case 'admin':
+                    $userData = ['admin' => $this->getAdministratorData($user->id)];
+                    break;
+                case 'student':
+                    $userData = ['student' => $this->getStudentData($user->id)];
+                    break;
+                case 'tutor':
+                    $userData = ['tutor' => $this->getTutorData($user->id)];
+                    break;
             }
 
             return response()->json([
@@ -82,5 +64,29 @@ class LoginUserAction extends Action
                 'message' => $exception->getMessage(),
             ], 500);
         }
+    }
+
+    private function getAdministratorData($userId)
+    {
+        return Adminstrator::join('users', 'users.id', '=', 'adminstrators.user_id')
+            ->where('users.id', $userId)
+            ->select('users.*', 'adminstrators.*')
+            ->first();
+    }
+
+    private function getStudentData($userId)
+    {
+        return Student::join('users', 'users.id', '=', 'students.user_id')
+            ->where('users.id', $userId)
+            ->select('users.*', 'students.*')
+            ->first();
+    }
+
+    private function getTutorData($userId)
+    {
+        return Tutor::join('users', 'users.id', '=', 'tutors.user_id')
+            ->where('users.id', $userId)
+            ->select('users.*', 'tutors.*')
+            ->first();
     }
 }

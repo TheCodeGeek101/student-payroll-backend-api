@@ -28,7 +28,7 @@ class UserSeeder extends Seeder
                 'name' => 'User',
                 'email' => 'user@softdroid.com',
                 'password' => Hash::make('Securedkey@2024'),
-                'role' => 'parent',
+                'role' => 'admin',
                 'status' => true,
                 'created_at' => now(),
                 'updated_at' => now(),

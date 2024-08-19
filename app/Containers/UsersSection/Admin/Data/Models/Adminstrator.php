@@ -36,6 +36,10 @@ class Adminstrator extends Model
         'user_id',
     ];
 
+    public function getPositionAttribute($value)
+    {
+        return ucwords(str_replace('_', ' ', $value));
+    }
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);

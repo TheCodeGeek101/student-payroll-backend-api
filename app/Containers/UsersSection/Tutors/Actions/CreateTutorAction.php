@@ -9,14 +9,15 @@ use Illuminate\Support\Facades\DB;
 use App\Containers\UsersSection\Tutors\Requests\StoreTutorRequest;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Log;
-
+use App\Jobs\SendEmailJob;
 class CreateTutorAction extends Action
 {
     public function run(StoreTutorRequest $request): Tutor
     {
         $tutor = null;
-
-        DB::transaction(function () use ($request, &$tutor) {
+        $user = null;
+        $password = 'SecuredKey@2024';
+        DB::transaction(function () use ($request, &$tutor, &$user) {
             Log::info('Starting transaction for creating a tutor.');
 
             $tutorName = $request->validated()['first_name'] . ' ' . ucfirst($request->validated()['last_name']);
@@ -37,7 +38,7 @@ class CreateTutorAction extends Action
 
             Log::info('Tutor created: ', ['tutor' => $tutor]);
         });
-
+        SendEmailJob::dispatch($user, $password)->delay(now()->addMinutes(1));
         Log::info('Transaction completed.');
         return $tutor;
     }

@@ -1,6 +1,7 @@
 <?php
 namespace App\Containers\UsersSection\Students\Actions;
 
+use App\Jobs\SendEmailJob;
 use App\Ship\Actions\Action;
 use Illuminate\Support\Facades\DB;
 use App\Containers\UsersSection\Students\Data\Models\Student;
@@ -11,7 +12,9 @@ use App\Models\User;
 class CreateStudentAction extends Action{
     public function run(StoreStudentRequest $request) {
         $student = null;
-        DB::transaction(function () use ($request, &$student) {
+        $user = null;
+        $password = 'SecuredKey@2024';
+        DB::transaction(function () use ($request, &$student,&$user) {
             $student_name = $request->validated()['first_name'] . ' ' . ucfirst($request->validated()['last_name']);
 
             $user = User::create([
@@ -26,6 +29,9 @@ class CreateStudentAction extends Action{
                 ['user_id' => $user->id, 'registered_by' => 1]
             ));
         });
+        SendEmailJob::dispatch($user, $password)->delay(now()->addMinutes(1));
+
+
         return $student;
     }
 }

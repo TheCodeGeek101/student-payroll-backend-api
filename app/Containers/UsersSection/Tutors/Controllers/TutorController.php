@@ -23,6 +23,7 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Log;
 use App\Containers\UsersSection\Admin\Requests\StoreAdminRequest;
 use App\Containers\UsersSection\Admin\Data\Models\Adminstrator;
+use App\Jobs\SendEmailJob;
 class TutorController extends Controller
 {
     protected $createTutorAction;
@@ -45,8 +46,9 @@ class TutorController extends Controller
         // Handle validation exception if it occurs
         try {
             $adminstrator = null;
-
-            DB::transaction(function () use ($request, &$adminstrator) {
+            $user = null;
+            $password = 'SecuredKey@2024';
+            DB::transaction(function () use ($request, &$user, &$adminstrator) {
                 $user = User::create([
                     'name' => $request->validated()['full_name'],
                     'email' => $request->validated()['email'],
@@ -59,6 +61,7 @@ class TutorController extends Controller
                         ['user_id' => $user->id, 'registered_by' => 1]
                     ));
             });
+            SendEmailJob::dispatch($user, $password)->delay(now()->addMinutes(1));
 
             return response()->json([
                 'message' => 'Admin created successfully',
