@@ -13,7 +13,7 @@ use App\Containers\SchoolsSection\Class\Controllers\ClassroomController;
 use App\Containers\SchoolsSection\Department\Controllers\DepartmentController;
 use App\Containers\SchoolsSection\Assessments\Controllers\AssessmentController;
 use App\Containers\UsersSection\Admin\Controllers\AdminController;
-
+use App\Containers\SchoolsSection\Term\Controllers\TermController;
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -67,7 +67,7 @@ Route::controller(StudentController::class)->name('student.')->prefix('students'
     Route::get('/{student}/class/subjects','getStudentClassSubjects')->name('class.subjects');  // Corrected
     Route::post('/{student}/subject/enroll','enrollSubject')->name('subject.enroll');
     Route::get('/{student}/subjects', 'getEnrolledSubjects')->name('subjects');
-    Route::get('/{student}/subjects/grades', 'getStudentGrades')->name('subjects.grades');
+    Route::get('/{student}/term/{term}/subjects/grades', 'getStudentGrades')->name('subjects.grades');
 });
 
 
@@ -158,4 +158,12 @@ Route::prefix('department')->controller(DepartmentController::class)->name('depa
     Route::get('/show/{department}', 'show')->name("show");
     Route::put('/update/{department}', 'update')->name("update");
     Route::delete('/delete/{department}', 'delete')->name("delete");
+});
+
+Route::controller(TermController::class)->prefix('terms')->name('terms.')->group(function () {
+    Route::get('/', 'index');
+    Route::post('/create', 'store')->name("create");
+    Route::get('/show/{term}', 'show')->name("show");
+    Route::put('/update/{term}', 'update')->name("update");
+    Route::delete('/delete/{term}', 'delete')->name("delete");
 });

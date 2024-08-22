@@ -2,6 +2,7 @@
 
 namespace App\Containers\UsersSection\Students\Controllers;
 
+use App\Containers\SchoolsSection\Term\Data\Models\Term;
 use App\Containers\UsersSection\Students\Actions\UpdateStudentAction;
 use App\Containers\UsersSection\Students\Data\Models\Student;
 use App\Containers\UsersSection\Students\Requests\UpdateStudentRequest;
@@ -79,15 +80,22 @@ class StudentController extends Controller
             'subjects'=>$enrolledSubjects
         ],200);
     }
-
-    public function getStudentGrades(Student $student): JsonResponse
+    public function getStudentGrades(Student $student, Term $term): JsonResponse
     {
         try {
-            $studentGrades = app(GetStudentGradesAction::class)->run($student);
-            return response()->json([
-                'message' => 'Grades retrieved successfully',
-                'grades' => $studentGrades
-            ], 200);
+            // Get the student grades from the action
+            $studentGrades = app(GetStudentGradesAction::class)->run($student, $term);
+
+            // Check if the result is an array and is empty
+            if (is_array($studentGrades) && empty($studentGrades['grades'])) {
+                return response()->json([
+                    'message' => 'No grades found for this student and term',
+                ], 404);
+            }
+
+            return response()->json(
+                $studentGrades, 200);
+
         } catch (\Exception $e) {
             return response()->json([
                 'message' => 'An error occurred while retrieving grades',
@@ -95,6 +103,7 @@ class StudentController extends Controller
             ], 500);
         }
     }
+
 
     public function destroy(Student $student): JsonResponse
     {

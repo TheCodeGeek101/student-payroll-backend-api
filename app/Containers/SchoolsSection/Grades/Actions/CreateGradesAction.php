@@ -18,6 +18,7 @@ class CreateGradesAction extends Action
 
         DB::transaction(function () use ($request, &$grades, $tutor, $subject) {
             $studentId = $request->validated()['student_id'];
+            $termId = $request->validated()['term_id'];
             $score = $request->validated()['score'];
             $totalMarks = $request->validated()['total_marks'];
             $endOfTermResult = $score / $totalMarks;
@@ -52,6 +53,7 @@ class CreateGradesAction extends Action
                     'student_id' => $studentId,
                     'subject_id' => $subject->id,
                     'tutor_id' => $tutor->id,
+                    'term_id' => $termId
                 ],
                 [
                     'score' => $score,

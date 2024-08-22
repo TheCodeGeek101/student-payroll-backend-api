@@ -41,6 +41,7 @@ class UpdateGradesRequest extends FormRequest
     {
         return [
             'student_id' => 'sometimes|required|exists:students,id',
+            'term_id' => 'sometimes|required|exists:terms,id',
             'score' => 'sometimes|required|numeric|min:0|max:100',
             'total_marks' => 'sometimes|required|numeric|min:0|max:100',
             'graded_at' => 'sometimes|required|date'
@@ -57,6 +58,8 @@ class UpdateGradesRequest extends FormRequest
         return [
             'student_id.required' => 'The student ID is required.',
             'student_id.exists' => 'The selected student ID is invalid.',
+            'term_id.required' => 'The term ID is required.',
+            'term_id.exists' => 'The selected term ID is invalid.',
             'score.required' => 'The score is required.',
             'score.numeric' => 'The score must be a number.',
             'score.min' => 'The score must be at least 0.',

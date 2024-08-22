@@ -5,7 +5,7 @@ use App\Containers\SchoolsSection\Assessments\Data\Models\Assessment;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
-
+use App\Containers\SchoolsSection\Term\Data\Models\Term;
 class Grade extends Model
 {
     use HasFactory;
@@ -16,6 +16,7 @@ class Grade extends Model
         'tutor_id',
         'student_id',
         'subject_id',
+        'term_id',
         'score',
         'total_marks',
         'grade',
@@ -37,5 +38,10 @@ class Grade extends Model
     public function subject(): BelongsTo
     {
         return $this->belongsTo(Subject::class, 'subject_id');
+    }
+
+    public function terms(): BelongsTo
+    {
+        return $this->belongsTo(Term::class, 'term_id');
     }
 }
