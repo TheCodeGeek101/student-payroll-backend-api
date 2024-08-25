@@ -20,9 +20,12 @@ class SendEmailAction extends Action
         $details .= "Email: **{$user->email}**\n";   // Highlighted Email
         $details .= "Password: **{$password}**\n\n"; // Highlighted Password
 
+
         $details .= "Please note that the password provided is a one-time password (OTP) and must be changed upon your first login for security reasons.\n\n";
 
         $details .= "To log in to your account, please visit our website and enter your credentials.\n\n";
+
+
 
         $details .= "If you have any questions or need assistance, feel free to contact our support team.\n\n";
 

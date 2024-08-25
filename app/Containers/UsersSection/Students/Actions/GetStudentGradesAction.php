@@ -13,10 +13,10 @@ class GetStudentGradesAction extends Action
     {
         try {
             // Fetch grades for the specific student and term
-            $grades = Grade::where('student_id', $student->id)
-                ->where('term_id', $term->id)
-                ->join('subjects', 'grades.subject_id', '=', 'subjects.id')
+            $grades = Grade::join('subjects', 'grades.subject_id', '=', 'subjects.id')
                 ->join('terms', 'grades.term_id', '=', 'terms.id')
+                ->where('student_id', $student->id)
+                ->where('term_id', $term->id)
                 ->select(
                     'subjects.name as subject_name',
                     'subjects.code as subject_code',

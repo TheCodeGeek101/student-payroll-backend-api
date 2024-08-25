@@ -26,6 +26,9 @@ class UpdateAssessmentRequest extends FormRequest
     {
         return [
             'student_id' => 'required|exists:students,id',
+            'subject_id' => 'required|exists:subjects,id',
+            'tutor_id' => 'required|exists:tutors,id',
+            'term_id' => 'required|exists:terms,id',
             'score' => 'required|numeric|min:0|max:100',
             'total_marks' => 'required|numeric|min:0|max:100',
             'comments' => 'nullable|string|max:255',
@@ -43,6 +46,12 @@ class UpdateAssessmentRequest extends FormRequest
         return [
             'student_id.required' => 'The student field is required.',
             'student_id.exists' => 'The selected student does not exist.',
+            'tutor_id.exists' => 'The tutor field does not exist.',
+            'tutor_id.required' => 'The tutor field is required.',
+            'subject_id.exists' => 'The selected subject does not exist.',
+            'subject_id.required' => 'The subject field is required.',
+            'term_id.required' => 'The term field is required.',
+            'term_id.exists' => 'The selected term does not exist.',
             'score.required' => 'The score field is required.',
             'score.numeric' => 'The score must be a number.',
             'total_marks.numeric' => 'The marks must be a number.',

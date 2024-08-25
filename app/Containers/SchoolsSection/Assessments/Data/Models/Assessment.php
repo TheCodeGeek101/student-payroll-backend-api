@@ -10,7 +10,7 @@ use App\Containers\SchoolsSection\Subjects\Data\Models\Subject;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
-
+use App\Containers\SchoolsSection\Term\Data\Models\Term;
 class Assessment extends Model
 {
     use HasFactory;
@@ -19,6 +19,7 @@ class Assessment extends Model
     protected $fillable = [
         'student_id',
         'subject_id',
+        'term_id',
         'score',
         'total_marks',
         'grade_value',
@@ -39,6 +40,10 @@ class Assessment extends Model
     public function grades(): BelongsTo
     {
         return $this->belongsTo(Grade::class);
+    }
+    public function terms(): BelongsTo
+    {
+        return $this->belongsTo(Term::class);
     }
 
 }

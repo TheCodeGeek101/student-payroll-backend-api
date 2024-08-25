@@ -23,6 +23,7 @@ class StoreAssessmentRequest extends FormRequest
     {
         return [
             'student_id' => 'required|exists:students,id',
+            'term_id' => 'required|exists:terms,id',
             'score' => 'required|numeric|min:0|max:100',
             'total_marks' => 'required|numeric|min:0|max:100',
             'comments' => 'nullable|string|max:255',
@@ -38,6 +39,8 @@ class StoreAssessmentRequest extends FormRequest
         return [
             'student_id.required' => 'The student field is required.',
             'student_id.exists' => 'The selected student does not exist.',
+            'term_id.required' => 'The term field is required.',
+            'term_id.exists' => 'The selected term does not exist.',
             'score.required' => 'The score field is required.',
             'score.numeric' => 'The score must be a number.',
             'score.min' => 'The score must be at least 0.',

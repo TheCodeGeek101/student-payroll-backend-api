@@ -30,6 +30,7 @@ class StudentResource extends JsonResource
             'emergency_contact' => $this->emergency_contact,
             'previous_school' => $this->previous_school,
             'medical_info' => $this->medical_info,
+            'registration_number' => $this->registration_number
         ];
     }
 }

@@ -1,4 +1,6 @@
 <?php
+
+
 namespace App\Containers\SchoolsSection\Grades\Actions;
 
 use App\Containers\SchoolsSection\Grades\Data\Models\Grade;
@@ -10,62 +12,91 @@ use App\Containers\UsersSection\Tutors\Data\Models\Tutor;
 use App\Containers\SchoolsSection\Subjects\Data\Models\Subject;
 use App\Containers\SchoolsSection\Grades\Actions\MapPointsToLetterAction;
 use App\Containers\SchoolsSection\Grades\Actions\DisplayFinalGradeComments;
+use App\Containers\SchoolsSection\Grades\Exceptions\FinalGradeAlreadyExistsException;
+use Illuminate\Support\Facades\Log;
+
 class CreateGradesAction extends Action
 {
     public function run(StoreGradesRequest $request, Tutor $tutor, Subject $subject)
-    {
-        $grades = null;
-
-        DB::transaction(function () use ($request, &$grades, $tutor, $subject) {
+        {
             $studentId = $request->validated()['student_id'];
             $termId = $request->validated()['term_id'];
-            $score = $request->validated()['score'];
-            $totalMarks = $request->validated()['total_marks'];
-            $endOfTermResult = $score / $totalMarks;
 
-            // Retrieve assessments for the given student and subject
-            $assessments = Assessment::where('student_id', $studentId)
+            Log::info('CreateGradesAction called', [
+                'student_id' => $studentId,
+                'subject_id' => $subject->id,
+                'term_id' => $termId,
+            ]);
+
+            // Check if a final grade already exists for the student, subject, and term
+            $existingGrade = Grade::where('student_id', $studentId)
                 ->where('subject_id', $subject->id)
-                ->get();
+                ->where('term_id', $termId)
+                ->first();
 
-            // Calculate the total score from the assessments
-            $totalAssessmentScore = $assessments->sum('grade_value'); // Sum of pre-calculated weighted scores
-            $assessmentCount = $assessments->count();
+            if ($existingGrade) {
+                Log::warning('Final grade already exists for this student, subject, and term.');
+                return false;
+            }
 
-            // If there are no assessments, default to 0
-            $weightedAssessmentScore = $assessmentCount > 0 ? ($totalAssessmentScore / $assessmentCount) : 0;
+            $grades = null;
 
-            // Calculate the final weighted assessment score (40% weight)
-            $weightedAssessmentScore = $weightedAssessmentScore * 40;
+            DB::transaction(function () use ($request, &$grades, $tutor, $subject) {
+                try {
+                    Log::info('Starting database transaction for grade creation');
 
-            // Calculate the final weighted end-of-term result (60% weight)
-            $weightedEndOfTermResult = $endOfTermResult * 60;
+                    $studentId = $request->validated()['student_id'];
+                    $termId = $request->validated()['term_id'];
+                    $score = $request->validated()['score'];
+                    $totalMarks = $request->validated()['total_marks'];
+                    $endOfTermResult = $score / $totalMarks;
 
-            // Calculate the final grade value
-            $finalGradeValue = $weightedAssessmentScore + $weightedEndOfTermResult;
+                    // Retrieve assessments for the given student and subject
+                    $assessments = Assessment::where('student_id', $studentId)
+                        ->where('subject_id', $subject->id)
+                        ->get();
 
-            // Map the final grade value to a letter grade
-            $letterGrade = app(MapPointsToLetterAction::class)->run($finalGradeValue);
-            $comments = app(DisplayFinalGradeComments::class)->run($letterGrade);
-            // Create or update the grade record
-            $grades = Grade::updateOrCreate(
-                [
-                    'student_id' => $studentId,
-                    'subject_id' => $subject->id,
-                    'tutor_id' => $tutor->id,
-                    'term_id' => $termId
-                ],
-                [
-                    'score' => $score,
-                    'total_marks' => $totalMarks,
-                    'grade' => $letterGrade,
-                    'grade_value' => $finalGradeValue,
-                    'comments' => $comments,
-                    'graded_at' => $request->validated()['graded_at']
-                ]
-            );
-        });
+                    $totalAssessmentScore = $assessments->sum('grade_value');
+                    $assessmentCount = $assessments->count();
 
-        return $grades;
-    }
+                    $weightedAssessmentScore = $assessmentCount > 0 ? ($totalAssessmentScore / $assessmentCount) : 0;
+                    $weightedAssessmentScore = $weightedAssessmentScore * 40;
+                    $weightedEndOfTermResult = $endOfTermResult * 60;
+
+                    $finalGradeValue = $weightedAssessmentScore + $weightedEndOfTermResult;
+
+                    $letterGrade = app(MapPointsToLetterAction::class)->run($finalGradeValue);
+                    $comments = app(DisplayFinalGradeComments::class)->run($letterGrade);
+
+                    Log::info('Calculated final grade value and comments', [
+                        'final_grade_value' => $finalGradeValue,
+                        'letter_grade' => $letterGrade,
+                        'comments' => $comments,
+                    ]);
+
+                    $grades = Grade::create([
+                        'student_id' => $studentId,
+                        'subject_id' => $subject->id,
+                        'tutor_id' => $tutor->id,
+                        'term_id' => $termId,
+                        'score' => $score,
+                        'total_marks' => $totalMarks,
+                        'grade' => $letterGrade,
+                        'grade_value' => $finalGradeValue,
+                        'comments' => $comments,
+                        'graded_at' => $request->validated()['graded_at'],
+                    ]);
+
+                    Log::info('Grade record created successfully', ['grade' => $grades]);
+                } catch (\Exception $e) {
+                    Log::error('Error in transaction', [
+                        'message' => $e->getMessage(),
+                        'stack' => $e->getTraceAsString(),
+                    ]);
+                    throw $e;
+                }
+            });
+
+            return $grades;
+        }
 }

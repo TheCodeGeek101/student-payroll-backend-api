@@ -16,6 +16,7 @@ class CalculateOverallResultsAction extends Action
             $results = Grade::join('subjects', 'grades.subject_id', '=', 'subjects.id')
                 ->join('students', 'grades.student_id', '=', 'students.id')
                 ->join('classroom', 'students.class_id', '=', 'classroom.id')
+                ->join('terms','grades.term_id','=', 'term.id')
                 ->where('students.id', $student->id)
                 ->select(
                     'grades.grade_value as grade_value',
@@ -23,7 +24,8 @@ class CalculateOverallResultsAction extends Action
                     'subjects.name as subject_name',
                     'students.first_name as student_name',
                     'students.last_name as student_last_name',
-                    'classroom.id as class_id'
+                    'classroom.id as class_id',
+                    'terms.name  as term_name'
                 )
                 ->get();
 

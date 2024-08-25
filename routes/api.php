@@ -117,9 +117,9 @@ Route::prefix('tutors')->controller(TutorController::class)->name('tutor.')->gro
 //All Assessment routes
 Route::prefix('assessments')->controller(AssessmentController::class)->name('assessments')->group( function(){
 //   CRUD ROUTES
-    Route::get('/subject/{subject}', 'index');
+    Route::get('/subject/{subject}/term/{term}', 'index');
     Route::get('/show/{assessment}', 'show');
-    Route::put('/update/{assessment}', 'update')->name("update");
+    Route::put('/assessment/{assessment}/update', 'update')->name("update");
     Route::post('/tutor/{tutor}/subject/{subject}/create', 'store');
     Route::delete('/delete/{assessment}', 'destroy')->name("delete");
 
@@ -131,10 +131,10 @@ Route::prefix('assessments')->controller(AssessmentController::class)->name('ass
 Route::prefix('grades')->controller(GradesController::class)->name('grades.')->group(function() {
 
     // CRUD ENDPOINTS
-    Route::get('/subject/{subject}', 'index');
+    Route::get('/subject/{subject}/term/{term}', 'index');
     Route::post('/tutor/{tutor}/subject/{subject}/create', 'store')->name("create");
     Route::get('/show/{grade}', 'show')->name("show");
-    Route::put('/update/{grade}', 'update')->name("update");
+    Route::put('/grade/{grade}/update', 'update')->name("update");
     Route::delete('/delete/{grade}', 'delete')->name("delete");
 
     // ADDITIONAL ENDPOINTS

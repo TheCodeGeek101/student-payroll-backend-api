@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id();
             $table->foreignId('tutor_id')->constrained('tutors');
             $table->foreignId('student_id')->constrained('students')->onDelete('cascade');
+            $table->foreignId('term_id')->constrained('terms')->onDelete('cascade');
             $table->string('grade'); // The letter grade
             $table->double('grade_value', 8, 2); // The numeric grade value
             $table->text('comments')->nullable(); // Comments for the grade

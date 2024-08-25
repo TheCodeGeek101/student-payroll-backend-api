@@ -44,7 +44,9 @@ class UpdateGradesRequest extends FormRequest
             'term_id' => 'sometimes|required|exists:terms,id',
             'score' => 'sometimes|required|numeric|min:0|max:100',
             'total_marks' => 'sometimes|required|numeric|min:0|max:100',
-            'graded_at' => 'sometimes|required|date'
+            'graded_at' => 'sometimes|required|date',
+            'tutor_id' =>'sometimes|required|exists:tutors,id',
+            'subject_id'=> 'sometimes|required|exists:subjects,id'
         ];
     }
 

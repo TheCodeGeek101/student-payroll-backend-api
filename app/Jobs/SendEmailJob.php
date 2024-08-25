@@ -25,6 +25,7 @@ class SendEmailJob implements ShouldQueue
     {
         $this->user = $user;
         $this->password = $password;
+
     }
 
     /**

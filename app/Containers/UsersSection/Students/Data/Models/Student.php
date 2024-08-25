@@ -25,6 +25,27 @@ class Student extends Model
         'full_name',
     ];
 
+    protected $fillable = [
+        'registration_number',
+        'first_name',
+        'last_name',
+        'gender',
+        'date_of_birth',
+        'phone_number',
+        'email',
+        'address',
+        'postal_address',
+        'guardian_name',
+        'guardian_contact',
+        'admission_date',
+        'emergency_contact',
+        'previous_school',
+        'medical_info',
+        'class_id',
+        'user_id',
+        'registered_by'
+    ];
+
     public function guardian(): BelongsTo
     {
         return $this->belongsTo(Guardian::class);
@@ -34,6 +55,7 @@ class Student extends Model
     {
         return $this->belongsTo(User::class);
     }
+
     public function getFullNameAttribute(): string
     {
         return $this->first_name . ' ' . $this->last_name;

@@ -9,7 +9,8 @@ use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Support\Facades\Route;
 use App\Containers\UsersSection\Adminstrator\Data\Models\Admin;
 use App\Containers\SchoolsSection\Subjects\Data\Models\Subject;
-
+use App\Containers\UsersSection\Tutors\Data\Models\Tutor;
+use App\Containers\SchoolsSection\Assessments\Data\Models\Assessment;
 class RouteServiceProvider extends ServiceProvider
 {
     /**
@@ -30,6 +31,8 @@ class RouteServiceProvider extends ServiceProvider
 
         Route::model('admin', Adminstrator::class);
         Route::model('subject', Subject::class);
+        Route::model('assessment', Assessment::class);
+        Route::model('tutor', Tutor::class);
 
         $this->routes(function () {
             Route::middleware('api')
