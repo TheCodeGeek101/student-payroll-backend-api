@@ -1,61 +1,102 @@
 <?php
-
-
 namespace App\Containers\SchoolsSection\Grades\Actions;
 
 use App\Ship\Actions\Action;
 use App\Containers\SchoolsSection\Grades\Data\Models\Grade;
 use App\Containers\UsersSection\Students\Data\Models\Student;
+use App\Containers\SchoolsSection\Term\Data\Models\Term;
+use App\Containers\SchoolsSection\Classes\Data\Models\SchoolClass;
+use Illuminate\Support\Facades\Log;
 
 class CalculateOverallResultsAction extends Action
 {
+    const FINAL_CLASS_ID = 4; // Representing Form 4
+
     public function run(Student $student): array
     {
         try {
-            // Retrieve grades and calculate total and average results
-            $results = Grade::join('subjects', 'grades.subject_id', '=', 'subjects.id')
-                ->join('students', 'grades.student_id', '=', 'students.id')
-                ->join('classroom', 'students.class_id', '=', 'classroom.id')
-                ->join('terms','grades.term_id','=', 'term.id')
-                ->where('students.id', $student->id)
-                ->select(
-                    'grades.grade_value as grade_value',
-                    'grades.grade as grade',
-                    'subjects.name as subject_name',
-                    'students.first_name as student_name',
-                    'students.last_name as student_last_name',
-                    'classroom.id as class_id',
-                    'terms.name  as term_name'
-                )
-                ->get();
+            // Fetch all terms with grades for the student
+            $terms = Term::whereHas('grades', function($query) use ($student) {
+                $query->where('student_id', $student->id);
+            })->get();
 
-            if ($results->isEmpty()) {
+            // Early return if no terms found
+            if ($terms->isEmpty()) {
                 return [
                     'status' => 'No Data',
                     'message' => 'No grades found for this student.',
-                    'average' => 0
+                    'overall_average' => 0,
+                    'term_averages' => []
                 ];
             }
 
-            // Calculate the total and average grade value
-            $totalResults = $results->sum('grade_value');
-            $averageResults = $totalResults / $results->count();
+            $termAverages = [];
+            $cumulativeAverage = 0;
 
-            // Prepare the response data
+            foreach ($terms as $term) {
+                $grades = Grade::where('student_id', $student->id)
+                    ->where('term_id', $term->id)
+                    ->get();
+
+                if ($grades->isEmpty()) {
+                    continue;
+                }
+
+                $averageResults = $grades->avg('grade_value');
+
+                // Store the term average
+                $termAverages[] = [
+                    'term' => $term->name,
+                    'average' => $averageResults
+                ];
+
+                // Add to cumulative average for all terms
+                $cumulativeAverage += $averageResults;
+            }
+
+            // Calculate overall average across all terms
+            $overallAverage = $cumulativeAverage / count($termAverages);
+
+            // Determine pass or fail based on overall average
+            if ($overallAverage >= 50) {
+                // Check if the student is in the final class
+                if ($student->class_id < self::FINAL_CLASS_ID) {
+                    // Promote the student to the next class
+                    $student->class_id += 1;
+                    $student->save();
+
+                    $status = 'Proceed';
+                    $message = 'Congratulations! You have an overall average score of ' . number_format($overallAverage, 2) .
+                        '. You may proceed to the next class (Form ' . $student->class_id . ').';
+                } else {
+                    // The student has completed the final class
+                    $status = 'Graduated';
+                    $message = 'Congratulations! You have successfully completed Form ' . self::FINAL_CLASS_ID . ' with an overall average score of ' .
+                        number_format($overallAverage, 2) . '. You have graduated from secondary school.';
+                }
+            } else {
+                // The student has failed
+                $status = 'Withdraw';
+                $message = 'Unfortunately, your overall average score is ' . number_format($overallAverage, 2) .
+                    '. You have been withdrawn on academic grounds.';
+            }
+
             return [
-                'status' => $averageResults >= 50 ? 'Pass' : 'Fail',
-                'message' => $averageResults >= 50
-                    ? 'Congratulations! You have passed the exam with an average score of ' . number_format($averageResults, 2) . '. Keep up the good work!'
-                    : 'Unfortunately, you have not passed the exam. Your average score is ' . number_format($averageResults, 2) . '. Please review the material and seek help if needed.',
-                'average' => $averageResults
+                'status' => $status,
+                'message' => $message,
+                'overall_average' => $overallAverage,
+                'term_averages' => $termAverages
             ];
 
         } catch (\Exception $e) {
-            // Handle exceptions and provide a meaningful error message
+            // Log the error message for debugging
+            Log::error('Error calculating overall results: ' . $e->getMessage(), ['student_id' => $student->id]);
+
             return [
                 'status' => 'Error',
-                'message' => 'An error occurred while calculating results: ' . $e->getMessage(),
-                'average' => 0
+                'message' => 'An error occurred while calculating the results. Please try again later.',
+                'overall_average' => 0,
+                'term_averages' => []
             ];
         }
     }

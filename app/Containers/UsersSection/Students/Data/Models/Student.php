@@ -3,6 +3,7 @@
 
 namespace App\Containers\UsersSection\Students\Data\Models;
 
+use App\Containers\SchoolsSection\Class\Data\Models\ClassModel;
 use App\Containers\SchoolsSection\Grades\Data\Models\Grade;
 use App\Containers\UsersSection\Guardians\Data\Models\Guardian;
 use App\Containers\UsersSection\Tutors\Data\Models\Tutor;
@@ -79,5 +80,10 @@ class Student extends Model
     public function subjects(): BelongsToMany
     {
         return $this->belongsToMany(Subject::class, 'student_subject');
+    }
+
+    public function classroom(): BelongsTo
+    {
+        return $this->belongsTo(ClassModel::class);
     }
 }
