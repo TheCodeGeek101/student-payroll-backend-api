@@ -18,7 +18,7 @@ use Illuminate\Http\JsonResponse;
 use App\Containers\UsersSection\Students\Data\Models\Student;
 use App\Containers\SchoolsSection\Grades\Exceptions\FinalGradeAlreadyExistsException;
 use Illuminate\Support\Facades\Log;
-
+use App\Containers\SchoolsSection\Class\Data\Models\ClassModel;
 class GradesController extends Controller
 {
     public function index(Subject $subject, Term $term)
@@ -117,11 +117,11 @@ class GradesController extends Controller
         $subjectGrade = app(GetSubjectGrade::class)->run();
         return response()->json(['grades'=>$subjectGrade],200);
     }
-    public function getOverallResults(Student $student): JsonResponse
+    public function getOverallResults(Student $student, ClassModel $class): JsonResponse
     {
         try {
             // Calculate overall results
-            $results = app(CalculateOverallResultsAction::class)->run($student);
+            $results = app(CalculateOverallResultsAction::class)->run($student,$class);
 
             // Return response as JSON
             return response()->json($results, 200);

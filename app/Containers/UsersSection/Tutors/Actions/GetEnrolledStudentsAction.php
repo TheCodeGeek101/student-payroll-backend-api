@@ -15,7 +15,13 @@ class GetEnrolledStudentsAction extends Action
             ->join('students','students.id','=','student_subject.student_id')
             ->where('tutors.id',$tutor->id)
             ->where('subjects.id',$subject->id)
-            ->select('students.id as student_id','students.first_name as student_first_name','students.last_name as student_last_name','subjects.name as subject_name','subjects.code as subject_code')
+            ->select(
+                'students.id as student_id',
+                'students.first_name as student_first_name',
+                'students.last_name as student_last_name',
+                'students.class_id as class_id',
+                'subjects.name as subject_name',
+                'subjects.code as subject_code')
             ->get();
         return $students;
 //        $subjects = $tutor->subjects()

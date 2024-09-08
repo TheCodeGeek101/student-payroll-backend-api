@@ -14,6 +14,7 @@ class LoginUserAction extends Action
     public function run(Request $request)
     {
         try {
+            // Validate user input
             $validateUser = Validator::make($request->all(), [
                 'email' => 'required|email',
                 'password' => 'required',
@@ -27,6 +28,7 @@ class LoginUserAction extends Action
                 ], 401);
             }
 
+            // Attempt to authenticate the user
             if (!Auth::attempt($request->only(['email', 'password']))) {
                 return response()->json([
                     'status' => false,
@@ -34,9 +36,11 @@ class LoginUserAction extends Action
                 ], 401);
             }
 
+            // Get the authenticated user
             $user = Auth::user();
             $userData = null;
 
+            // Handle based on user role
             switch ($user->role) {
                 case 'superadminstrator':
                     $userData = ['superadmin' => $user];
@@ -45,7 +49,15 @@ class LoginUserAction extends Action
                     $userData = ['admin' => $this->getAdministratorData($user->id)];
                     break;
                 case 'student':
-                    $userData = ['student' => $this->getStudentData($user->id)];
+                    $studentData = $this->getStudentData($user->id);
+                    if ($studentData === false) {
+                        // If the student is withdrawn, return a 403 Forbidden response
+                        return response()->json([
+                            'status' => false,
+                            'message' => 'Student has been withdrawn and is not allowed to access the system',
+                        ], 403);
+                    }
+                    $userData = ['student' => $studentData];
                     break;
                 case 'tutor':
                     $userData = ['tutor' => $this->getTutorData($user->id)];
@@ -76,10 +88,18 @@ class LoginUserAction extends Action
 
     private function getStudentData($userId)
     {
-        return Student::join('users', 'users.id', '=', 'students.user_id')
+        // Fetch the student record
+        $student = Student::join('users', 'users.id', '=', 'students.user_id')
             ->where('users.id', $userId)
             ->select('users.*', 'students.*')
             ->first();
+
+        // Check enrollment status
+        if ($student && $student->enrollment_status === 'withdrawn') {
+            return false; // Return false if the student is withdrawn
+        }
+
+        return $student; // Otherwise, return the student data
     }
 
     private function getTutorData($userId)

@@ -20,6 +20,7 @@ class Assessment extends Model
         'student_id',
         'subject_id',
         'term_id',
+        'class_id',
         'score',
         'total_marks',
         'grade_value',

@@ -16,14 +16,21 @@ use Illuminate\Http\JsonResponse;
 use App\Containers\UsersSection\Students\Actions\GetEnrolledSubjectAction;
 use App\Containers\UsersSection\Students\Actions\GetStudentGradesAction;
 use App\Containers\UsersSection\Students\Actions\GetStudentClassSubjectAction;
+use App\Containers\SchoolsSection\Class\Data\Models\ClassModel;
+use App\Containers\UsersSection\Students\Actions\WithdrawnStudentsAction;
+use Nette\Schema\ValidationException;
+use App\Containers\UsersSection\Students\UploadProfilePictureAction;
+
 class StudentController extends Controller
 {
-    public function index() {
+    public function index()
+    {
         $students = Student::all();
-        return response()->json(['students'=>$students]);
+        return response()->json(['students' => $students]);
     }
 
-    public function store(StoreStudentRequest $request){
+    public function store(StoreStudentRequest $request)
+    {
         $student = app(CreateStudentAction::class)->run($request);
         return response()->json([
             'message' => 'Student Created Successfully',
@@ -31,16 +38,18 @@ class StudentController extends Controller
         ], 201);
     }
 
-    public function show(Student $student){
-        return response()->json(new StudentResource($student),200);
+    public function show(Student $student)
+    {
+        return response()->json(new StudentResource($student), 200);
     }
 
-    public function update(UpdateStudentRequest $request, Student $student){
-        $updatedStudent = app(UpdateStudentAction::class)->run($request,$student);
+    public function update(UpdateStudentRequest $request, Student $student)
+    {
+        $updatedStudent = app(UpdateStudentAction::class)->run($request, $student);
         return response()->json([
             'message' => 'Student Updated Successfully',
             'student' => $updatedStudent
-        ],200);
+        ], 200);
     }
     public function getStudentClassSubjects(Student $student): JsonResponse
     {
@@ -65,8 +74,6 @@ class StudentController extends Controller
             return response()->json([
                 'message' => 'Student enrolled in subject successfully'
             ], 200);
-        } catch (ValidationException $e) {
-            return response()->json(['errors' => $e->errors()], 422);
         } catch (\Exception $e) {
             return response()->json([
                 'message' => 'An error occurred during enrollment'
@@ -77,8 +84,8 @@ class StudentController extends Controller
     {
         $enrolledSubjects = app(GetEnrolledSubjectAction::class)->run($student);
         return response()->json([
-            'subjects'=>$enrolledSubjects
-        ],200);
+            'subjects' => $enrolledSubjects
+        ], 200);
     }
     public function getStudentGrades(Student $student, Term $term): JsonResponse
     {
@@ -94,8 +101,9 @@ class StudentController extends Controller
             }
 
             return response()->json(
-                $studentGrades, 200);
-
+                $studentGrades,
+                200
+            );
         } catch (\Exception $e) {
             return response()->json([
                 'message' => 'An error occurred while retrieving grades',
@@ -109,7 +117,22 @@ class StudentController extends Controller
     {
         $student->delete();
         return response()->json([
-            'message'=>'Student deleted successfully'
-        ],200);
+            'message' => 'Student deleted successfully'
+        ], 200);
+    }
+    public function withdrawnStudents(): JsonResponse
+    {
+        $students = app(WithdrawnStudentsAction::class)->run();
+        return response()->json([
+            'students' => $students
+        ], 200);
+    }
+
+    public function setProfilePicture(Request $request, Student $student): JsonResponse
+    {
+        app(UploadProfilePictureAction::class)->run($request, $student);
+        return response()->json([
+            'message' => 'Picture updated successfully'
+        ], 200);
     }
 }

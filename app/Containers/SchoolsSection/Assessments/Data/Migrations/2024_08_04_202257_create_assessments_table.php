@@ -16,7 +16,9 @@ return new class extends Migration
             $table->foreignId('student_id')->contrained('students');
             $table->foreignId('tutor_id')->contrained('tutors');
             $table->foreignId('subject_id')->contrained('subjects');
+            $table->foreignId('term_id')->constrained('terms')->onDelete('cascade');
             $table->double('score');
+            $table->foreignId('class_id')->constrained('classroom');
             $table->string('comments');
             $table->date('date');
             $table->timestamps();

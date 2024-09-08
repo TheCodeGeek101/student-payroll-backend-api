@@ -28,6 +28,7 @@ class StoreAssessmentRequest extends FormRequest
             'total_marks' => 'required|numeric|min:0|max:100',
             'comments' => 'nullable|string|max:255',
             'date' => 'required|date',
+            'class_id' => 'required|exists:classroom,id',
         ];
     }
 

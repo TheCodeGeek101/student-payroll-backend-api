@@ -32,6 +32,7 @@ return new class extends Migration
             $table->foreignId('registered_by')->constrained('users', 'id');
             $table->text('remarks')->nullable();
             $table->string('registration_number')->unique();
+            $table->enum('enrollment_status', ['active', 'withdrawn', 'suspended', 'expelled'])->default('active');
             $table->timestamps();
         });
     }

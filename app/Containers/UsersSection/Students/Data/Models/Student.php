@@ -1,6 +1,4 @@
 <?php
-
-
 namespace App\Containers\UsersSection\Students\Data\Models;
 
 use App\Containers\SchoolsSection\Class\Data\Models\ClassModel;
@@ -43,8 +41,10 @@ class Student extends Model
         'previous_school',
         'medical_info',
         'class_id',
+        'previous_class_id', // Newly added field
         'user_id',
-        'registered_by'
+        'registered_by',
+        'has_promoted' // Newly added field
     ];
 
     public function guardian(): BelongsTo
