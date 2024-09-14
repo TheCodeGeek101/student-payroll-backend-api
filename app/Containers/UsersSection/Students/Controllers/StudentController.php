@@ -18,18 +18,17 @@ use App\Containers\UsersSection\Students\Actions\GetStudentGradesAction;
 use App\Containers\UsersSection\Students\Actions\GetStudentClassSubjectAction;
 use App\Containers\SchoolsSection\Class\Data\Models\ClassModel;
 use App\Containers\UsersSection\Students\Actions\WithdrawnStudentsAction;
-use Nette\Schema\ValidationException;
 use App\Containers\UsersSection\Students\UploadProfilePictureAction;
 
 class StudentController extends Controller
 {
-    public function index()
+    public function index(): JsonResponse
     {
         $students = Student::all();
         return response()->json(['students' => $students]);
     }
 
-    public function store(StoreStudentRequest $request)
+    public function store(StoreStudentRequest $request): JsonResponse
     {
         $student = app(CreateStudentAction::class)->run($request);
         return response()->json([
@@ -51,6 +50,7 @@ class StudentController extends Controller
             'student' => $updatedStudent
         ], 200);
     }
+
     public function getStudentClassSubjects(Student $student): JsonResponse
     {
         $subjects = app(GetStudentClassSubjectAction::class)->run($student);
@@ -63,6 +63,7 @@ class StudentController extends Controller
     public function enrollSubject(Request $request, Student $student): JsonResponse
     {
         try {
+
             $result = app(EnrollSubjectAction::class)->run($request, $student);
 
             if ($result === false) {
@@ -80,6 +81,7 @@ class StudentController extends Controller
             ], 500);
         }
     }
+
     public function getEnrolledSubjects(Student $student): JsonResponse
     {
         $enrolledSubjects = app(GetEnrolledSubjectAction::class)->run($student);
@@ -87,11 +89,13 @@ class StudentController extends Controller
             'subjects' => $enrolledSubjects
         ], 200);
     }
-    public function getStudentGrades(Student $student, Term $term): JsonResponse
+
+    public function getStudentGrades(Student $student, Term $term, ClassModel $class): JsonResponse
     {
         try {
             // Get the student grades from the action
-            $studentGrades = app(GetStudentGradesAction::class)->run($student, $term);
+            $studentGrades = app(GetStudentGradesAction::class)
+                ->run($student, $term, $class);
 
             // Check if the result is an array and is empty
             if (is_array($studentGrades) && empty($studentGrades['grades'])) {
@@ -100,18 +104,16 @@ class StudentController extends Controller
                 ], 404);
             }
 
-            return response()->json(
-                $studentGrades,
-                200
-            );
+            return response()->json($studentGrades, 200);
         } catch (\Exception $e) {
+            // Optional: Log the error for future debugging
+            // Log::error('Error retrieving grades: ', ['error' => $e->getMessage()]);
             return response()->json([
                 'message' => 'An error occurred while retrieving grades',
                 'error' => $e->getMessage()
             ], 500);
         }
     }
-
 
     public function destroy(Student $student): JsonResponse
     {
@@ -120,6 +122,7 @@ class StudentController extends Controller
             'message' => 'Student deleted successfully'
         ], 200);
     }
+
     public function withdrawnStudents(): JsonResponse
     {
         $students = app(WithdrawnStudentsAction::class)->run();

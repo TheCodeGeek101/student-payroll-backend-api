@@ -18,7 +18,7 @@ class ClassroomController extends Controller
     {
         $classes = ClassModel::all();
         return response()->json([
-            'classes' => ClassroomResource::collection($classes)
+            'classes' => $classes
         ], 200);
     }
 
@@ -30,13 +30,11 @@ class ClassroomController extends Controller
                 'message' => 'Class created successfully',
                 'class' => new ClassroomResource($newClass)
             ], 201);
-        }
-        else{
+        } else {
             return response()->json([
                 'message' => 'Class cannot be created',
-            ],500);
+            ], 500);
         }
-
     }
 
     public function show(ClassModel $class): JsonResponse

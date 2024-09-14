@@ -1,30 +1,24 @@
 <?php
+
 namespace App\Providers;
 
-use App\Containers\UsersSection\Admin\Data\Models\Adminstrator;
 use Illuminate\Cache\RateLimiting\Limit;
 use Illuminate\Foundation\Support\Providers\RouteServiceProvider as ServiceProvider;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Support\Facades\Route;
-use App\Containers\UsersSection\Adminstrator\Data\Models\Admin;
+use App\Containers\UsersSection\Admin\Data\Models\Adminstrator;
 use App\Containers\SchoolsSection\Subjects\Data\Models\Subject;
 use App\Containers\UsersSection\Tutors\Data\Models\Tutor;
 use App\Containers\SchoolsSection\Assessments\Data\Models\Assessment;
+use App\Containers\UsersSection\Students\Data\Models\Student;
+use App\Containers\SchoolsSection\Term\Data\Models\Term;
+use App\Containers\SchoolsSection\Class\Data\Models\ClassModel;
+
 class RouteServiceProvider extends ServiceProvider
 {
-    /**
-     * The path to the "home" route for your application.
-     *
-     * Typically, users are redirected here after authentication.
-     *
-     * @var string
-     */
     public const HOME = '/home';
 
-    /**
-     * Define your route model bindings, pattern filters, and other route configuration.
-     */
     public function boot(): void
     {
         $this->configureRateLimiting();
@@ -33,6 +27,13 @@ class RouteServiceProvider extends ServiceProvider
         Route::model('subject', Subject::class);
         Route::model('assessment', Assessment::class);
         Route::model('tutor', Tutor::class);
+        Route::model('student', Student::class);
+        Route::model('term', Term::class);
+
+        // Custom route model binding for ClassModel
+        Route::bind('class', function ($value) {
+            return ClassModel::where('slug', $value)->firstOrFail(); // Use the correct identifier field
+        });
 
         $this->routes(function () {
             Route::middleware('api')
@@ -44,9 +45,6 @@ class RouteServiceProvider extends ServiceProvider
         });
     }
 
-    /**
-     * Configure the rate limiters for the application.
-     */
     protected function configureRateLimiting(): void
     {
         RateLimiter::for('api', function (Request $request) {

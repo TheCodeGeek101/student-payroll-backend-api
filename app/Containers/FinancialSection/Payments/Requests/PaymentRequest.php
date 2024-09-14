@@ -22,8 +22,14 @@ class PaymentRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'amount'=>'required|numeric|min:1000',
-            'date'=>'required|date',
+            'student_id' => 'required|exists:students,id',
+            'class_id' => 'required|exists:classroom,id',
+            'term_id' => 'required|exists:terms,id',
+            'amount' => 'required|numeric|min:1000',
+            'payment_date' => 'required|date',
+            'title' => 'required|string|max:255',
+            'description' => 'required|string|max:255',
+            'currency' => 'requried | string'
         ];
     }
 }

@@ -1,10 +1,12 @@
 <?php
+
 namespace App\Containers\SchoolsSection\Class\Resources;
 
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 use App\Containers\SchoolsSection\Subjects\Resources\SubjectResource;
 use App\Containers\UsersSection\Tutors\Resources\TutorResource;
+
 class ClassroomResource extends JsonResource
 {
     /**
@@ -27,8 +29,7 @@ class ClassroomResource extends JsonResource
             'subject' => new SubjectResource($this->whenLoaded('subject')),
             'room' => $this->room,
             'status' => $this->status,
-            'created_at' => $this->created_at->toDateTimeString(),
-            'updated_at' => $this->updated_at->toDateTimeString(),
+
         ];
     }
 }

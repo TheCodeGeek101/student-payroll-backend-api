@@ -17,7 +17,7 @@ return new class extends Migration
             $table->double('amount');
             $table->string('description')->nullable();
             $table->date('date');
-            $table->foreignId('received_by')->constrained('users');
+            $table->foreignId('received_by')->constrained('admin');
             $table->boolean('confirmed')->default(false);
             $table->foreignId('confirmed_by')->nullable()->constrained('users');
             $table->timestamps();

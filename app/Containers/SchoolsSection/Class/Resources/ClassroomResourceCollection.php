@@ -15,7 +15,7 @@ class ClassroomResourceCollection extends ResourceCollection
     public function toArray(Request $request): array
     {
         return [
-            'object'=> 'ClassroomResourceCollection',
+            'object' => 'ClassroomResourceCollection',
             'data' => $this->collection,
             'links' => [
                 'self' => 'link-value',
