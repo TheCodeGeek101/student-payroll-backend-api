@@ -86,8 +86,11 @@ Route::controller(PaymentController::class)
     ->name('payment.')
     ->prefix('payments')
     ->group(function () {
-        Route::get('/', 'index');
-        Route::post('/create/{student}', 'payments');
+        Route::get('/student/{student}', 'index');
+        Route::post('/create', 'store');
+        Route::get('/show/{payment}', 'show');
+        Route::post('/transactions', 'transactions')->name('transactions');
+        Route::delete('/delete/{payment}', 'destroy');
     });
 
 

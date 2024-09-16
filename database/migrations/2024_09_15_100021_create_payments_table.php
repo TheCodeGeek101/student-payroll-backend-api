@@ -16,10 +16,14 @@ return new class extends Migration
             $table->foreignId('student_id')->constrained('students');
             $table->double('amount');
             $table->string('description')->nullable();
-            $table->date('date');
-            $table->foreignId('received_by')->constrained('admin');
+            $table->date('payment_date');
             $table->boolean('confirmed')->default(false);
-            $table->foreignId('confirmed_by')->nullable()->constrained('users');
+            $table->string('tx_ref');
+            $table->foreignId('class_id')->constrained('classroom');
+            $table->foreignId('term_id')->constrained('terms');
+            $table->string('currency');
+            $table->string('title');
+            $table->foreignId('confirmed_by')->nullable()->constrained('adminstrators');
             $table->timestamps();
         });
     }
@@ -27,6 +31,7 @@ return new class extends Migration
     /**
      * Reverse the migrations.
      */
+
     public function down(): void
     {
         Schema::dropIfExists('payments');

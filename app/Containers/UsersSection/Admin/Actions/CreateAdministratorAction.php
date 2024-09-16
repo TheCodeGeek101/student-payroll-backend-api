@@ -1,8 +1,9 @@
 <?php
+
 namespace App\Containers\UsersSection\Admin\Actions;
 
 use App\Ship\Actions\Action;
-use App\Containers\UsersSection\Admin\Data\Models\Administrator;
+use App\Containers\UsersSection\Admin\Data\Models\Adminstrator;
 use App\Models\User;
 use App\Containers\UsersSection\Admin\Requests\StoreAdminRequest;
 use Illuminate\Support\Facades\DB;
@@ -30,7 +31,7 @@ class CreateAdministratorAction extends Action
                 Log::info('User created: ', ['user' => $user]);
 
                 // Create admin
-                $admin = Administrator::create(array_merge(
+                $admin = Adminstrator::create(array_merge(
                     $request->validated(),
                     ['user_id' => $user->id, 'registered_by' => 1]
                 ));

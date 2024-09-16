@@ -25,11 +25,12 @@ class PaymentRequest extends FormRequest
             'student_id' => 'required|exists:students,id',
             'class_id' => 'required|exists:classroom,id',
             'term_id' => 'required|exists:terms,id',
-            'amount' => 'required|numeric|min:1000',
+            'amount' => 'required|numeric',
             'payment_date' => 'required|date',
             'title' => 'required|string|max:255',
             'description' => 'required|string|max:255',
-            'currency' => 'requried | string'
+            'tx_ref' => 'required|string|max:255',
+            'currency' => 'required|string', // Corrected the typo here
         ];
     }
 }

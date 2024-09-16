@@ -1,0 +1,29 @@
+<?php
+
+namespace App\Containers\FinancialSection\Payments\Actions;
+
+use App\Containers\FinancialSection\Payments\Data\Models\Transaction;
+use App\Ship\Actions\Action;
+use App\Containers\FinancialSection\Payments\Requests\StoreTransactionRequest;
+use Illuminate\Support\Facades\DB;
+
+class StoreTransactionsAction extends Action
+{
+    public function run(StoreTransactionRequest $request): Transaction
+    {
+        DB::beginTransaction();
+
+        try {
+            // Store all payment data in one table
+            $transaction = Transaction::create($request->validated());
+
+            DB::commit();
+
+            return $transaction;
+        } catch (\Exception $e) {
+            DB::rollBack();
+
+            throw $e;
+        }
+    }
+}
