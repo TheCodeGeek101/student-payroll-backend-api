@@ -12,6 +12,9 @@ use Illuminate\Http\JsonResponse;
 use App\Containers\FinancialSection\Payments\Actions\RecentTransactions;
 use App\Containers\FinancialSection\Payments\Actions\StoreTransactionsAction;
 use App\Containers\FinancialSection\Payments\Requests\StoreTransactionRequest;
+use App\Containers\FinancialSection\Payments\Actions\ApprovePayment;
+use App\Containers\UsersSection\Admin\Data\Models\Adminstrator;
+use Illuminate\Http\Request;
 
 class PaymentController extends Controller
 {
@@ -57,5 +60,12 @@ class PaymentController extends Controller
             ],
             201
         );
+    }
+    public function approvePayment(Request $request, Adminstrator $admin): JsonResponse
+    {
+        app(ApprovePayment::class)->run($request, $admin);
+        return response()->json([
+            'message' => 'payment confirmed successfully',
+        ], 200);
     }
 }

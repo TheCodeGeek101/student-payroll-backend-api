@@ -91,6 +91,7 @@ Route::controller(PaymentController::class)
         Route::get('/show/{payment}', 'show');
         Route::post('/transactions', 'transactions')->name('transactions');
         Route::delete('/delete/{payment}', 'destroy');
+        Route::post('/admin/{admin}', 'approvePayment')->name('approve');
     });
 
 
