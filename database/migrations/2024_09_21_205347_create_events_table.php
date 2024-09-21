@@ -13,6 +13,14 @@ return new class extends Migration
     {
         Schema::create('events', function (Blueprint $table) {
             $table->id();
+            $table->string('event_name');
+            $table->text('description')->nullable();
+            $table->string('location')->nullable();
+            $table->dateTime('start_date');
+            $table->dateTime('end_date');
+            $table->boolean('is_recurring')->default(false);
+            $table->string('recurrence_pattern')->nullable(); // Optional for recurring events
+            $table->softDeletes(); // Add soft delete functionality
             $table->timestamps();
         });
     }

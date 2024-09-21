@@ -14,6 +14,7 @@ use App\Containers\SchoolsSection\Department\Controllers\DepartmentController;
 use App\Containers\SchoolsSection\Assessments\Controllers\AssessmentController;
 use App\Containers\UsersSection\Admin\Controllers\AdminController;
 use App\Containers\SchoolsSection\Term\Controllers\TermController;
+use App\Containers\SchoolsSection\Events\Controllers\EventsController;
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -95,6 +96,15 @@ Route::controller(PaymentController::class)
         Route::delete('/delete/{payment}', 'destroy');
         Route::post('/admin/{admin}/confirm', 'approvePayment')->name('approve');
         Route::get('/confirmed', 'confirmedTransactions')->name('confirmed');
+    });
+
+
+// All Events routes
+Route::prefix('events')
+    ->controller(EventsController::class)
+    ->name('events.')
+    ->group(function () {
+        Route::post('/school/calendar', 'createCalendar')->name('calendar');
     });
 
 
