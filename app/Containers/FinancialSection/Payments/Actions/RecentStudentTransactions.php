@@ -3,16 +3,19 @@
 namespace App\Containers\FinancialSection\Payments\Actions;
 
 use App\Ship\Actions\Action;
+use App\Containers\UsersSection\Students\Data\Models\Student;
+use App\Containers\SchoolsSection\Term\Data\Models\Term;
+use App\Containers\SchoolsSection\Class\Data\Models\ClassModel;
 use App\Containers\FinancialSection\Payments\Data\Models\Payment;
 
-class RecentTransactions extends Action
+class RecentStudentTransactions extends Action
 {
-    public function run()
+    public function run(Student $student): Payment
     {
-        $unConfirmedPayments = Payment::join('students', 'students.id', '=', 'payments.student_id')
+        $payments = Payment::join('students', 'students.id', '=', 'payments.student_id')
             ->join('terms', 'terms.id', '=', 'payments.term_id')
             ->join('classroom', 'classroom.id', '=', 'payments.class_id')
-            ->where('payments.confirmed', '=', false)
+            ->where('students.id', '=', $student->id)
             ->select(
                 'payments.title',
                 'payments.description',
@@ -26,6 +29,6 @@ class RecentTransactions extends Action
                 'terms.name as term_name'
             )
             ->get();
-        return $unConfirmedPayments;
+        return $payments;
     }
 }

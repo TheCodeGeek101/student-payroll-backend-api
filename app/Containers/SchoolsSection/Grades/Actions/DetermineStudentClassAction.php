@@ -20,7 +20,10 @@ class DetermineStudentClassAction extends SubAction
                 ->exists();
 
             if ($existingPromotion) {
-                return ['status' => 'already_exists', 'message' => 'Promotion record already exists for this class.'];
+                return [
+                    'status' => 'already_exists',
+                    'message' => 'Promotion record already exists for this class.'
+                ];
             }
 
             // Insert the promotion record

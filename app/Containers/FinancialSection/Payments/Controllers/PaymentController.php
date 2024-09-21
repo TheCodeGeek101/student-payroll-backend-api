@@ -10,17 +10,32 @@ use App\Containers\FinancialSection\Payments\Data\Models\Payment;
 use App\Containers\FinancialSection\Payments\Resources\PaymentResource;
 use Illuminate\Http\JsonResponse;
 use App\Containers\FinancialSection\Payments\Actions\RecentTransactions;
-use App\Containers\FinancialSection\Payments\Actions\StoreTransactionsAction;
 use App\Containers\FinancialSection\Payments\Requests\StoreTransactionRequest;
 use App\Containers\FinancialSection\Payments\Actions\ApprovePayment;
 use App\Containers\UsersSection\Admin\Data\Models\Adminstrator;
 use Illuminate\Http\Request;
+use App\Containers\FinancialSection\Payments\Actions\StoreTransactionsAction;
+use App\Containers\FinancialSection\Payments\Actions\RecentStudentTransactions;
+use App\Containers\FinancialSection\Payments\Actions\ConfirmedTransactions;
 
 class PaymentController extends Controller
 {
     public function index(Student $student): JsonResponse
     {
-        $studentPayments = app(RecentTransactions::class)->run($student);
+
+        $studentPayments = app(RecentTransactions::class)->run();
+        return response()->json(
+            [
+                'message' => 'Payments retrieved successfully',
+                'payments' => $studentPayments
+            ],
+            200
+        );
+    }
+
+    public function studentTransactions(Student $student): JsonResponse
+    {
+        $studentPayments = app(RecentStudentTransactions::class)->run($student);
         return response()->json(
             [
                 'message' => 'Student payments retrieved successfully',
@@ -67,5 +82,14 @@ class PaymentController extends Controller
         return response()->json([
             'message' => 'payment confirmed successfully',
         ], 200);
+    }
+
+    public function confirmedTransactions(): JsonResponse
+    {
+        $transactions = app(confirmedTransactions::class)->run();
+        return response()->json([
+            'message' => 'Transactions retrieved successfully',
+            'payments' => $transactions
+        ]);
     }
 }

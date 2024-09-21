@@ -5,14 +5,14 @@ namespace App\Containers\FinancialSection\Payments\Actions;
 use App\Ship\Actions\Action;
 use App\Containers\FinancialSection\Payments\Data\Models\Payment;
 
-class RecentTransactions extends Action
+class ConfirmedTransactions extends Action
 {
     public function run()
     {
-        $unConfirmedPayments = Payment::join('students', 'students.id', '=', 'payments.student_id')
+        $confirmedPayments = Payment::join('students', 'students.id', '=', 'payments.student_id')
             ->join('terms', 'terms.id', '=', 'payments.term_id')
             ->join('classroom', 'classroom.id', '=', 'payments.class_id')
-            ->where('payments.confirmed', '=', false)
+            ->where('payments.confirmed', '=', true)
             ->select(
                 'payments.title',
                 'payments.description',
@@ -26,6 +26,6 @@ class RecentTransactions extends Action
                 'terms.name as term_name'
             )
             ->get();
-        return $unConfirmedPayments;
+        return $confirmedPayments;
     }
 }

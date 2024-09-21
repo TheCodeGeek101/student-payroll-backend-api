@@ -78,6 +78,7 @@ Route::controller(StudentController::class)
         Route::get('/{student}/term/{term}/class/{class}/subjects/grades', 'getStudentGrades')->name('subjects.grades');
         Route::get('/withdrawn', 'withdrawnStudents')->name('withdrawn');
         Route::post('/{student}/profile/picture', 'setProfilePicture')->name('picture');
+        Route::post('/{student}/can-register', 'canStudentRegister')->name('can-register');
     });
 
 
@@ -86,12 +87,14 @@ Route::controller(PaymentController::class)
     ->name('payment.')
     ->prefix('payments')
     ->group(function () {
-        Route::get('/student/{student}', 'index');
+        Route::get('/', 'index');
+        Route::get('/student/{student}', 'studentTransactions')->name('student');
         Route::post('/create', 'store');
         Route::get('/show/{payment}', 'show');
         Route::post('/transactions', 'transactions')->name('transactions');
         Route::delete('/delete/{payment}', 'destroy');
-        Route::post('/admin/{admin}', 'approvePayment')->name('approve');
+        Route::post('/admin/{admin}/confirm', 'approvePayment')->name('approve');
+        Route::get('/confirmed', 'confirmedTransactions')->name('confirmed');
     });
 
 

@@ -19,6 +19,7 @@ use App\Containers\UsersSection\Students\Actions\GetStudentClassSubjectAction;
 use App\Containers\SchoolsSection\Class\Data\Models\ClassModel;
 use App\Containers\UsersSection\Students\Actions\WithdrawnStudentsAction;
 use App\Containers\UsersSection\Students\UploadProfilePictureAction;
+use App\Containers\UsersSection\Students\Actions\CanStudentRegisterAction;
 
 class StudentController extends Controller
 {
@@ -136,6 +137,14 @@ class StudentController extends Controller
         app(UploadProfilePictureAction::class)->run($request, $student);
         return response()->json([
             'message' => 'Picture updated successfully'
+        ], 200);
+    }
+
+    public function canStudentRegister(Request $request, Student $student): JsonResponse
+    {
+        $isStudentEligibleForRegistration = app(CanStudentRegisterAction::class)->run($request, $student);
+        return response()->json([
+            'decision' => $isStudentEligibleForRegistration
         ], 200);
     }
 }
