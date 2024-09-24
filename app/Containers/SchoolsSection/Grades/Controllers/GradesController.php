@@ -121,7 +121,7 @@ class GradesController extends Controller
     {
         try {
             // Calculate overall results
-            $results = app(CalculateOverallResultsAction::class)->run($student,$class);
+            $results = app(CalculateOverallResultsAction::class)->run($student, $class);
 
             // Return response as JSON
             return response()->json($results, 200);
@@ -134,4 +134,5 @@ class GradesController extends Controller
             ], 500);
         }
     }
+
 }

@@ -10,6 +10,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use App\Containers\SchoolsSection\Subjects\Data\Models\Subject;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use App\Containers\SchoolsSection\Grades\Data\Models\Grade;
+
 class ClassModel extends Model
 {
     use HasFactory;

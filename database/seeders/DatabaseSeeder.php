@@ -12,6 +12,7 @@ use App\Containers\UsersSection\Admin\Data\Seeders\AdminSeeder;
 use App\Containers\SchoolsSection\Department\Data\Seeders\DepartmentSeeder;
 use App\Containers\SchoolsSection\Class\Data\Seeders\ClassSeeder;
 use App\Containers\SchoolsSection\Term\Data\Seeders\TermSeeder;
+
 class DatabaseSeeder extends Seeder
 {
     /**
@@ -20,13 +21,13 @@ class DatabaseSeeder extends Seeder
     public function run(): void
     {
         $this->call([
-//            AdminSeeder::class,
-            TermSeeder::class
+           AdminSeeder::class,
+            TermSeeder::class,
 
-//            ClassSeeder::class,
-//            DepartmentSeeder::class,
+        //    ClassSeeder::class,
+           DepartmentSeeder::class,
 
-//            SubjectSeeder::class,
+           SubjectSeeder::class,
 //            StudentSeeder::class,
         ]);
 

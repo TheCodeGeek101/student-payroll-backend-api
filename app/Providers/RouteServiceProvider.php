@@ -30,10 +30,7 @@ class RouteServiceProvider extends ServiceProvider
         Route::model('student', Student::class);
         Route::model('term', Term::class);
 
-        // Custom route model binding for ClassModel
-        Route::bind('class', function ($value) {
-            return ClassModel::where('slug', $value)->firstOrFail(); // Use the correct identifier field
-        });
+        
 
         $this->routes(function () {
             Route::middleware('api')

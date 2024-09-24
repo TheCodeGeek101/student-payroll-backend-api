@@ -15,6 +15,8 @@ use App\Containers\SchoolsSection\Assessments\Controllers\AssessmentController;
 use App\Containers\UsersSection\Admin\Controllers\AdminController;
 use App\Containers\SchoolsSection\Term\Controllers\TermController;
 use App\Containers\SchoolsSection\Events\Controllers\EventsController;
+use App\Containers\SchoolsSection\Events\Controllers\CalendarController;
+
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -76,7 +78,7 @@ Route::controller(StudentController::class)
         Route::get('/{student}/class/subjects', 'getStudentClassSubjects')->name('class.subjects');  // Corrected
         Route::post('/{student}/subject/enroll', 'enrollSubject')->name('subject.enroll');
         Route::get('/{student}/subjects', 'getEnrolledSubjects')->name('subjects');
-        Route::get('/{student}/term/{term}/class/{class}/subjects/grades', 'getStudentGrades')->name('subjects.grades');
+        Route::post('/{student}/term/{term}/subjects/grades', 'getStudentGrades')->name('subjects.grades');
         Route::get('/withdrawn', 'withdrawnStudents')->name('withdrawn');
         Route::post('/{student}/profile/picture', 'setProfilePicture')->name('picture');
         Route::post('/{student}/can-register', 'canStudentRegister')->name('can-register');
@@ -104,9 +106,18 @@ Route::prefix('events')
     ->controller(EventsController::class)
     ->name('events.')
     ->group(function () {
-        Route::post('/school/calendar', 'createCalendar')->name('calendar');
+        
     });
 
+    // All Calendar Routes
+Route::prefix('calendars')
+    ->controller(CalendarController::class)
+    ->name('calendar.')
+    ->group(function (){
+
+        Route::get('/','index');
+        Route::post('/create','store')->name('create');
+    });
 
 //All Subject routes
 Route::controller(SubjectsController::class)
@@ -169,7 +180,7 @@ Route::prefix('assessments')
         Route::delete('/delete/{assessment}', 'destroy')->name("delete");
 
         //    ADDITIONAL ROUTES
-        Route::get('/student/{student}/subjects/results', 'getStudentAssessment');
+        Route::post('/student/{student}/subjects/results', 'getStudentAssessment');
     });
 
 //All Grade routes

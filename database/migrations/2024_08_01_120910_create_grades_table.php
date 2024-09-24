@@ -3,7 +3,7 @@
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
-
+use Illuminate\Support\Facades\DB;
 return new class extends Migration
 {
     /**
@@ -15,9 +15,6 @@ return new class extends Migration
             $table->id();
             $table->foreignId('tutor_id')->constrained('tutors');
             $table->foreignId('student_id')->constrained('students')->onDelete('cascade');
-            $table->foreignId('term_id')->constrained('terms')->onDelete('cascade');
-            $table->foreignId('class_id')->constrained('classroom');
-
             $table->string('grade'); // The letter grade
             $table->double('grade_value', 8, 2); // The numeric grade value
             $table->text('comments')->nullable(); // Comments for the grade

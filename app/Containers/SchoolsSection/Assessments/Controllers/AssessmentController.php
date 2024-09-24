@@ -14,31 +14,15 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\JsonResponse;
 use App\Containers\SchoolsSection\Assessments\Actions\GetStudentAssessmentAction;
 use App\Containers\SchoolsSection\Assessments\Exception\GradeAlreadyExistsException;
+use App\Containers\SchoolsSection\Assessments\Actions\GetAllAssessmentsAction;
+use App\Containers\SchoolsSection\Assessments\Actions\GetSingleAssessmentAction;
+use Illuminate\Http\Request;
+
 class AssessmentController extends Controller
 {
     public function index(Subject $subject,Term $term): JsonResponse
     {
-        $assessments = Assessment::join('subjects','subjects.id','=','assessments.subject_id')
-            ->join('students','students.id','=','assessments.student_id')
-            ->join('tutors','tutors.id','=','assessments.tutor_id')
-            ->join('terms','assessments.term_id','=','terms.id')
-            ->where('subjects.id',$subject->id)
-            ->where('terms.id',$term->id)
-            ->select(
-                'assessments.id as assessment_id',
-                'assessments.score as assessment_score',
-                'assessments.total_marks as assessment_marks',
-                'assessments.grade_value as assessment_grade_value',
-                'assessments.comments as assessment_comments',
-                'assessments.date as assessment_date',
-                'students.first_name as student_first_name',
-                'students.last_name as student_last_name',
-                'subjects.name as subject_name',
-                'subjects.code as subject_code',
-                'tutors.first_name as tutor_first_name',
-                'tutors.last_name as tutor_last_name',
-                'terms.name as term_name',
-            )->get();
+        $assessments = app(GetAllAssessmentsAction::class)->run($subject,$term);
         return response()->json([
             'message' => 'assessments retrieved successfully',
             'assessments'=>$assessments
@@ -63,22 +47,7 @@ class AssessmentController extends Controller
     }
     public function show(Assessment $assessment): JsonResponse
     {
-        $singleAssessment = Assessment::join('students','assessments.student_id','students.id')
-            ->join('subjects','assessments.subject_id','subjects.id')
-            ->join('tutors','assessments.tutor_id','tutors.id')
-            ->join('terms','assessments.term_id','=','terms.id')
-            ->where('assessments.id',$assessment->id)
-            ->select(
-                'assessments.*',
-                'subjects.name as subject_name',
-                'subjects.code as subject_code',
-                'students.first_name as student_first_name',
-                'students.last_name as student_last_name',
-                'tutors.first_name as tutor_first_name',
-                'tutors.last_name as tutor_last_name',
-                'terms.name as term_name'
-            )
-            ->get();
+       $singleAssessment = app(GetSingleAssessmentAction::class)->run($assessment);
         return response()->json([
             'message'=>'assessments retrieved successfully',
             'assessment' => $singleAssessment
@@ -92,14 +61,16 @@ class AssessmentController extends Controller
     }
 
 
-    public function getStudentAssessment(Student $student): JsonResponse
+    public function getStudentAssessment(Request $request,Student $student): JsonResponse
     {
-        $assessments = app(GetStudentAssessmentAction::class)->run($student);
+        $assessments = app(GetStudentAssessmentAction::class)->run($request,$student);
         return response()->json(['assessments'=> $assessments],200);
     }
+
     public function delete(Assessment $assessment): JsonResponse
     {
         $assessment->delete();
         return response()->json(['message' => 'Assessment deleted successfully'], 204);
     }
+
 }

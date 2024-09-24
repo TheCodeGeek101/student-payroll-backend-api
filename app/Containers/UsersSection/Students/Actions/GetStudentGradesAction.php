@@ -2,25 +2,31 @@
 
 namespace App\Containers\UsersSection\Students\Actions;
 
-use App\Containers\SchoolsSection\Class\Data\Models\ClassModel;
 use App\Containers\SchoolsSection\Grades\Data\Models\Grade;
 use App\Containers\SchoolsSection\Term\Data\Models\Term;
 use App\Ship\Actions\Action;
 use App\Containers\UsersSection\Students\Data\Models\Student;
-use Illuminate\Support\Facades\Log; // Consider logging for exceptions
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 
 class GetStudentGradesAction extends Action
 {
-    public function run(Student $student, Term $term, ClassModel $class): array
+    public function run(Request $request, Student $student, Term $term): array
     {
+        // Validate request
+        $data = $request->validate([
+            'class_id' => 'required|exists:classroom,id'  // Check the table name 'classrooms'
+        ]);
+
         try {
             // Fetch grades for the specific student, term, and class
             $grades = Grade::join('subjects', 'subjects.id', '=', 'grades.subject_id')
                 ->join('terms', 'terms.id', '=', 'grades.term_id')
-                ->join('classroom', 'classroom.id', '=', 'grades.class_id') // Ensure table name is correct
-                ->where('student_id', '=', $student->id)
-                ->where('term_id', '=', $term->id)
-                ->where('class_id', '=', $class->id)
+                ->join('classroom', 'classroom.id', '=', 'grades.class_id')  // Ensure table name is 'classrooms'
+                ->join('students', 'students.id', '=', 'grades.student_id')    // Join with 'students' table
+                ->where('students.id', '=', $student->id)                      // Use $student->id
+                ->where('terms.id', '=', $term->id)                            // Use $term->id
+                ->where('classroom.id', '=', $data['class_id'])               // Use class ID from validated data
                 ->select(
                     'subjects.name as subject_name',
                     'subjects.code as subject_code',
@@ -28,7 +34,7 @@ class GetStudentGradesAction extends Action
                     'grades.grade_value as number_grade',
                     'grades.comments as grade_comments',
                     'terms.name as term_name',
-                    'classrooms.name as class_name'
+                    'classroom.name as class_name'
                 )
                 ->get();
 
@@ -41,11 +47,11 @@ class GetStudentGradesAction extends Action
                 ];
             }
 
-            // Calculate the total and average grade value
+            // Calculate total and average grade value
             $totalResults = $grades->sum('number_grade');
             $averageResults = $totalResults / $grades->count();
 
-            // Prepare the response data, including grades and overall results
+            // Prepare the response with grades and average results
             return [
                 'status' => $averageResults >= 50 ? 'Pass' : 'Fail',
                 'message' => $averageResults >= 50
@@ -54,14 +60,15 @@ class GetStudentGradesAction extends Action
                 'average' => $averageResults,
                 'grades' => $grades
             ];
+
         } catch (\Exception $e) {
-            // Log the exception for debugging
+            // Log the exception
             Log::error('Error fetching student grades: ' . $e->getMessage());
 
-            // Handle exceptions and provide a meaningful error message
+            // Return error response
             return [
                 'status' => 'Error',
-                'message' => 'An error occurred while fetching grades and calculating results: ' . $e->getMessage(),
+                'message' => 'An error occurred while fetching grades: ' . $e->getMessage(),
                 'average' => 0
             ];
         }

@@ -27,7 +27,6 @@ return new class extends Migration
             $table->string('previous_school')->nullable();
             $table->string('emergency_contact')->nullable();
             $table->text('medical_info')->nullable();
-            $table->string('enrollment_status')->default('Active');
             $table->foreignId('user_id')->constrained('users');
             $table->foreignId('registered_by')->constrained('users', 'id');
             $table->text('remarks')->nullable();

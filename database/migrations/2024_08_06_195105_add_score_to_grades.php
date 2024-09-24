@@ -14,6 +14,7 @@ return new class extends Migration
         Schema::table('grades', function (Blueprint $table) {
             $table->double('score', 8, 2)->after('student_id');
             $table->integer('total_marks')->after('score');
+           
         });
     }
 

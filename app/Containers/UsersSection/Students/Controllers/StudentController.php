@@ -91,12 +91,12 @@ class StudentController extends Controller
         ], 200);
     }
 
-    public function getStudentGrades(Student $student, Term $term, ClassModel $class): JsonResponse
+    public function getStudentGrades(Request $request,Student $student, Term $term): JsonResponse
     {
         try {
             // Get the student grades from the action
             $studentGrades = app(GetStudentGradesAction::class)
-                ->run($student, $term, $class);
+                ->run($request, $student, $term);
 
             // Check if the result is an array and is empty
             if (is_array($studentGrades) && empty($studentGrades['grades'])) {

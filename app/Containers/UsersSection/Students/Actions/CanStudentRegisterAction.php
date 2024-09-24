@@ -26,6 +26,8 @@ class CanStudentRegisterAction extends Action
             ->where('students.id', '=', $student->id)
             ->where('classroom.id', '=', $data['class_id'])
             ->where('terms.id', '=', $data['term_id'])
+            ->where('payments.title','=','School Fees')
+            ->where('payments.confirmed','=',true)
             ->select('payments.amount')
             ->get();
 

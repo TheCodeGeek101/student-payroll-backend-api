@@ -36,6 +36,17 @@ class PaymentController extends Controller
     public function studentTransactions(Student $student): JsonResponse
     {
         $studentPayments = app(RecentStudentTransactions::class)->run($student);
+    
+        if ($studentPayments->isEmpty()) {
+            return response()->json(
+                [
+                    'message' => 'This student hasn\'t made any payments yet.',
+                    'payments' => []
+                ],
+                200
+            );
+        }
+    
         return response()->json(
             [
                 'message' => 'Student payments retrieved successfully',
@@ -44,6 +55,7 @@ class PaymentController extends Controller
             200
         );
     }
+    
 
     public function store(PaymentRequest $request): JsonResponse
     {
@@ -65,17 +77,17 @@ class PaymentController extends Controller
         return response()->json(['message' => 'Payment:' . $payment->tx_ref . 'made by' . $payment->studentName() . 'has been deleted successfully'], 200);
     }
 
-    public function transactions(StoreTransactionRequest $request): JsonResponse
-    {
-        $transaction = app(StoreTransactionsAction::class)->run($request);
-        return response()->json(
-            [
-                'message' => 'Transaction posted successfully',
-                'data' => $transaction
-            ],
-            201
-        );
-    }
+    // public function transactions(StoreTransactionRequest $request): JsonResponse
+    // {
+    //     $transaction = app(StoreTransactionsAction::class)->run($request);
+    //     return response()->json(
+    //         [
+    //             'message' => 'Transaction posted successfully',
+    //             'data' => $transaction
+    //         ],
+    //         201
+    //     );
+    // }
     public function approvePayment(Request $request, Adminstrator $admin): JsonResponse
     {
         app(ApprovePayment::class)->run($request, $admin);

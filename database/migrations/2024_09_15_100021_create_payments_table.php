@@ -18,7 +18,6 @@ return new class extends Migration
             $table->string('description')->nullable();
             $table->date('payment_date');
             $table->boolean('confirmed')->default(false);
-            $table->string('tx_ref');
             $table->foreignId('class_id')->constrained('classroom');
             $table->foreignId('term_id')->constrained('terms');
             $table->string('currency');
