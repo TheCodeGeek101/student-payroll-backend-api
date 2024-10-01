@@ -35,12 +35,12 @@ class AdminController extends Controller
         ], 500);
     }
 
-    public function show(Administrator $administrator): JsonResponse
+    public function show(Adminstrator $administrator): JsonResponse
     {
         return response()->json(['admin' => $administrator]);
     }
 
-    public function update(UpdateAdminRequest $request, Administrator $administrator): JsonResponse
+    public function update(UpdateAdminRequest $request, Adminstrator $administrator): JsonResponse
     {
         $updateAdmin = app(UpdateAdminAction::class)->run($request, $administrator);
 
@@ -57,14 +57,14 @@ class AdminController extends Controller
         ], 500);
     }
 
-    public function delete(Administrator $administrator): JsonResponse
+    public function delete(Adminstrator $administrator): JsonResponse
     {
         try {
             $administrator->delete();
             return response()->json([
                 'success' => true,
                 'message' => 'Admin deleted successfully'
-            ]);
+            ],204);
         } catch (\Exception $e) {
             return response()->json([
                 'success' => false,

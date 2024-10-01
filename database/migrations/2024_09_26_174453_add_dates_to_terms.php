@@ -9,19 +9,22 @@ return new class extends Migration
     /**
      * Run the migrations.
      */
+
     public function up(): void
     {
-        Schema::table('subject_tutor', function (Blueprint $table) {
-            $table->foreignId('assigned_by')->constrained('adminstrators');
+        Schema::table('terms', function (Blueprint $table) {
+            $table->boolean('is_active')->default(false);
+            $table->text('description')->nullable();
         });
     }
 
     /**
      * Reverse the migrations.
      */
+
     public function down(): void
     {
-        Schema::table('subject_tutor', function (Blueprint $table) {
+        Schema::table('terms', function (Blueprint $table) {
             //
         });
     }

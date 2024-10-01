@@ -16,7 +16,9 @@ use App\Containers\UsersSection\Admin\Controllers\AdminController;
 use App\Containers\SchoolsSection\Term\Controllers\TermController;
 use App\Containers\SchoolsSection\Events\Controllers\EventsController;
 use App\Containers\SchoolsSection\Events\Controllers\CalendarController;
-
+use App\Containers\UsersSection\Admin\Controllers\AdminDashboardController;
+use App\Containers\UsersSection\Students\Controllers\StudentDashboardController;
+use App\Containers\UsersSection\Tutors\Controllers\TutorDashboardController;
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -38,6 +40,8 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
 
+
+
 // All user routes
 Route::controller(UserController::class)
     ->name('user.')
@@ -47,6 +51,19 @@ Route::controller(UserController::class)
         Route::get('/show/{user}', 'show');
         Route::post('/create', 'store');
         Route::put('/update/{user}', 'update');
+    });
+
+//Admin dashboard routes
+
+Route::prefix('adminstrator')
+    ->controller(AdminDashboardController::class)
+    ->name('adminstrator.')
+    ->group(function () {
+        Route::get('/', 'index');
+        Route::get('/students/withdrawn', 'totalWithdrawnStudents');
+        Route::get('/students/active', 'totalNumberStudents');
+        Route::get('/students/payments', 'totalConfirmedAndPendingPayments');
+        Route::get('/performance','classPerformance');
     });
 
 // All admin routes
@@ -106,18 +123,9 @@ Route::prefix('events')
     ->controller(EventsController::class)
     ->name('events.')
     ->group(function () {
-        
+        Route::post('/store','createTerm');
     });
 
-    // All Calendar Routes
-Route::prefix('calendars')
-    ->controller(CalendarController::class)
-    ->name('calendar.')
-    ->group(function (){
-
-        Route::get('/','index');
-        Route::post('/create','store')->name('create');
-    });
 
 //All Subject routes
 Route::controller(SubjectsController::class)
@@ -230,7 +238,7 @@ Route::controller(TermController::class)
     ->name('terms.')
     ->group(function () {
         Route::get('/', 'index');
-        Route::post('/create', 'store')->name("create");
+        Route::post('/create','store');
         Route::get('/show/{term}', 'show')->name("show");
         Route::put('/update/{term}', 'update')->name("update");
         Route::delete('/delete/{term}', 'delete')->name("delete");

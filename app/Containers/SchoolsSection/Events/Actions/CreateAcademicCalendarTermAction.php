@@ -1,15 +1,15 @@
 <?php
 
-namespace App\Containers\SchoolsSection\Term\Actions;
+namespace App\Containers\SchoolsSection\Events\Actions;
 
-use App\Ship\Actions\Action;
-use App\Containers\SchoolsSection\Term\Requests\StoreTermRequest;
-use App\Containers\SchoolsSection\Term\Data\Models\Term;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Carbon;
 use Illuminate\Validation\ValidationException;
-use Carbon\Carbon;
+use App\Containers\SchoolsSection\Term\Requests\StoreTermRequest;
+use App\Ship\Actions\Action;
+use App\Containers\SchoolsSection\Term\Data\Models\Term;
 
-class CreateTermAction extends Action
+class CreateAcademicCalendarTermAction extends Action
 {
     public function run(StoreTermRequest $request)
     {
@@ -27,8 +27,7 @@ class CreateTermAction extends Action
         // Validate the new term's start and end dates
         if ($lastTerm && $startDate->lte($lastTerm->end_date)) {
             // Custom error message for start date
-            $errorMessage = 'The start date of the new term must be after the end date of the previous term ('
-                . $lastTerm->end_date->format('Y-m-d') . '). Please provide a valid date range.';
+            $errorMessage = 'The start date of the new term must be after the end date of the previous term (' . $lastTerm->end_date->format('Y-m-d') . '). Please provide a valid date range.';
             throw ValidationException::withMessages(['start_date' => [$errorMessage]]);
         }
 
@@ -41,7 +40,6 @@ class CreateTermAction extends Action
         DB::transaction(function () use ($request, &$term) {
             $term = Term::create($request->validated());
         });
-
         return $term;
     }
 }

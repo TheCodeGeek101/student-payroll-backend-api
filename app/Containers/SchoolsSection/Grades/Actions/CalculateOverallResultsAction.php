@@ -44,10 +44,12 @@ class CalculateOverallResultsAction extends Action
                     ->where('class_id', $class->id)
                     ->get();
 
+                // Skip if no grades are found for this term
                 if ($grades->isEmpty()) {
                     continue;
                 }
 
+                // Calculate the average for this term
                 $averageResults = $grades->avg('grade_value');
 
                 // Store the term average
@@ -60,8 +62,19 @@ class CalculateOverallResultsAction extends Action
                 $cumulativeAverage += $averageResults;
             }
 
-            // Calculate overall average
-            $overallAverage = $cumulativeAverage / count($termAverages);
+            // Check if there are any term averages before dividing
+            if (count($termAverages) > 0) {
+                // Calculate overall average
+                $overallAverage = $cumulativeAverage / count($termAverages);
+            } else {
+                // Return no data if no valid grades were found
+                return [
+                    'status' => 'No Data',
+                    'message' => 'No grades available to calculate overall average.',
+                    'overall_average' => 0,
+                    'term_averages' => [],
+                ];
+            }
 
             // Determine promotion status
             if ($overallAverage >= 50) {
