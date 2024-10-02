@@ -8,6 +8,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\JsonResponse;
 use App\Containers\UsersSection\Tutors\Data\Models\Tutor;
 use App\Containers\SchoolsSection\Grades\Data\Models\Grade;
+use Illuminate\Support\Facades\DB;
 
 class AdminDashboardController extends Controller
 {
@@ -110,6 +111,23 @@ class AdminDashboardController extends Controller
             'full_payments_count' => $fullPaymentsCount,
             'pending_payments_count' => $pendingPaymentsCount
         ], 200);
+    }
+
+    public function monthlyPayments(): JsonResponse
+    {
+        // Fetch total fees collected grouped by month
+        $monthlyCollections = Payment::select(
+                DB::raw('DATE_FORMAT(payment_date, "%Y-%m") as month'),
+                DB::raw('SUM(amount) as total_collected')
+            )
+            ->where('confirmed', true) // Ensure only confirmed payments are counted
+            ->groupBy('month')
+            ->orderBy('month', 'asc')
+            ->get();
+
+        return response()->json([
+            'data' =>$monthlyCollections
+        ],200);
     }
 
 

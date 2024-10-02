@@ -64,6 +64,7 @@ Route::prefix('adminstrator')
         Route::get('/students/active', 'totalNumberStudents');
         Route::get('/students/payments', 'totalConfirmedAndPendingPayments');
         Route::get('/performance','classPerformance');
+        Route::get('/monthly/payments','monthlyPayments');
     });
 
 // All admin routes
