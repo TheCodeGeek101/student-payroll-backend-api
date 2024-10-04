@@ -9,6 +9,7 @@ use Illuminate\Http\JsonResponse;
 use App\Containers\UsersSection\Tutors\Data\Models\Tutor;
 use App\Containers\SchoolsSection\Grades\Data\Models\Grade;
 use Illuminate\Support\Facades\DB;
+use App\Containers\UsersSection\Admin\SubActions\GetAcademicPerformanceAction;
 
 class AdminDashboardController extends Controller
 {
@@ -130,6 +131,17 @@ class AdminDashboardController extends Controller
         ],200);
     }
 
+
+    public function academicPerformance(): JsonResponse
+    {
+        // Call the action to get academic performance data
+        $performanceData = app(GetAcademicPerformanceAction::class)->run();
+
+        // Return the performance data as a JSON response
+        return response()->json([
+            "performance" => $performanceData
+        ],200);
+    }
 
 
 }

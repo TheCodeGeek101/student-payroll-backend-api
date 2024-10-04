@@ -18,23 +18,17 @@ class TermSeeder extends Seeder
     {
         $terms = [
             [
-                'name' => 'First Term',
-                'start_date' => Carbon::create(date('Y'), 1, 1),
-                'end_date' => Carbon::create(date('Y'), 3, 31),
+                'name' => 'Term 1',
                 'created_at' => now(),
                 'updated_at' => now(),
             ],
             [
-                'name' => 'Second Term',
-                'start_date' => Carbon::create(date('Y'), 4, 1),
-                'end_date' => Carbon::create(date('Y'), 6, 30),
+                'name' => 'Term 2',
                 'created_at' => now(),
                 'updated_at' => now(),
             ],
             [
-                'name' => 'Third Term',
-                'start_date' => Carbon::create(date('Y'), 9, 1),
-                'end_date' => Carbon::create(date('Y'), 12, 31),
+                'name' => 'Term 3',
                 'created_at' => now(),
                 'updated_at' => now(),
             ],

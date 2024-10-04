@@ -2,15 +2,13 @@
 
 namespace App\Containers\SchoolsSection\Term\Requests;
 
+
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Http\Exceptions\HttpResponseException;
 
-class StoreTermRequest extends FormRequest
+class StoreAcademicCalendarRequest extends FormRequest
 {
-    /**
-     * Determine if the user is authorized to make this request.
-     */
     public function authorize(): bool
     {
         return true; // Adjust this logic as needed
@@ -24,7 +22,10 @@ class StoreTermRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'name' => 'required|string|max:255', // Ensure term names are unique
+            'term_id' => 'required|exists:terms,id', // Ensure term names are unique
+            'start_date' => 'required|date|before:end_date', // Start date must be valid and before end date
+            'end_date' => 'required|date|after:start_date', // End date must be valid and after start date
+            'description' => 'required|string|max:255', // Description should not exceed 255 characters
         ];
     }
 
@@ -36,7 +37,12 @@ class StoreTermRequest extends FormRequest
     public function messages(): array
     {
         return [
-            'name.required' => 'The term name is required.',           
+            'term_id.required' => 'The term id is required.',
+            'start_date.required' => 'The start date is required.',
+            'start_date.before' => 'The start date must be before the end date.',
+            'end_date.required' => 'The end date is required.',
+            'end_date.after' => 'The end date must be after the start date.',
+            'description.required' => 'The term description is required.', // Added description message
         ];
     }
 

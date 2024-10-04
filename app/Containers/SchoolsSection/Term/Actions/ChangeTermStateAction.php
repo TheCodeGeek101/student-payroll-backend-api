@@ -6,6 +6,7 @@ use App\Containers\SchoolsSection\Term\Data\Models\Term;
 use App\Ship\Actions\Action;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
+use App\Containers\SchoolsSection\Term\Data\Models\AcademicCalendar;
 
 class ChangeTermStateAction extends Action
 {
@@ -15,7 +16,7 @@ class ChangeTermStateAction extends Action
         try {
             $termUpdated = null; // Changed variable name for clarity
             DB::transaction(function () use (&$termUpdated, $date) {
-                $termUpdated = Term::where('start_date', '=', $date)
+                $termUpdated = AcademicCalendar::where('start_date', '=', $date)
                     ->where('is_active', '=', false)
                     ->update(['is_active' => true]);
             });

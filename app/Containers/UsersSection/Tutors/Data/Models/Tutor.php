@@ -9,6 +9,8 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use App\Containers\SchoolsSection\Subjects\Data\Models\Subject;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
+use App\Containers\SchoolsSection\Grades\Data\Models\Grade;
+
 class Tutor extends Model
 {
     protected $fillable = [
@@ -61,4 +63,10 @@ class Tutor extends Model
     {
         return $this->belongsTo(User::class, 'user_id');
     }
+
+    public function grades(): HasMany
+    {
+        return $this->hasMany(Grade::class); // Adjust the relationship type and model as needed
+    }
+
 }

@@ -37,7 +37,7 @@ class AdminController extends Controller
 
     public function show(Adminstrator $administrator): JsonResponse
     {
-        return response()->json(['admin' => $administrator]);
+        return response()->json($administrator);
     }
 
     public function update(UpdateAdminRequest $request, Adminstrator $administrator): JsonResponse

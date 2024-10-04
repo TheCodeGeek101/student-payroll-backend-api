@@ -19,6 +19,9 @@ use App\Containers\SchoolsSection\Events\Controllers\CalendarController;
 use App\Containers\UsersSection\Admin\Controllers\AdminDashboardController;
 use App\Containers\UsersSection\Students\Controllers\StudentDashboardController;
 use App\Containers\UsersSection\Tutors\Controllers\TutorDashboardController;
+use App\Containers\SchoolsSection\Term\Controllers\AcademicCalendarController;
+use App\Containers\SchoolsSection\Term\Data\Models\AcademicCalendar;
+
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -40,8 +43,6 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-
-
 // All user routes
 Route::controller(UserController::class)
     ->name('user.')
@@ -54,7 +55,6 @@ Route::controller(UserController::class)
     });
 
 //Admin dashboard routes
-
 Route::prefix('adminstrator')
     ->controller(AdminDashboardController::class)
     ->name('adminstrator.')
@@ -62,9 +62,11 @@ Route::prefix('adminstrator')
         Route::get('/', 'index');
         Route::get('/students/withdrawn', 'totalWithdrawnStudents');
         Route::get('/students/active', 'totalNumberStudents');
+        Route::get('/tutors/active', 'totalNumberOfTeachers');
         Route::get('/students/payments', 'totalConfirmedAndPendingPayments');
         Route::get('/performance','classPerformance');
         Route::get('/monthly/payments','monthlyPayments');
+        Route::get('/students/academic/performance','academicPerformance');
     });
 
 // All admin routes
@@ -244,3 +246,14 @@ Route::controller(TermController::class)
         Route::put('/update/{term}', 'update')->name("update");
         Route::delete('/delete/{term}', 'delete')->name("delete");
     });
+
+Route::controller(AcademicCalendarController::class)
+    ->prefix('academic')
+    ->name('calendar')
+    ->group(function () {
+        Route::post('/calendars/create','store');
+        Route::get('/calendars','index');
+        Route::get('/calendars/show/{calendar}','show');
+        Route::get('/terms/active','activeTerm');
+    });
+    
