@@ -44,6 +44,8 @@ class Tutor extends Model
         return $this->belongsToMany(Subject::class, 'subject_tutor');
     }
 
+    
+
     /**
      * The students that the tutor is associated with.
      *

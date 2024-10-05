@@ -1,4 +1,5 @@
-<?php
+<?php 
+
 
 namespace App\Containers\FinancialSection\Payments\Data\Models;
 
@@ -9,13 +10,30 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use App\Containers\SchoolsSection\Term\Data\Models\Term;
 use App\Containers\SchoolsSection\Class\Data\Models\ClassModel;
+use OwenIt\Auditing\Auditable;
 
-class Payment extends Model
+class Payment extends Model 
 {
     use HasFactory;
+    use Auditable; 
 
     // Guarded or fillable attributes as necessary
     protected $fillable = [
+        'student_id',
+        'class_id',
+        'term_id',
+        'amount',
+        'payment_date',
+        'title',
+        'description',
+        'currency',
+        'confirmed',
+        'tx_ref',
+        'confirmed_by',
+    ];
+
+    // Define the attributes to be audited
+    protected $auditInclude = [
         'student_id',
         'class_id',
         'term_id',
@@ -34,10 +52,11 @@ class Payment extends Model
     {
         return $this->belongsTo(Student::class);
     }
+
+    // Access the student's full name
     public function studentName()
     {
-        $student = new Student();
-        return $student->first_name . '' . $student->last_name;
+        return $this->student ? $this->student->first_name . ' ' . $this->student->last_name : null;
     }
 
     // Relationship with the Administrator model for confirmation
@@ -46,11 +65,13 @@ class Payment extends Model
         return $this->belongsTo(Adminstrator::class, 'confirmed_by');
     }
 
-    public function terms(): BelongsTo
+    // Relationship with the Term model
+    public function term(): BelongsTo
     {
         return $this->belongsTo(Term::class, 'term_id');
     }
 
+    // Relationship with the Class model
     public function studentClass(): BelongsTo
     {
         return $this->belongsTo(ClassModel::class, 'class_id');

@@ -202,6 +202,7 @@ return [
         App\Containers\FinancialSection\FinancialSectionServiceProvider::class,
         App\Containers\SchoolsSection\SchoolsSectionServiceProvider::class,
         App\Containers\UsersSection\UsersSectionServiceProvider::class,
+        OwenIt\Auditing\AuditingServiceProvider::class,
 
     ],
 

@@ -20,7 +20,7 @@ use App\Containers\UsersSection\Admin\Controllers\AdminDashboardController;
 use App\Containers\UsersSection\Students\Controllers\StudentDashboardController;
 use App\Containers\UsersSection\Tutors\Controllers\TutorDashboardController;
 use App\Containers\SchoolsSection\Term\Controllers\AcademicCalendarController;
-use App\Containers\SchoolsSection\Term\Data\Models\AcademicCalendar;
+use App\Ship\Controllers\AuditTrailController;
 
 /*
 |--------------------------------------------------------------------------
@@ -178,6 +178,13 @@ Route::prefix('tutors')
         Route::get('/subject/{subject}/department', 'getTutorsUnderDepartment')->name('department');
     });
 
+    // Tutor Dashboard routes
+Route::prefix('tutors')
+    ->controller(TutorDashboardController::class)
+    ->name('tutor.')
+    ->group(function() {
+        Route::get('/{tutor}/students/performance/term/{term}','studentPerformance');
+    });
 //All Assessment routes
 Route::prefix('assessments')
     ->controller(AssessmentController::class)
@@ -247,6 +254,7 @@ Route::controller(TermController::class)
         Route::delete('/delete/{term}', 'delete')->name("delete");
     });
 
+    // Academic Calendar routes
 Route::controller(AcademicCalendarController::class)
     ->prefix('academic')
     ->name('calendar')
@@ -256,4 +264,13 @@ Route::controller(AcademicCalendarController::class)
         Route::get('/calendars/show/{calendar}','show');
         Route::get('/terms/active','activeTerm');
     });
-    
+
+    // Audit trail routes
+Route::prefix('system')
+    ->controller(AuditTrailController::class)
+    ->name('audit.')
+    ->group(function () {
+        Route::get('/audit/payments','paymentAudits');
+        Route::get('/audit/grades/{grade}','gradeAudits');
+        Route::get('/audit/assessments/{assessment}','assessmentAudits');
+    });

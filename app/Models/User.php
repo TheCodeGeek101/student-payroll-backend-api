@@ -11,8 +11,9 @@ use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
 use App\Containers\UsersSection\Tutors\Data\Models\Tutor;
 use App\Containers\UsersSection\Students\Data\Models\Student;
+use OwenIt\Auditing\Contracts\Auditable;
 
-class User extends Authenticatable
+class User extends Authenticatable implements Auditable
 {
     use HasApiTokens, HasFactory, Notifiable;
 
@@ -21,6 +22,7 @@ class User extends Authenticatable
      *
      * @var array<int, string>
      */
+    use \OwenIt\Auditing\Auditable;
     protected $guarded = [];
 
     /**

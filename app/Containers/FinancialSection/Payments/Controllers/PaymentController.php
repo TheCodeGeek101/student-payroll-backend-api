@@ -20,7 +20,7 @@ use App\Containers\FinancialSection\Payments\Actions\ConfirmedTransactions;
 
 class PaymentController extends Controller
 {
-    public function index(Student $student): JsonResponse
+    public function index(): JsonResponse
     {
 
         $studentPayments = app(RecentTransactions::class)->run();
@@ -66,6 +66,7 @@ class PaymentController extends Controller
             'message' => 'Payment record created successfully'
         ], 201);
     }
+    
     public function show(Payment $payment): PaymentResource
     {
         return new PaymentResource($payment);

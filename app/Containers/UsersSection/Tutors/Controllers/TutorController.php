@@ -24,6 +24,8 @@ use Illuminate\Support\Facades\Log;
 use App\Containers\UsersSection\Admin\Requests\StoreAdminRequest;
 use App\Containers\UsersSection\Admin\Data\Models\Adminstrator;
 use App\Jobs\SendEmailJob;
+use League\Config\Exception\ValidationException;
+
 class TutorController extends Controller
 {
     protected $createTutorAction;
