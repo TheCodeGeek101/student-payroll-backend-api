@@ -95,6 +95,7 @@ class TutorController extends Controller
             return response()->json(['error' => $e->getMessage()], 500);
         }
     }
+    
     public function show(Tutor $tutor): JsonResponse
     {
         $showTutor = Tutor::join('departments', 'departments.id', '=', 'tutors.department_id')
@@ -117,6 +118,7 @@ class TutorController extends Controller
         $tutors = app(GetTutorsUnderDepartmentAction::class)->run($subject);
         return response()->json(['tutors' => $tutors], 200);
     }
+
     public function addStudentsToClass(Request $request, Tutor $tutor): JsonResponse
     {
         app(AddStudentToClassAction::class)->run($request, $tutor);
@@ -140,6 +142,7 @@ class TutorController extends Controller
         $grades = app(GetStudentGradesAction::class)->run($tutor);
         return response()->json(['grades' => $grades], 200);
     }
+
     public function destroy(Tutor $tutor): JsonResponse
     {
         $tutor->delete();

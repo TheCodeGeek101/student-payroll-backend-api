@@ -1,5 +1,6 @@
 <?php
 
+
 namespace App\Containers\UsersSection\Tutors\Controllers;
 
 use App\Http\Controllers\Controller;
@@ -11,41 +12,46 @@ use Illuminate\Support\Facades\Log;
 
 class TutorDashboardController extends Controller
 {
-    
     public function studentPerformance(Tutor $tutor, Term $term): JsonResponse
-{
-    // Log the request for debugging
-    Log::info("Fetching performance for Tutor ID: {$tutor->id}, Term ID: {$term->id}");
+    {
+        // Log the request for debugging
+        Log::info("Fetching performance for Tutor ID: {$tutor->id}, Term ID: {$term->id}");
 
-    // Get the subjects taught by the specified tutor
-    $subjects = $tutor->subjects()
-        ->with(['grades' => function ($query) use ($term) {
-            // Corrected: Use $term->id to filter by term ID
-            $query->where('term_id', $term->id);
-        }])
-        ->get();
+        // Get the subjects taught by the specified tutor
+        $subjects = $tutor->subjects()
+            ->with(['grades.student' => function ($query) {
+                // Here we eager load the student relationship
+            }, 'grades' => function ($query) use ($term) {
+                $query->where('term_id', $term->id);
+            }])
+            ->get();
 
-    // Prepare the response data
-    $responseData = [];
+        // Prepare the response data
+        $responseData = [];
 
-    foreach ($subjects as $subject) {
-        $subjectData = [
-            'subject_code' => $subject->code,
-            'subject_name' => $subject->name,
-            'grades' => [],
-        ];
-
-        foreach ($subject->grades as $grade) {
-            $subjectData['grades'][] = [
-                'student_id' => $grade->student_id,
-                'grade_value' => $grade->grade_value,
+        foreach ($subjects as $subject) {
+            $subjectData = [
+                'subject_code' => $subject->code,
+                'subject_name' => $subject->name,
+                'grades' => [],
             ];
+
+            foreach ($subject->grades as $grade) {
+                $student = $grade->student; // Assuming you have a student relationship in your Grade model
+                $subjectData['grades'][] = [
+                    'student_id' => $grade->student_id,
+                    'student_first_name' => $student->first_name, // Get the student's first name
+                    'student_last_name' => $student->last_name, // Get the student's last name
+                    'grade_value' => $grade->grade_value,
+                ];
+            }
+
+            $responseData[] = $subjectData;
         }
 
-        $responseData[] = $subjectData;
+        return response()->json([
+            "statistics" => $responseData
+        ], 200);
     }
-
-    return response()->json($responseData);
 }
 
-}

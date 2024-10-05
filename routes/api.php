@@ -179,9 +179,9 @@ Route::prefix('tutors')
     });
 
     // Tutor Dashboard routes
-Route::prefix('tutors')
+Route::prefix('teachers')
     ->controller(TutorDashboardController::class)
-    ->name('tutor.')
+    ->name('teacher.')
     ->group(function() {
         Route::get('/{tutor}/students/performance/term/{term}','studentPerformance');
     });
