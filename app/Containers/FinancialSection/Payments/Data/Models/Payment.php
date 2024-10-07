@@ -1,6 +1,5 @@
 <?php 
 
-
 namespace App\Containers\FinancialSection\Payments\Data\Models;
 
 use App\Containers\UsersSection\Students\Data\Models\Student;
@@ -15,7 +14,7 @@ use OwenIt\Auditing\Auditable;
 class Payment extends Model 
 {
     use HasFactory;
-    use Auditable; 
+    use Auditable;
 
     // Guarded or fillable attributes as necessary
     protected $fillable = [
@@ -46,6 +45,29 @@ class Payment extends Model
         'tx_ref',
         'confirmed_by',
     ];
+
+    // Optionally exclude specific fields from auditing
+    protected $auditExclude = [
+        // Add fields here if you want to exclude them from the audit log
+        'tx_ref'
+    ];
+
+    // Custom metadata for auditing
+    public function getAuditCustomValues(): array
+    {
+        return [
+            'ip_address' => request()->ip(), // Log IP address of the user
+            'performed_by' => auth()->check() ? auth()->user()->id : 'system', // Log user or system
+        ];
+    }
+
+    // Transform the audit log if needed
+    public function transformAudit(array $data): array
+    {
+        // Add custom fields or modify the audit data
+        $data['custom_field'] = 'Additional Info'; // Example of adding custom info
+        return $data;
+    }
 
     // Relationship with the Student model
     public function student(): BelongsTo

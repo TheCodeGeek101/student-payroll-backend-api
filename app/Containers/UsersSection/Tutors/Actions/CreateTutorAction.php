@@ -12,7 +12,7 @@ use Illuminate\Support\Facades\Log;
 use App\Jobs\SendEmailJob;
 class CreateTutorAction extends Action
 {
-    public function run(StoreTutorRequest $request): Tutor
+    public function run(StoreTutorRequest $request)
     {
         $tutor = null;
         $user = null;

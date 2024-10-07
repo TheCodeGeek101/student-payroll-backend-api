@@ -24,6 +24,7 @@ use Illuminate\Support\Facades\Log;
 use App\Containers\UsersSection\Admin\Requests\StoreAdminRequest;
 use App\Containers\UsersSection\Admin\Data\Models\Adminstrator;
 use App\Jobs\SendEmailJob;
+use Illuminate\Http\Request;
 use League\Config\Exception\ValidationException;
 
 class TutorController extends Controller
@@ -74,7 +75,7 @@ class TutorController extends Controller
             // Return a 422 status code with validation errors if validation fails
             return response()->json([
                 'message' => 'Validation failed',
-                'errors' => $e->errors()
+                'errors' => $e->getMessage()
             ], 422);
         } catch (\Exception $e) {
             // Handle other exceptions if needed
@@ -95,7 +96,7 @@ class TutorController extends Controller
             return response()->json(['error' => $e->getMessage()], 500);
         }
     }
-    
+
     public function show(Tutor $tutor): JsonResponse
     {
         $showTutor = Tutor::join('departments', 'departments.id', '=', 'tutors.department_id')

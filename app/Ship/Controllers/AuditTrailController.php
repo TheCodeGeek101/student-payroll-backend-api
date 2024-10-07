@@ -11,6 +11,8 @@ use App\Containers\SchoolsSection\Grades\Data\Models\Grade;
 
 class AuditTrailController extends Controller
 {
+    
+    
     public function paymentAudits(): JsonResponse
     {
         // Get the first confirmed Payment record with related data
@@ -47,11 +49,22 @@ class AuditTrailController extends Controller
             'student_last_name' => $payment->student->last_name,
             'class_name' => $payment->studentClass->name,
             'term_name' => $payment->term->name,
-            'audits' => $audits,
+            'audits' => $audits->map(function ($audit) {
+                return [
+                    'old_values' => $audit->old_values,
+                    'new_values' => $audit->new_values,
+                    'event' => $audit->event,
+                    'auditable_id' => $audit->auditable_id,
+                    'auditable_type' => $audit->auditable_type,
+                    'user_id' => $audit->user_id,
+                    'created_at' => $audit->created_at,
+                ];
+            }),
         ];
     
         return response()->json($paymentDetails, 200);
     }
+    
     
 
 

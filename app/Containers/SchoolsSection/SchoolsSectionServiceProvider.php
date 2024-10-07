@@ -9,6 +9,7 @@ use App\Containers\SchoolsSection\Subjects\Configurations\providers\SubjectServi
 use App\Containers\SchoolsSection\Assessments\Configurations\providers\AssessmentProvider;
 use App\Containers\SchoolsSection\Term\Configurations\providers\TermServiceProvider;
 use App\Containers\SchoolsSection\Events\Configurations\Providers\SchoolEventsServiceProvider;
+use App\Containers\SchoolsSection\Timetable\Configurations\Providers\TimetableServiceProvider;
 
 use Illuminate\Support\ServiceProvider;
 
@@ -26,6 +27,7 @@ class SchoolsSectionServiceProvider extends ServiceProvider
         $this->app->register(AssessmentProvider::class);
         $this->app->register(TermServiceProvider::class);
         $this->app->register(SchoolEventsServiceProvider::class);
+        $this->app->register(TimetableServiceProvider::class);
     }
 
     /**

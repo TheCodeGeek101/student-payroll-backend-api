@@ -10,6 +10,8 @@ use App\Containers\UsersSection\Tutors\Data\Models\Tutor;
 use App\Containers\SchoolsSection\Grades\Data\Models\Grade;
 use Illuminate\Support\Facades\DB;
 use App\Containers\UsersSection\Admin\SubActions\GetAcademicPerformanceAction;
+use App\Containers\SchoolsSection\Class\Data\Models\ClassModel;
+
 
 class AdminDashboardController extends Controller
 {
@@ -143,5 +145,35 @@ class AdminDashboardController extends Controller
         ],200);
     }
 
+    public function totalStudentsPerClass(): JsonResponse
+    {
+        // Retrieve all classrooms
+        $classrooms = ClassModel::all();
+    
+        // Check if there are no classrooms
+        if ($classrooms->isEmpty()) {
+            return response()->json([
+                'error' => 'No classrooms found'
+            ], 404);
+        }
+    
+        // Initialize an array to hold the class names and student counts
+        $classData = [];
+    
+        // Loop through each class and count the students
+        foreach ($classrooms as $classroom) {
+            $studentCount = Student::where('class_id', $classroom->id)->count();
+            
+            $classData[] = [
+                'class_name' => $classroom->name,
+                'total_students' => $studentCount
+            ];
+        }
+    
+        return response()->json([
+            'classes' => $classData
+        ], 200);
+    }
+    
 
 }

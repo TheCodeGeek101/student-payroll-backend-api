@@ -21,6 +21,8 @@ use App\Containers\UsersSection\Students\Controllers\StudentDashboardController;
 use App\Containers\UsersSection\Tutors\Controllers\TutorDashboardController;
 use App\Containers\SchoolsSection\Term\Controllers\AcademicCalendarController;
 use App\Ship\Controllers\AuditTrailController;
+use App\Ship\Controllers\BackupManagementController;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -67,6 +69,8 @@ Route::prefix('adminstrator')
         Route::get('/performance','classPerformance');
         Route::get('/monthly/payments','monthlyPayments');
         Route::get('/students/academic/performance','academicPerformance');
+        Route::get('/students/class/total','totalStudentsPerClass');
+        
     });
 
 // All admin routes
@@ -104,6 +108,14 @@ Route::controller(StudentController::class)
         Route::post('/{student}/can-register', 'canStudentRegister')->name('can-register');
     });
 
+    // All student dashboard routes 
+
+Route::prefix('students')
+      ->controller(StudentDashboardController::class)
+      ->name('dashboard.')
+      ->group(function () {
+            Route::get('/{student}/academic/term/{term}/performance','gradeSummary');
+      });
 
 // All payment routes
 Route::controller(PaymentController::class)
@@ -126,8 +138,9 @@ Route::prefix('events')
     ->controller(EventsController::class)
     ->name('events.')
     ->group(function () {
-        Route::post('/store','createTerm');
+        Route::post('/create','store');
     });
+
 
 
 //All Subject routes
@@ -184,7 +197,10 @@ Route::prefix('teachers')
     ->name('teacher.')
     ->group(function() {
         Route::get('/{tutor}/students/performance/term/{term}','studentPerformance');
+        Route::get('/{tutor}/students/subjects/total','getStudentPerSubject');
     });
+
+
 //All Assessment routes
 Route::prefix('assessments')
     ->controller(AssessmentController::class)
@@ -274,3 +290,11 @@ Route::prefix('system')
         Route::get('/audit/grades/{grade}','gradeAudits');
         Route::get('/audit/assessments/{assessment}','assessmentAudits');
     });
+
+    // Backup management routes
+Route::prefix('system')
+     ->controller(BackupManagementController::class)
+     ->name('system.')
+     ->group(function () {
+         Route::get('/backup/run','backups')->name('backup');
+     });

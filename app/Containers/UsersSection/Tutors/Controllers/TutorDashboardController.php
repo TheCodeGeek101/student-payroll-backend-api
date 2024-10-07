@@ -5,6 +5,7 @@ namespace App\Containers\UsersSection\Tutors\Controllers;
 
 use App\Http\Controllers\Controller;
 use App\Containers\SchoolsSection\Grades\Data\Models\Grade;
+use App\Containers\SchoolsSection\Subjects\Data\Models\Subject;
 use App\Containers\UsersSection\Tutors\Data\Models\Tutor;
 use Illuminate\Http\JsonResponse;
 use App\Containers\SchoolsSection\Term\Data\Models\Term;
@@ -53,5 +54,25 @@ class TutorDashboardController extends Controller
             "statistics" => $responseData
         ], 200);
     }
+
+    public function getStudentPerSubject(Tutor $tutor): JsonResponse
+    {
+        $subjects = $tutor->subjects()->withCount('students')->get();
+
+        $responseData = [];
+
+        foreach ($subjects as $subject) {
+            $responseData[] = [
+                'subject_code' => $subject->code,
+                'subject_name' => $subject->name,
+                'student_count' => $subject->students_count,
+            ];
+        }
+
+        return response()->json(['students'=>$responseData],200);
+    }
+
+
+    
 }
 
