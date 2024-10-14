@@ -138,7 +138,9 @@ Route::prefix('events')
     ->controller(EventsController::class)
     ->name('events.')
     ->group(function () {
+        Route::get('/','index');
         Route::post('/create','store');
+        Route::delete('/{event}/delete','destroy');
     });
 
 

@@ -11,11 +11,17 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use App\Containers\SchoolsSection\Events\Actions\CreateAcademicCalendarTermAction;
 use App\Containers\SchoolsSection\Events\Requests\StoreEventRequest;
 use App\Containers\SchoolsSection\Events\Actions\CreateEventAction;
-
+use App\Containers\SchoolsSection\Events\Data\Models\Event;
 
 class EventsController extends Controller
 {
-    public function index() {}
+    public function index(): JsonResponse 
+    {
+        $events = Event::all();
+        return response()->json([
+            'events' => $events
+        ],200);
+    }
 
     public function createCalendar(StoreCalendarRequest $request): JsonResponse
     {
@@ -42,5 +48,14 @@ class EventsController extends Controller
             'event' => $event,
             'message' => 'event created successfully'
         ],201);
+    }
+    
+    
+    public function destroy(Event $event): JsonResponse
+    {
+        $event->delete();
+        return response()->json([
+            'message' => 'event deleted successfully'
+        ],200);
     }
 }

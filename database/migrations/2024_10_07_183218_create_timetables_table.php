@@ -13,6 +13,12 @@ return new class extends Migration
     {
         Schema::create('timetables', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('subject_id')->constrained('subjects'); // Foreign key for the subject
+            $table->foreignId('tutor_id')->constrained('tutors'); // Foreign key for the tutor
+            $table->string('day_of_week'); // E.g., 'Monday', 'Tuesday', etc.
+            $table->time('start_time'); // Start time of the class
+            $table->time('end_time'); // End time of the class
+            $table->foreignId('class_id')->constrained('classroom'); // Optional: Foreign key for the classroom
             $table->timestamps();
         });
     }

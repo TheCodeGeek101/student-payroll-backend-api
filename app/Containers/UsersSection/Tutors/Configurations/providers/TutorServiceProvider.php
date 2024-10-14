@@ -5,6 +5,7 @@ namespace App\Containers\UsersSection\Tutors\Configurations\providers;
 use App\Containers\UsersSection\Tutors\Tutors;
 use Illuminate\Support\ServiceProvider;
 use App\Ship\Traits\RegisterComponentsTraits;
+
 class TutorServiceProvider extends ServiceProvider
 {
     use RegisterComponentsTraits;

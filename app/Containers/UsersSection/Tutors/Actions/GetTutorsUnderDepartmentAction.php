@@ -1,7 +1,5 @@
 <?php
 
-
-
 namespace App\Containers\UsersSection\Tutors\Actions;
 
 use App\Ship\Actions\Action;

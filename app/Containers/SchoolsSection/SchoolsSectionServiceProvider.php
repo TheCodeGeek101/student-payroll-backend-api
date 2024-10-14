@@ -10,7 +10,6 @@ use App\Containers\SchoolsSection\Assessments\Configurations\providers\Assessmen
 use App\Containers\SchoolsSection\Term\Configurations\providers\TermServiceProvider;
 use App\Containers\SchoolsSection\Events\Configurations\Providers\SchoolEventsServiceProvider;
 use App\Containers\SchoolsSection\Timetable\Configurations\Providers\TimetableServiceProvider;
-
 use Illuminate\Support\ServiceProvider;
 
 class SchoolsSectionServiceProvider extends ServiceProvider
