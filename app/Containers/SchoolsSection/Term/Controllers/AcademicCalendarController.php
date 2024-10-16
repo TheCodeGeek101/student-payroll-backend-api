@@ -13,7 +13,7 @@ use App\Containers\SchoolsSection\Term\Actions\GetActiveTerm;
 class AcademicCalendarController extends Controller
 {
     public function index(): JsonResponse
-    {
+    { 
         $calendars = AcademicCalendar::all();
         return response()->json([
             'calendars' => $calendars

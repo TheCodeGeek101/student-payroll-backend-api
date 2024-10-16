@@ -67,11 +67,15 @@ return [
              * also supply the useSingleTransaction option to avoid table locking.
              *
              * E.g.
-              
+             * 'mysql' => [
+             *       ...
+             *      'dump' => [
+             *           'useSingleTransaction' => true,
+             *       ],
+             * ],
              *
              * For a complete list of available customization options, see https://github.com/spatie/db-dumper
              */
-            
             'databases' => [
                 'mysql',
             ],
@@ -207,11 +211,11 @@ return [
         'notifiable' => \Spatie\Backup\Notifications\Notifiable::class,
 
         'mail' => [
-            'to' => 'your@example.com',
+            'to' => 'helpdesk@continental.mw',
 
             'from' => [
-                'address' => env('MAIL_FROM_ADDRESS', 'hello@example.com'),
-                'name' => env('MAIL_FROM_NAME', 'Example'),
+                'address' => env('MAIL_FROM_ADDRESS', 'helpdesk@continental.mw'),
+                'name' => env('MAIL_FROM_NAME', 'CCLFMS'),
             ],
         ],
 

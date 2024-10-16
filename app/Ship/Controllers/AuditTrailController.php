@@ -8,10 +8,16 @@ use App\Containers\FinancialSection\Payments\Data\Models\Payment;
 use Illuminate\Http\JsonResponse;
 use App\Containers\SchoolsSection\Assessments\Data\Models\Assessment;
 use App\Containers\SchoolsSection\Grades\Data\Models\Grade;
+use OwenIt\Auditing\Models\Audit;
 
 class AuditTrailController extends Controller
 {
-    
+    public function index(): JsonResponse 
+    {
+        return response()->json([
+            'audits' => Audit::all()
+        ],200);
+    }
     
     public function paymentAudits(): JsonResponse
     {

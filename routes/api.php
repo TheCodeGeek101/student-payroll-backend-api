@@ -22,7 +22,7 @@ use App\Containers\UsersSection\Tutors\Controllers\TutorDashboardController;
 use App\Containers\SchoolsSection\Term\Controllers\AcademicCalendarController;
 use App\Ship\Controllers\AuditTrailController;
 use App\Ship\Controllers\BackupManagementController;
-
+use App\Containers\SchoolsSection\Timetable\Controllers\TimetableController;
 
 /*
 |--------------------------------------------------------------------------
@@ -144,7 +144,17 @@ Route::prefix('events')
     });
 
 
+    // All timetable routes
+Route::prefix('timetables')
+     ->controller(TimetableController::class)
+     ->name('timetable.')
+     ->group(function() {
+            Route::get('/','index');
+            Route::post('/create','store');
+            Route::get('/{timetable}/show','show');
+     });
 
+     
 //All Subject routes
 Route::controller(SubjectsController::class)
     ->name('subjects.')
@@ -288,6 +298,7 @@ Route::prefix('system')
     ->controller(AuditTrailController::class)
     ->name('audit.')
     ->group(function () {
+        Route::get('/audits','index');
         Route::get('/audit/payments','paymentAudits');
         Route::get('/audit/grades/{grade}','gradeAudits');
         Route::get('/audit/assessments/{assessment}','assessmentAudits');

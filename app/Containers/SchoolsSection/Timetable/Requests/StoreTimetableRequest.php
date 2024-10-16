@@ -29,7 +29,7 @@ class StoreTimetableRequest extends FormRequest
             'day_of_week' => 'required|string|in:Monday,Tuesday,Wednesday,Thursday,Friday,Saturday,Sunday',
             'start_time' => 'required|date_format:H:i',
             'end_time' => 'required|date_format:H:i|after:start_time',
-            'classroom_id' => 'nullable|exists:classrooms,id',
+            'class_id' => 'nullable|exists:classroom,id',
         ];
     }
 
@@ -52,7 +52,7 @@ class StoreTimetableRequest extends FormRequest
             'end_time.required' => 'The end time is required.',
             'end_time.date_format' => 'The end time format is invalid. Use HH:MM.',
             'end_time.after' => 'The end time must be after the start time.',
-            'classroom_id.exists' => 'The selected classroom does not exist.',
+            'class_id.exists' => 'The selected classroom does not exist.',
         ];
     }
 }

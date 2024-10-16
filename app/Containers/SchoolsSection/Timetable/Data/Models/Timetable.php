@@ -24,7 +24,7 @@ class Timetable extends Model
         'day_of_week',
         'start_time',
         'end_time',
-        'classroom_id',
+        'class_id',
     ];
 
     /**
