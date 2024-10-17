@@ -149,12 +149,12 @@ Route::prefix('timetables')
      ->controller(TimetableController::class)
      ->name('timetable.')
      ->group(function() {
-            Route::get('/','index');
-            Route::post('/create','store');
+            Route::get('/class/{class}','index');
+            Route::get('/{class}/create','store');
             Route::get('/{timetable}/show','show');
      });
 
-     
+
 //All Subject routes
 Route::controller(SubjectsController::class)
     ->name('subjects.')

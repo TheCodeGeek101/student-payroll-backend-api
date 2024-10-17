@@ -13,7 +13,6 @@ return new class extends Migration
     {
         Schema::table('student_subject', function (Blueprint $table) {
               $table->foreignId('subject_id')->constrained('subjects');
-
         });
     }
 
