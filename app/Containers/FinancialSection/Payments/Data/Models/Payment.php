@@ -9,12 +9,12 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use App\Containers\SchoolsSection\Term\Data\Models\Term;
 use App\Containers\SchoolsSection\Class\Data\Models\ClassModel;
-use OwenIt\Auditing\Auditable;
+// use OwenIt\Auditing\Auditable;
 
 class Payment extends Model 
 {
     use HasFactory;
-    use Auditable;
+    // use Auditable;
 
     // Guarded or fillable attributes as necessary
     protected $fillable = [
@@ -32,42 +32,42 @@ class Payment extends Model
     ];
 
     // Define the attributes to be audited
-    protected $auditInclude = [
-        'student_id',
-        'class_id',
-        'term_id',
-        'amount',
-        'payment_date',
-        'title',
-        'description',
-        'currency',
-        'confirmed',
-        'tx_ref',
-        'confirmed_by',
-    ];
+    // protected $auditInclude = [
+    //     'student_id',
+    //     'class_id',
+    //     'term_id',
+    //     'amount',
+    //     'payment_date',
+    //     'title',
+    //     'description',
+    //     'currency',
+    //     'confirmed',
+    //     'tx_ref',
+    //     'confirmed_by',
+    // ];
 
-    // Optionally exclude specific fields from auditing
-    protected $auditExclude = [
-        // Add fields here if you want to exclude them from the audit log
-        'tx_ref'
-    ];
+    // // Optionally exclude specific fields from auditing
+    // protected $auditExclude = [
+    //     // Add fields here if you want to exclude them from the audit log
+    //     'tx_ref'
+    // ];
 
-    // Custom metadata for auditing
-    public function getAuditCustomValues(): array
-    {
-        return [
-            'ip_address' => request()->ip(), // Log IP address of the user
-            'performed_by' => auth()->check() ? auth()->user()->id : 'system', // Log user or system
-        ];
-    }
+    // // Custom metadata for auditing
+    // public function getAuditCustomValues(): array
+    // {
+    //     return [
+    //         'ip_address' => request()->ip(), // Log IP address of the user
+    //         'performed_by' => auth()->check() ? auth()->user()->id : 'system', // Log user or system
+    //     ];
+    // }
 
-    // Transform the audit log if needed
-    public function transformAudit(array $data): array
-    {
-        // Add custom fields or modify the audit data
-        $data['custom_field'] = 'Additional Info'; // Example of adding custom info
-        return $data;
-    }
+    // // Transform the audit log if needed
+    // public function transformAudit(array $data): array
+    // {
+    //     // Add custom fields or modify the audit data
+    //     $data['custom_field'] = 'Additional Info'; // Example of adding custom info
+    //     return $data;
+    // }
 
     // Relationship with the Student model
     public function student(): BelongsTo

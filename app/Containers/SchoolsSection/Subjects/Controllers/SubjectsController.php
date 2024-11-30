@@ -17,6 +17,8 @@ use App\Containers\SchoolsSection\Subjects\Actions\GetSubjectByClassAction;
 use Illuminate\Http\Request;
 use App\Containers\SchoolsSection\Subjects\Actions\AssignSubjectToTutor;
 use App\Containers\UsersSection\Tutors\Actions\GetTutorSubjectsAction;
+use Illuminate\Support\Facades\Log;
+
 class SubjectsController extends Controller
 {
     /**
@@ -70,22 +72,31 @@ class SubjectsController extends Controller
 
     public function assignSubjectToTutor(Request $request, Subject $subject, Adminstrator $admin): JsonResponse
     {
-        \Log::info('Admin Type: ' . get_class($admin));
-        \Log::info('Subject Type: ' . get_class($subject));
+        Log::info('Admin Type: ' . get_class($admin));
+        Log::info('Subject Type: ' . get_class($subject));
 
         try {
+            // Call the AssignSubjectToTutor action
             $result = app(AssignSubjectToTutor::class)->run($request, $admin, $subject);
 
+            // Handle success case
             if ($result['status'] === 'success') {
                 return response()->json(['message' => 'Subject assigned successfully', 'Subject' => $subject], 200);
-            } else {
-                return response()->json(['message' => $result['message']], 500);
             }
+
+            // Handle conflict case (tutor already assigned to subject)
+            if ($result['status'] === 'error' && $result['message'] === 'Tutor already assigned to this subject') {
+                return response()->json(['message' => $result['message']], 429); // 429 Conflict
+            }
+
+            // Handle other errors
+            return response()->json(['message' => $result['message']], 500);
         } catch (\Exception $e) {
-            \Log::error('Failed to assign subject to tutor: ' . $e->getMessage());
+            Log::error('Failed to assign subject to tutor: ' . $e->getMessage());
             return response()->json(['message' => 'Failed to assign subject to tutor'], 500);
         }
     }
+
 
     public function getSubjectByClass(Request $request, ClassModel $classroom): JsonResponse
     {

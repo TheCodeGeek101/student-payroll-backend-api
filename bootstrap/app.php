@@ -41,6 +41,7 @@ $app->singleton(
     App\Exceptions\Handler::class
 );
 
+
 // $app->configure('audit');
 
 // $app->register(OwenIt\Auditing\AuditingServiceProvider::class);

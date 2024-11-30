@@ -16,13 +16,13 @@ class UserSeeder extends Seeder
     {
         DB::table('users')->insert([
             [
-            'name' => 'Administrator',
-            'email' => 'administrator@softdroid.com',
-            'password' => Hash::make('Securedkey@2024'),
-            'role' => 'superadminstrator',
-            'status' => true,
-            'created_at' => now(),
-            'updated_at' => now(),
+                'name' => 'Administrator',
+                'email' => 'administrator@softdroid.com',
+                'password' => Hash::make('Securedkey@2024'),
+                'role' => 'superadminstrator',
+                'status' => true,
+                'created_at' => now(),
+                'updated_at' => now(),
             ],
             [
                 'name' => 'User',
@@ -33,7 +33,6 @@ class UserSeeder extends Seeder
                 'created_at' => now(),
                 'updated_at' => now(),
             ],
-
         ]);
     }
 }

@@ -4,7 +4,6 @@ namespace App\Containers\SchoolsSection\Timetable\Actions;
 
 use App\Ship\Actions\Action;
 use Illuminate\Support\Facades\DB;
-use App\Containers\SchoolsSection\Timetable\Requests\StoreTimetableRequest;
 use App\Containers\SchoolsSection\Timetable\Data\Models\Timetable;
 use App\Containers\UsersSection\Tutors\Data\Models\Tutor;
 use App\Containers\SchoolsSection\Subjects\Data\Models\Subject;
@@ -35,17 +34,28 @@ class CreateTimetableAction extends Action
             $startTime = 7 * 60; // 7:00 AM in minutes
             $endTime = 15 * 60 + 30; // 3:30 PM in minutes
             $periodDuration = 45; // duration of a single period in minutes
-            $maxSubjectDuration = 90; // maximum duration a subject can occupy in minutes
-            $periodsPerDay = ($endTime - $startTime) / $periodDuration;
+
+            // Generate predefined time slots
+            $timeSlots = $this->generateTimeSlots($startTime, $endTime, $periodDuration);
 
             // Get all subjects for the class
             $subjects = Subject::where('class_id', $class->id)
                 ->with('tutors') // Ensure we load the tutors for each subject
                 ->get();
 
+            // Shuffle the subjects to avoid bias in allocation
+            $subjects = $subjects->shuffle();
+
             // Prepare timetable slots
             $timetableSlots = [];
+            $conflicts = []; // Array to store any conflicts found
+
+            // Keep track of periods assigned per subject per day
+            $subjectDailyPeriods = [];
+
             foreach ($teachingDays as $day) {
+                $availableSlots = $timeSlots;
+
                 foreach ($subjects as $subject) {
                     // Ensure the subject has associated tutors
                     if ($subject->tutors->isEmpty()) {
@@ -53,14 +63,23 @@ class CreateTimetableAction extends Action
                         continue; // Skip subjects with no tutors
                     }
 
+                    // Limit to 2 periods per day per subject
+                    if (!isset($subjectDailyPeriods[$day])) {
+                        $subjectDailyPeriods[$day] = [];
+                    }
+
+                    if (isset($subjectDailyPeriods[$day][$subject->id]) && $subjectDailyPeriods[$day][$subject->id] >= 2) {
+                        continue; // Skip if this subject already has 2 periods assigned for the day
+                    }
+
                     // Calculate the number of periods needed per week based on credits
                     $periodsNeeded = $subject->credits; // Assuming credits translate directly to periods per week
 
-                    for ($i = 0; $i < $periodsNeeded; $i++) {
-                        // Select a random time slot for each period, ensuring no overlaps
-                        $timeSlot = random_int($startTime, $endTime - $maxSubjectDuration);
-                        $start = $this->minutesToTime($timeSlot);
-                        $end = $this->minutesToTime($timeSlot + $maxSubjectDuration);
+                    for ($i = 0; $i < $periodsNeeded && !empty($availableSlots); $i++) {
+                        // Iterate over time slots and pick the next available slot
+                        $slot = array_shift($availableSlots);
+                        $start = $slot['start'];
+                        $end = $slot['end'];
 
                         // Get the list of tutor IDs associated with this subject
                         $tutorIds = $subject->tutors->pluck('id')->toArray();
@@ -75,7 +94,7 @@ class CreateTimetableAction extends Action
                             ->exists();
 
                         if (!$conflict) {
-                            // Randomly select one of the tutors for the subject
+                            // Randomly select one of the tutors for the subject (round-robin could be applied here)
                             $selectedTutorId = $tutorIds[array_rand($tutorIds)];
 
                             $timetableSlots[] = [
@@ -87,8 +106,15 @@ class CreateTimetableAction extends Action
                                 'term_id' => $activeTerm->id,
                                 'class_id' => $class->id, // Use the current class
                             ];
+
+                            // Increment the count of assigned periods for this subject on this day
+                            if (!isset($subjectDailyPeriods[$day][$subject->id])) {
+                                $subjectDailyPeriods[$day][$subject->id] = 0;
+                            }
+                            $subjectDailyPeriods[$day][$subject->id]++;
                         } else {
                             Log::warning('Conflict found for subject: ', [$subject->name]);
+                            $conflicts[] = "Conflict for subject {$subject->name} on {$day} between {$start} and {$end}";
                         }
                     }
                 }
@@ -105,7 +131,10 @@ class CreateTimetableAction extends Action
                 Log::info('No timetable slots available to create.');
             }
 
-            return ['success' => 'Timetable created successfully.'];
+            return [
+                'success' => 'Timetable created successfully.',
+                'conflicts' => $conflicts // Return any conflicts found
+            ];
 
         } catch (Exception $e) {
             return [
@@ -120,5 +149,21 @@ class CreateTimetableAction extends Action
         $hours = floor($minutes / 60);
         $minutes = $minutes % 60;
         return sprintf('%02d:%02d:00', $hours, $minutes); // HH:MM:00
+    }
+
+    // Generate predefined time slots for each day
+    private function generateTimeSlots($startTime, $endTime, $periodDuration)
+    {
+        $slots = [];
+        $currentStart = $startTime;
+
+        while ($currentStart + $periodDuration <= $endTime) {
+            $start = $this->minutesToTime($currentStart);
+            $end = $this->minutesToTime($currentStart + $periodDuration);
+            $slots[] = ['start' => $start, 'end' => $end];
+            $currentStart += $periodDuration;
+        }
+
+        return $slots;
     }
 }

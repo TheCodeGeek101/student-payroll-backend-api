@@ -35,6 +35,14 @@ class User extends Authenticatable implements Auditable
         'remember_token',
     ];
 
+    protected $fillable = [
+        'two_factor_code',
+        'name',
+        'email',
+        'password',
+        'status'
+    ];
+
     /**
      * The attributes that should be cast.
      *
